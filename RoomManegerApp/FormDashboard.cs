@@ -35,7 +35,7 @@ namespace RoomManegerApp.Forms
 
         private void điệnNướcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormMeterreading form = new FormMeterreading();
+            FormRoomDeatils form = new FormRoomDeatils();
             form.MdiParent = this;
             form.Dock = DockStyle.Fill;
             form.Show();
@@ -51,7 +51,7 @@ namespace RoomManegerApp.Forms
 
         private void hợpĐồngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormContract form = new FormContract();
+            FormCheck_in form = new FormCheck_in();
             form.MdiParent = this;
             form.Dock = DockStyle.Fill;
             form.Show();

@@ -39,12 +39,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonCapnhat
             // 
             this.buttonCapnhat.Location = new System.Drawing.Point(118, 219);
-            this.buttonCapnhat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCapnhat.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCapnhat.Name = "buttonCapnhat";
             this.buttonCapnhat.Size = new System.Drawing.Size(61, 24);
             this.buttonCapnhat.TabIndex = 21;
@@ -55,7 +56,7 @@
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(133, 166);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox4.Margin = new System.Windows.Forms.Padding(2);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(127, 20);
             this.textBox4.TabIndex = 20;
@@ -73,10 +74,10 @@
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(133, 131);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(2);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(127, 20);
-            this.textBox3.TabIndex = 18;
+            this.textBox3.TabIndex = 2;
             // 
             // label5
             // 
@@ -101,10 +102,10 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(133, 65);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(127, 20);
-            this.textBox1.TabIndex = 14;
+            this.textBox1.TabIndex = 0;
             // 
             // label3
             // 
@@ -131,9 +132,9 @@
             this.label1.Location = new System.Drawing.Point(67, 34);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(15, 13);
+            this.label1.Size = new System.Drawing.Size(16, 13);
             this.label1.TabIndex = 11;
-            this.label1.Text = "id";
+            this.label1.Text = "Id";
             // 
             // comboBox1
             // 
@@ -142,19 +143,26 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Trống",
             "Đã thuê",
-            "Đang sửa chữa",
-            "Khác"});
+            "Đang sửa chữa"});
             this.comboBox1.Location = new System.Drawing.Point(133, 98);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(127, 21);
-            this.comboBox1.TabIndex = 22;
+            this.comboBox1.TabIndex = 1;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(11, 11);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(296, 20);
+            this.textBox2.TabIndex = 23;
             // 
             // FormAdd_one_room
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(319, 289);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.buttonCapnhat);
             this.Controls.Add(this.textBox4);
@@ -166,9 +174,9 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormAdd_one_room";
-            this.Text = "FormAdd_room";
+            this.Text = "Thêm phòng";
             this.Load += new System.EventHandler(this.FormAdd_room_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -188,5 +196,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }

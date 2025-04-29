@@ -1,6 +1,6 @@
 ﻿namespace RoomManegerApp.Tetants
 {
-    partial class FormEdit_tetant
+    partial class FormEdit_tenant
     {
         /// <summary>
         /// Required designer variable.

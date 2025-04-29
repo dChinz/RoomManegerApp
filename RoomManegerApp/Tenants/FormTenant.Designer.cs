@@ -34,7 +34,6 @@
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -101,7 +100,6 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.checkbox,
             this.id,
             this.name,
             this.phone,
@@ -120,14 +118,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(796, 378);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
-            // 
-            // checkbox
-            // 
-            this.checkbox.HeaderText = "";
-            this.checkbox.MinimumWidth = 8;
-            this.checkbox.Name = "checkbox";
-            this.checkbox.ReadOnly = true;
-            this.checkbox.Width = 30;
             // 
             // id
             // 
@@ -237,7 +227,7 @@
             this.buttonAdd_one_tentant.Name = "buttonAdd_one_tentant";
             this.buttonAdd_one_tentant.Size = new System.Drawing.Size(83, 36);
             this.buttonAdd_one_tentant.TabIndex = 1;
-            this.buttonAdd_one_tentant.Text = "Thêm Khách";
+            this.buttonAdd_one_tentant.Text = "Thêm";
             this.buttonAdd_one_tentant.UseVisualStyleBackColor = false;
             this.buttonAdd_one_tentant.Click += new System.EventHandler(this.buttonAdd_one_tentant_Click);
             // 
@@ -303,7 +293,6 @@
         private System.Windows.Forms.ToolStripMenuItem sửaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem xóaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem xemChiTiếtToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn checkbox;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn phone;

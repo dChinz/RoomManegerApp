@@ -12,9 +12,16 @@ using System.Windows.Forms;
 
 namespace RoomManegerApp.Tetants
 {
-    public partial class FormAdd_one_tentant : Form
+    public partial class FormAdd_one_tenant : Form
     {
-        public FormAdd_one_tentant()
+        private string tenantName;
+        public FormAdd_one_tenant(string name)
+        {
+            InitializeComponent();
+            tenantName = name;
+            textBox1.Text = tenantName;
+        }
+        public FormAdd_one_tenant()
         {
             InitializeComponent();
         }
@@ -26,7 +33,7 @@ namespace RoomManegerApp.Tetants
 
         private void FormAdd_one_tentant_Load(object sender, EventArgs e)
         {
-            sql = @"select * from tentants order by id desc limit 1";
+            sql = @"select * from tenants order by id desc limit 1";
             int i = 0;
             using (ketnoi = Database_connect.connection())
             {
@@ -68,7 +75,13 @@ namespace RoomManegerApp.Tetants
                 return;
             }
 
-            sql = "select 1 from tentants where name = @name and phone = @phone and id_card = @id_card and gender = @gender and address = @address and note = @note";
+            if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(gender))
+            {
+                MessageBox.Show("Vui lòng điển đầy đủ thông tin", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            sql = "select 1 from tenants where name = @name and phone = @phone and id_card = @id_card and gender = @gender and address = @address and note = @note";
             using(ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
@@ -89,25 +102,44 @@ namespace RoomManegerApp.Tetants
                         }
                     }
                 }
-                sql = @"insert into tentants (name, phone, id_card, gender, address, note) values (@name, @phone, @id_card, @gender, @address, @note)";
+                sql = @"insert into tenants (name, phone, id_card, gender, address, note) values (@name, @phone, @id_card, @gender, @address, @note)";
                 using (thuchien = new SQLiteCommand(sql, ketnoi))
                 {
                     thuchien.Parameters.AddWithValue("@name", name);
                     thuchien.Parameters.AddWithValue("@phone", phone);
                     thuchien.Parameters.AddWithValue("@id_card", id_card);
                     thuchien.Parameters.AddWithValue("@gender", gender);
-                    thuchien.Parameters.AddWithValue("@address", address);
-                    thuchien.Parameters.AddWithValue("@note", note);
+                    thuchien.Parameters.AddWithValue("@address", address ?? "");
+                    thuchien.Parameters.AddWithValue("@note", note ?? "");
                     thuchien.ExecuteNonQuery();
-
                 }
             }
-            MessageBox.Show("Thêm thành công!", "Thông bào", MessageBoxButtons.OK);
+            MessageBox.Show("Thêm người thuê thành công!", "Thông bào", MessageBoxButtons.OK);
 
-            tentant_added?.Invoke(this, EventArgs.Empty);
-            this.Close();
+            resetForm();
+            if(tenantName != null)
+            {
+                this.Close();
+            }
         }
 
         public event EventHandler tentant_added;
+
+        private void buttonThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
+
+            tentant_added?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void resetForm()
+        {
+            textBox1.Text = null;
+            textBox2.Text = null;
+            textBox3.Text = null;
+            comboBox1.SelectedIndex = -1;
+            textBox5.Text = null;
+            textBox6.Text = null;
+        }
     }
 }

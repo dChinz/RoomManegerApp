@@ -37,13 +37,7 @@ namespace RoomManegerApp.Forms
 
             load_tentant();
 
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.ReadOnly = false;
-            dataGridView1.Columns[1].ReadOnly = true;
-            dataGridView1.Columns[2].ReadOnly = true;
-            dataGridView1.Columns[3].ReadOnly = true;
-            dataGridView1.Columns[4].ReadOnly = true;
-            dataGridView1.Columns[5].ReadOnly = true;
+            dataGridView1.ReadOnly = true;
 
             this.AcceptButton = buttonSearch;
 
@@ -55,7 +49,7 @@ namespace RoomManegerApp.Forms
         {
             dataGridView1.Rows.Clear();
 
-            sql = @"select * from tentants";
+            sql = @"select * from tenants";
             using(ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
@@ -66,7 +60,7 @@ namespace RoomManegerApp.Forms
                     {
                         while (doc.Read())
                         {
-                            dataGridView1.Rows.Add(false, doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"], doc["note"]);
+                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"], doc["note"]);
                         }
                     }
                 }
@@ -75,7 +69,7 @@ namespace RoomManegerApp.Forms
 
         private void buttonAdd_one_tentant_Click(object sender, EventArgs e)
         {
-            FormAdd_one_tentant f = new FormAdd_one_tentant();
+            FormAdd_one_tenant f = new FormAdd_one_tenant();
             f.Show();
 
             f.tentant_added += (s, args) => load_tentant();
@@ -104,7 +98,7 @@ namespace RoomManegerApp.Forms
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 var row = dataGridView1.SelectedRows[0];
-                id = Int32.Parse(row.Cells[1].Value.ToString()); //lấy id từ dòng đã chọn
+                id = Int32.Parse(row.Cells[0].Value.ToString()); //lấy id từ dòng đã chọn
             }
             return id;
         }
@@ -115,7 +109,7 @@ namespace RoomManegerApp.Forms
             {
                 string id = get_id_room().ToString();
 
-                FormEdit_tetant f = new FormEdit_tetant(id);
+                FormEdit_tenant f = new FormEdit_tenant(id);
 
                 // Đăng ký sự kiện reload lại danh sách khi form edit cập nhật
                 f.tentant_updateded += (s, args) => load_tentant();
@@ -126,7 +120,7 @@ namespace RoomManegerApp.Forms
 
         private void xóaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            sql = @"delete from tentants where id = @id";
+            sql = @"delete from tenants where id = @id";
             using(ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();

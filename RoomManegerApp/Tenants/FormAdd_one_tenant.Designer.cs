@@ -1,6 +1,6 @@
 ﻿namespace RoomManegerApp.Tetants
 {
-    partial class FormAdd_one_tentant
+    partial class FormAdd_one_tenant
     {
         /// <summary>
         /// Required designer variable.
@@ -43,11 +43,12 @@
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.buttonThoat = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonCapnhat
             // 
-            this.buttonCapnhat.Location = new System.Drawing.Point(119, 287);
+            this.buttonCapnhat.Location = new System.Drawing.Point(89, 287);
             this.buttonCapnhat.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCapnhat.Name = "buttonCapnhat";
             this.buttonCapnhat.Size = new System.Drawing.Size(61, 24);
@@ -187,11 +188,23 @@
             this.comboBox1.Size = new System.Drawing.Size(127, 21);
             this.comboBox1.TabIndex = 37;
             // 
+            // buttonThoat
+            // 
+            this.buttonThoat.Location = new System.Drawing.Point(154, 287);
+            this.buttonThoat.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonThoat.Name = "buttonThoat";
+            this.buttonThoat.Size = new System.Drawing.Size(61, 24);
+            this.buttonThoat.TabIndex = 38;
+            this.buttonThoat.Text = "Thoát";
+            this.buttonThoat.UseVisualStyleBackColor = true;
+            this.buttonThoat.Click += new System.EventHandler(this.buttonThoat_Click);
+            // 
             // FormAdd_one_tentant
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(319, 322);
+            this.Controls.Add(this.buttonThoat);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.label8);
@@ -231,5 +244,6 @@
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button buttonThoat;
     }
 }

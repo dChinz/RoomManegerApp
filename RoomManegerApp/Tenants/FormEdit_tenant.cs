@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace RoomManegerApp.Tetants
 {
-    public partial class FormEdit_tetant : Form
+    public partial class FormEdit_tenant : Form
     {
         string tentant_id;
-        public FormEdit_tetant(string id)
+        public FormEdit_tenant(string id)
         {
             InitializeComponent();
             tentant_id = id;
@@ -27,7 +27,7 @@ namespace RoomManegerApp.Tetants
 
         private void FormEdit_tetant_Load(object sender, EventArgs e)
         {
-            sql = @"select * from tentants where id = @id";
+            sql = @"select * from tenants where id = @id";
             using(ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
@@ -62,24 +62,24 @@ namespace RoomManegerApp.Tetants
 
             if(!string.IsNullOrWhiteSpace(name) || !string.IsNullOrWhiteSpace(gender) || !string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(note))
             {
-                MessageBox.Show("Vui lòng điền đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Vui lòng điền đầy đủ thông tin.", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (phone.Length != 10 || !Int32.TryParse(phone, out int phoneNumber))
             {
-                MessageBox.Show("Số điện thoại không đúng", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Số điện thoại không đúng", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox2.Focus();
                 return;
             }
             if (id_card.Length != 12 || !Int64.TryParse(id_card, out long id_cardNumber))
             {
-                MessageBox.Show("Số CCCD không đúng", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Số CCCD không đúng", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox3.Focus();
                 return;
             }
 
-            sql = @"update tentants set name = @name, phone = @phone, id_card = @id_card, gender = @gender, address = @address, note = @note where id = @id";
+            sql = @"update tenants set name = @name, phone = @phone, id_card = @id_card, gender = @gender, address = @address, note = @note where id = @id";
             using(ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
@@ -95,7 +95,7 @@ namespace RoomManegerApp.Tetants
                     thuchien.ExecuteNonQuery();
                 }
             }
-            MessageBox.Show("Sửa thành công!", "Thông bào", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Cập nhật thành công!", "Thông bào", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             tentant_updateded?.Invoke(this, EventArgs.Empty);
             this.Close();

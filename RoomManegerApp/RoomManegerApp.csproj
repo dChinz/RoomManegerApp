@@ -51,6 +51,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bills\FormAdd_bill.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bills\FormAdd_bill.Designer.cs">
+      <DependentUpon>FormAdd_bill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bills\FormStatus_room_2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bills\FormStatus_room_2.Designer.cs">
+      <DependentUpon>FormStatus_room_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Check-in\FormAdd_check_in.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Check-in\FormAdd_check_in.Designer.cs">
+      <DependentUpon>FormAdd_check_in.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Check-in\FormStatus_room.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Check-in\FormStatus_room.Designer.cs">
+      <DependentUpon>FormStatus_room.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -69,11 +93,11 @@
     <Compile Include="Bills\FormBills.Designer.cs">
       <DependentUpon>FormBills.cs</DependentUpon>
     </Compile>
-    <Compile Include="Contracts\FormContract.cs">
+    <Compile Include="Check-in\FormCheck_in.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Contracts\FormContract.Designer.cs">
-      <DependentUpon>FormContract.cs</DependentUpon>
+    <Compile Include="Check-in\FormCheck_in.Designer.cs">
+      <DependentUpon>FormCheck_in.cs</DependentUpon>
     </Compile>
     <Compile Include="FormDashboard.cs">
       <SubType>Form</SubType>
@@ -81,22 +105,10 @@
     <Compile Include="FormDashboard.Designer.cs">
       <DependentUpon>FormDashboard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meter_readings\FormAdd_new.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Meter_readings\FormAdd_new.Designer.cs">
-      <DependentUpon>FormAdd_new.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Rooms\FormAdd_many_room.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Rooms\FormAdd_many_room.Designer.cs">
-      <DependentUpon>FormAdd_many_room.cs</DependentUpon>
     </Compile>
     <Compile Include="Rooms\FormAdd_one_room.cs">
       <SubType>Form</SubType>
@@ -104,23 +116,11 @@
     <Compile Include="Rooms\FormAdd_one_room.Designer.cs">
       <DependentUpon>FormAdd_one_room.cs</DependentUpon>
     </Compile>
-    <Compile Include="Rooms\FormEdit_many_room.cs">
+    <Compile Include="RoomDetails\FormRoomDeatils.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Rooms\FormEdit_many_room.Designer.cs">
-      <DependentUpon>FormEdit_many_room.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Rooms\FormEdit_one_room.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Rooms\FormEdit_one_room.Designer.cs">
-      <DependentUpon>FormEdit_one_room.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Meter_readings\FormMeterreading.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Meter_readings\FormMeterreading.Designer.cs">
-      <DependentUpon>FormMeterreading.cs</DependentUpon>
+    <Compile Include="RoomDetails\FormRoomDeatils.Designer.cs">
+      <DependentUpon>FormRoomDeatils.cs</DependentUpon>
     </Compile>
     <Compile Include="Rooms\FormRooms.cs">
       <SubType>Form</SubType>
@@ -128,49 +128,55 @@
     <Compile Include="Rooms\FormRooms.Designer.cs">
       <DependentUpon>FormRooms.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tetants\FormAdd_one_tentant.cs">
+    <Compile Include="Tenants\FormAdd_one_tenant.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Tetants\FormAdd_one_tentant.Designer.cs">
-      <DependentUpon>FormAdd_one_tentant.cs</DependentUpon>
+    <Compile Include="Tenants\FormAdd_one_tenant.Designer.cs">
+      <DependentUpon>FormAdd_one_tenant.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tetants\FormEdit_tetant.cs">
+    <Compile Include="Tenants\FormEdit_tenant.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Tetants\FormEdit_tetant.Designer.cs">
-      <DependentUpon>FormEdit_tetant.cs</DependentUpon>
+    <Compile Include="Tenants\FormEdit_tenant.Designer.cs">
+      <DependentUpon>FormEdit_tenant.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tetants\FormTenant.cs">
+    <Compile Include="Tenants\FormTenant.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Tetants\FormTenant.Designer.cs">
+    <Compile Include="Tenants\FormTenant.Designer.cs">
       <DependentUpon>FormTenant.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Bills\FormAdd_bill.resx">
+      <DependentUpon>FormAdd_bill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bills\FormBills.resx">
+      <DependentUpon>FormBills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bills\FormStatus_room_2.resx">
+      <DependentUpon>FormStatus_room_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Check-in\FormAdd_check_in.resx">
+      <DependentUpon>FormAdd_check_in.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Check-in\FormCheck_in.resx">
+      <DependentUpon>FormCheck_in.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Check-in\FormStatus_room.resx">
+      <DependentUpon>FormStatus_room.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormDangNhap.resx">
       <DependentUpon>FormDangNhap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDashboard.resx">
       <DependentUpon>FormDashboard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Meter_readings\FormAdd_new.resx">
-      <DependentUpon>FormAdd_new.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Meter_readings\FormMeterreading.resx">
-      <DependentUpon>FormMeterreading.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Rooms\FormAdd_many_room.resx">
-      <DependentUpon>FormAdd_many_room.cs</DependentUpon>
+    <EmbeddedResource Include="RoomDetails\FormRoomDeatils.resx">
+      <DependentUpon>FormRoomDeatils.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Rooms\FormAdd_one_room.resx">
       <DependentUpon>FormAdd_one_room.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Rooms\FormEdit_many_room.resx">
-      <DependentUpon>FormEdit_many_room.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Rooms\FormEdit_one_room.resx">
-      <DependentUpon>FormEdit_one_room.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Rooms\FormRooms.resx">
       <DependentUpon>FormRooms.cs</DependentUpon>
@@ -180,13 +186,13 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tetants\FormAdd_one_tentant.resx">
-      <DependentUpon>FormAdd_one_tentant.cs</DependentUpon>
+    <EmbeddedResource Include="Tenants\FormAdd_one_tenant.resx">
+      <DependentUpon>FormAdd_one_tenant.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tetants\FormEdit_tetant.resx">
-      <DependentUpon>FormEdit_tetant.cs</DependentUpon>
+    <EmbeddedResource Include="Tenants\FormEdit_tenant.resx">
+      <DependentUpon>FormEdit_tenant.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tetants\FormTenant.resx">
+    <EmbeddedResource Include="Tenants\FormTenant.resx">
       <DependentUpon>FormTenant.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Database\dtb_roommanager.db" />
