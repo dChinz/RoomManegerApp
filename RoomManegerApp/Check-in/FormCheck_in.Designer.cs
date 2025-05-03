@@ -42,7 +42,7 @@
             this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.start_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.end_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.desposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -103,7 +103,7 @@
             this.phone,
             this.start_date,
             this.end_date,
-            this.desposit,
+            this.type,
             this.status});
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 2);
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -200,12 +200,12 @@
             this.end_date.Name = "end_date";
             this.end_date.ReadOnly = true;
             // 
-            // desposit
+            // type
             // 
-            this.desposit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.desposit.HeaderText = "Tiền cọc";
-            this.desposit.Name = "desposit";
-            this.desposit.ReadOnly = true;
+            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.type.HeaderText = "Loại phòng";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
             // 
             // status
             // 
@@ -214,13 +214,13 @@
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
-            // FormContract
+            // FormCheck_in
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "FormContract";
+            this.Name = "FormCheck_in";
             this.Text = "FormContract";
             this.Load += new System.EventHandler(this.FormCheck_in_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
@@ -248,7 +248,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn phone;
         private System.Windows.Forms.DataGridViewTextBoxColumn start_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn end_date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn desposit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
     }
 }

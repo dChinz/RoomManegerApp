@@ -33,7 +33,7 @@ namespace RoomManegerApp.Tetants
 
         private void FormAdd_one_tentant_Load(object sender, EventArgs e)
         {
-            sql = @"select * from tenants order by id desc limit 1";
+            sql = @"select id from tenants order by id desc limit 1";
             int i = 0;
             using (ketnoi = Database_connect.connection())
             {
@@ -44,7 +44,7 @@ namespace RoomManegerApp.Tetants
                     {
                         if (doc.Read())
                         {
-                            i = Int32.Parse(doc[0].ToString());
+                            i = Int32.Parse(doc["id"].ToString());
                             i++;
                         }
                     }
@@ -64,13 +64,13 @@ namespace RoomManegerApp.Tetants
 
             if(phone.Length != 10 || !Int32.TryParse(phone, out int phoneNumber))
             {
-                MessageBox.Show("Số điện thoại không đúng", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Số điện thoại không đúng (SDT gồm 10 số)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox2.Focus();
                 return;
             }
             if (id_card.Length != 12 || !Int64.TryParse(id_card, out long id_cardNumber))
             {
-                MessageBox.Show("Số CCCD không đúng", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Số CCCD không đúng (CCCD gồm 12 số)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox3.Focus();
                 return;
             }
@@ -81,7 +81,7 @@ namespace RoomManegerApp.Tetants
                 return;
             }
 
-            sql = "select 1 from tenants where name = @name and phone = @phone and id_card = @id_card and gender = @gender and address = @address and note = @note";
+            sql = "select 1 from tenants where name = @name or phone = @phone or id_card = @id_card";
             using(ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
@@ -109,12 +109,12 @@ namespace RoomManegerApp.Tetants
                     thuchien.Parameters.AddWithValue("@phone", phone);
                     thuchien.Parameters.AddWithValue("@id_card", id_card);
                     thuchien.Parameters.AddWithValue("@gender", gender);
-                    thuchien.Parameters.AddWithValue("@address", address ?? "");
-                    thuchien.Parameters.AddWithValue("@note", note ?? "");
+                    thuchien.Parameters.AddWithValue("@address", address);
+                    thuchien.Parameters.AddWithValue("@note", note);
                     thuchien.ExecuteNonQuery();
                 }
             }
-            MessageBox.Show("Thêm người thuê thành công!", "Thông bào", MessageBoxButtons.OK);
+            MessageBox.Show("Thêm khách hàng thành công!", "Thông bào", MessageBoxButtons.OK);
 
             resetForm();
             if(tenantName != null)

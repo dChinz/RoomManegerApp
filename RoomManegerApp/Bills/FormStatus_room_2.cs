@@ -14,9 +14,12 @@ namespace RoomManegerApp.Bills
 {
     public partial class FormStatus_room_2 : Form
     {
-        public FormStatus_room_2()
+        private Action _callback;
+
+        public FormStatus_room_2(Action callback)
         {
             InitializeComponent();
+            _callback = callback;
         }
 
         string sql;
@@ -74,7 +77,7 @@ namespace RoomManegerApp.Bills
                                 DialogResult result = MessageBox.Show("Bạn muốn chọn phòng: " + roomName, "Thông báo", MessageBoxButtons.YesNo);
                                 if (result == DialogResult.Yes)
                                 {
-                                    FormAdd_bill form = new FormAdd_bill(roomName);
+                                    FormAdd_bill form = new FormAdd_bill(roomName, _callback);
                                     form.Show();
                                     this.Hide();
                                 }

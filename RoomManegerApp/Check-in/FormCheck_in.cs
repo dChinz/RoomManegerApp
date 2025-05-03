@@ -35,13 +35,13 @@ namespace RoomManegerApp.Forms
             {
                 ketnoi.Open();
 
-                sql = @"create table if not exists contracts(
+                sql = @"create table if not exists check_in(
                     id integer primary key autoincrement,
                     room_id integer,
                     tenant_id integer,
                     start_date integer,
                     end_date integer,
-                    desposit real,
+                    type text,
                     status text,
                     foreign key (room_id) references rooms(id) on delete cascade,
                     foreign key (tenant_id) references tenants(id) on delete cascade);";
@@ -50,10 +50,10 @@ namespace RoomManegerApp.Forms
                     thuchien.ExecuteNonQuery();
                 }
 
-                sql = @"select contracts.id as contract_id, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, desposit, contracts.status as contracts_status
-                    from contracts
-                    inner join rooms on contracts.room_id = rooms.id
-                    inner join tenants on contracts.tenant_id = tenants.id";
+                sql = @"select check_in.id as check_in, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, check_in.type as check_in_type, check_in.status as check_in_status
+                    from check_in
+                    inner join rooms on check_in.room_id = rooms.id
+                    inner join tenants on check_in.tenant_id = tenants.id";
                 using (thuchien = new SQLiteCommand(sql, ketnoi))
                 {
                     using (doc = thuchien.ExecuteReader())
@@ -97,18 +97,18 @@ namespace RoomManegerApp.Forms
 
             if (!checkSearch)
             {
-                sql = @"select contracts.id as contract_id, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, desposit, contracts.status as contracts_status
-                    from contracts
-                    inner join rooms on contracts.room_id = rooms.id
-                    inner join tenants on contracts.tenant_id = tenants.id
+                sql = @"select check_in.id as check_in,rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, check_in.type as check_in_type, check_in.status as check_in_status
+                    from check_in
+                    inner join rooms on check_in.room_id = rooms.id
+                    inner join tenants on check_in.tenant_id = tenants.id
                     where room_name like '%' || @name || '%'";
             }
             else
             {
-                sql = @"select contracts.id as contract_id, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, desposit, contracts.status as contracts_status
-                    from contracts
-                    inner join rooms on contracts.room_id = rooms.id
-                    inner join tenants on contracts.tenant_id = tenants.id
+                sql = @"select check_in.id as check_in, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, check_in.type as check_in_type, check_in.status as check_in_status
+                    from check_in
+                    inner join rooms on check_in.room_id = rooms.id
+                    inner join tenants on check_in.tenant_id = tenants.id
                     where tenants_name like '%' || @name || '%'";
             }
             using (ketnoi = Database_connect.connection())
@@ -140,9 +140,9 @@ namespace RoomManegerApp.Forms
             DateTime.TryParseExact(dbEnd_date, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime end_date);
             string formattedEnd_date = end_date.ToString("dd/MM/yyyy");
 
-            int rowIndex = dataGridView1.Rows.Add(doc["contract_id"], doc["room_name"], doc["tenants_name"], doc["tenants_phone"], formattedStart_date, formattedEnd_date, doc["desposit"], doc["contracts_status"]);
+            int rowIndex = dataGridView1.Rows.Add(doc["check_in"], doc["room_name"], doc["tenants_name"], doc["tenants_phone"], formattedStart_date, formattedEnd_date, doc["check_in_type"], doc["check_in_status"]);
 
-            SetStatusColor(dataGridView1.Rows[rowIndex], doc["contracts_status"].ToString());
+            SetStatusColor(dataGridView1.Rows[rowIndex], doc["check_in_status"].ToString());
         }
 
         private void update_status()
@@ -158,7 +158,7 @@ namespace RoomManegerApp.Forms
 
                     string id = row.Cells["id"].Value.ToString();
 
-                    sql = @"select end_date from contracts where id = @id";
+                    sql = @"select end_date from check_in where id = @id";
                     using (thuchien = new SQLiteCommand(sql, ketnoi))
                     {
                         thuchien.Parameters.AddWithValue("@id", id);
@@ -180,7 +180,7 @@ namespace RoomManegerApp.Forms
                 }
                 foreach (string id in listID)
                 {
-                    sql = @"update contracts set status = 'Hết hạn' where id = @id";
+                    sql = @"update check_in set status = 'Hết hạn' where id = @id";
                     using (thuchien = new SQLiteCommand(sql, ketnoi))
                     {
                         thuchien.Parameters.AddWithValue("@id", id);

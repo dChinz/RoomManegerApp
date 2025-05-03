@@ -62,7 +62,7 @@ namespace RoomManegerApp
                     {
                         while (doc.Read())
                         {
-                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["price"], doc["note"]);
+                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["type"], doc["price"], doc["note"]);
 
                             if (buttonSave.Visible)
                             {
@@ -110,7 +110,7 @@ namespace RoomManegerApp
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 var row = dataGridView1.SelectedRows[0];
-                id = Int32.Parse(row.Cells[1].Value.ToString()); //lấy id từ dòng đã chọn
+                id = Int32.Parse(row.Cells[0].Value.ToString()); //lấy id từ dòng đã chọn
             }
             return id;
         }
@@ -141,16 +141,16 @@ namespace RoomManegerApp
         {
             MessageBox.Show("Bạn đang bật trạng thái cập nhật. Hiện tại bạn có thể sửa luôn vào bảng.", "Thông báo");
 
-            DataGridViewComboBoxColumn comboColumn = new DataGridViewComboBoxColumn();
-            comboColumn.Name = "status";
-            comboColumn.HeaderText = "Tình trạng";
-            comboColumn.Items.Add("Trống");
-            comboColumn.Items.Add("Đã thuê");
-            comboColumn.Items.Add("Đang sửa chữa");
-            comboColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            //DataGridViewComboBoxColumn comboColumn = new DataGridViewComboBoxColumn();
+            //comboColumn.Name = "status";
+            //comboColumn.HeaderText = "Tình trạng";
+            //comboColumn.Items.Add("Trống");
+            //comboColumn.Items.Add("Đã thuê");
+            //comboColumn.Items.Add("Đang sửa chữa");
+            //comboColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            dataGridView1.Columns.RemoveAt(2);
-            dataGridView1.Columns.Insert(2, comboColumn);
+            //dataGridView1.Columns.RemoveAt(2);
+            //dataGridView1.Columns.Insert(2, comboColumn);
 
             load_rooms();
 
@@ -168,6 +168,7 @@ namespace RoomManegerApp
             dataGridView1.ReadOnly = false;
             dataGridView1.Columns[0].ReadOnly = true;
             dataGridView1.Columns[1].ReadOnly = true;
+            dataGridView1.Columns[2].ReadOnly = true;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)

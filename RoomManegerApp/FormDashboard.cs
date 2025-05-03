@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static RoomManegerApp.FormDangNhap;
 
 namespace RoomManegerApp.Forms
 {
@@ -16,32 +17,40 @@ namespace RoomManegerApp.Forms
         {
             InitializeComponent();
         }
+        public Role UserRole { get; set; }
 
         private void phòngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormRooms rooms = new FormRooms();
-            rooms.MdiParent = this;
-            rooms.Dock = DockStyle.Fill;
-            rooms.Show();
+            if(UserRole == Role.Admin || UserRole == Role.Manager)
+            {
+                FormRooms rooms = new FormRooms();
+                rooms.MdiParent = this;
+                rooms.Dock = DockStyle.Fill;
+                rooms.Show();
+            }
+            else
+            {
+                MessageBox.Show("Bạn không có quyền truy cập khu vực này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            
         }
 
         private void kháchThuêToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormTenant rooms = new FormTenant();
-            rooms.MdiParent = this;
-            rooms.Dock = DockStyle.Fill;
-            rooms.Show();
+            if (UserRole == Role.Admin || UserRole == Role.Manager)
+            {
+                FormTenant rooms = new FormTenant();
+                rooms.MdiParent = this;
+                rooms.Dock = DockStyle.Fill;
+                rooms.Show();
+            }
+            else
+            {
+                MessageBox.Show("Bạn không có quyền truy cập khu vực này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
-        private void điệnNướcToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormRoomDeatils form = new FormRoomDeatils();
-            form.MdiParent = this;
-            form.Dock = DockStyle.Fill;
-            form.Show();
-        }
-
-        private void hóaĐơnToolStripMenuItem_Click(object sender, EventArgs e)
+        private void checkInToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormBills form = new FormBills();
             form.MdiParent = this;
@@ -49,7 +58,7 @@ namespace RoomManegerApp.Forms
             form.Show();
         }
 
-        private void hợpĐồngToolStripMenuItem_Click(object sender, EventArgs e)
+        private void checkOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormCheck_in form = new FormCheck_in();
             form.MdiParent = this;

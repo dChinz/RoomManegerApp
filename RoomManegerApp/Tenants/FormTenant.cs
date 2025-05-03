@@ -47,6 +47,7 @@ namespace RoomManegerApp.Forms
 
         public void load_tentant()
         {
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.Rows.Clear();
 
             sql = @"select * from tenants";
@@ -167,7 +168,7 @@ namespace RoomManegerApp.Forms
         {
             string name = textBoxName.Text;
             string id_card = textBoxId_card.Text;
-            sql = "select * from tentants";
+            sql = "select * from tenants";
             List<string> list = new List<string>();
 
             if(name != "" && name != "Nhập tên...")
@@ -201,7 +202,7 @@ namespace RoomManegerApp.Forms
                     {
                         while (doc.Read())
                         {
-                            dataGridView1.Rows.Add(false, doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"], doc["note"]);
+                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"], doc["note"]);
                         }
                     }
                 }

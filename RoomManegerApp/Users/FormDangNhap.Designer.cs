@@ -53,7 +53,7 @@
             this.checkBox1.Location = new System.Drawing.Point(152, 235);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(191, 33);
+            this.checkBox1.Size = new System.Drawing.Size(131, 24);
             this.checkBox1.TabIndex = 11;
             this.checkBox1.Text = "Hiện mật khẩu";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -64,9 +64,8 @@
             this.textBoxPassword.Location = new System.Drawing.Point(152, 184);
             this.textBoxPassword.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.Size = new System.Drawing.Size(196, 35);
+            this.textBoxPassword.Size = new System.Drawing.Size(196, 26);
             this.textBoxPassword.TabIndex = 9;
-            this.textBoxPassword.Text = "123456";
             // 
             // label1
             // 
@@ -75,7 +74,7 @@
             this.label1.Location = new System.Drawing.Point(101, 53);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(181, 29);
+            this.label1.Size = new System.Drawing.Size(120, 20);
             this.label1.TabIndex = 6;
             this.label1.Text = "Tên đăng nhập:";
             // 
@@ -85,9 +84,8 @@
             this.textBoxUsername.Location = new System.Drawing.Point(152, 89);
             this.textBoxUsername.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.textBoxUsername.Name = "textBoxUsername";
-            this.textBoxUsername.Size = new System.Drawing.Size(196, 35);
+            this.textBoxUsername.Size = new System.Drawing.Size(196, 26);
             this.textBoxUsername.TabIndex = 7;
-            this.textBoxUsername.Text = "admin";
             // 
             // label2
             // 
@@ -96,13 +94,13 @@
             this.label2.Location = new System.Drawing.Point(101, 153);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 29);
+            this.label2.Size = new System.Drawing.Size(79, 20);
             this.label2.TabIndex = 8;
             this.label2.Text = "Mật khẩu:";
             // 
             // FormDangNhap
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 29F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(515, 402);
             this.Controls.Add(this.button1);

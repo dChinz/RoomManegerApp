@@ -36,9 +36,9 @@
             this.textBoxNameTenant = new System.Windows.Forms.TextBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.textBoxDesposit = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.labelNameRoom = new System.Windows.Forms.Label();
+            this.labelTypeRoom = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonCapnhat
@@ -114,23 +114,15 @@
             this.dateTimePicker2.Size = new System.Drawing.Size(200, 20);
             this.dateTimePicker2.TabIndex = 38;
             // 
-            // textBoxDesposit
-            // 
-            this.textBoxDesposit.Location = new System.Drawing.Point(133, 183);
-            this.textBoxDesposit.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxDesposit.Name = "textBoxDesposit";
-            this.textBoxDesposit.Size = new System.Drawing.Size(200, 20);
-            this.textBoxDesposit.TabIndex = 40;
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(67, 186);
+            this.label7.Location = new System.Drawing.Point(60, 186);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(49, 13);
+            this.label7.Size = new System.Drawing.Size(60, 13);
             this.label7.TabIndex = 39;
-            this.label7.Text = "Tiền cọc";
+            this.label7.Text = "Loại phòng";
             // 
             // labelNameRoom
             // 
@@ -141,13 +133,22 @@
             this.labelNameRoom.TabIndex = 41;
             this.labelNameRoom.Text = "label1";
             // 
+            // labelTypeRoom
+            // 
+            this.labelTypeRoom.AutoSize = true;
+            this.labelTypeRoom.Location = new System.Drawing.Point(130, 186);
+            this.labelTypeRoom.Name = "labelTypeRoom";
+            this.labelTypeRoom.Size = new System.Drawing.Size(35, 13);
+            this.labelTypeRoom.TabIndex = 42;
+            this.labelTypeRoom.Text = "label1";
+            // 
             // FormAdd_check_in
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(372, 331);
+            this.Controls.Add(this.labelTypeRoom);
             this.Controls.Add(this.labelNameRoom);
-            this.Controls.Add(this.textBoxDesposit);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.dateTimePicker2);
             this.Controls.Add(this.dateTimePicker1);
@@ -174,8 +175,8 @@
         private System.Windows.Forms.TextBox textBoxNameTenant;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
-        private System.Windows.Forms.TextBox textBoxDesposit;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label labelNameRoom;
+        private System.Windows.Forms.Label labelTypeRoom;
     }
 }

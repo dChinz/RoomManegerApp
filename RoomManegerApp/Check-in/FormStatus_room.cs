@@ -28,11 +28,13 @@ namespace RoomManegerApp.Contracts
         {
             load_status_room();
             flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel2.AutoScroll = true;
+            flowLayoutPanel3.AutoScroll = true;
         }
 
         private void load_status_room()
         {
-            sql = @"select name, status from rooms";
+            sql = @"select name, status, type from rooms";
             using (ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
@@ -44,6 +46,7 @@ namespace RoomManegerApp.Contracts
                         {
                             string roomName = doc["name"].ToString();
                             string status = doc["status"].ToString();
+                            string type = doc["type"].ToString();
 
                             Button button = new Button();
                             button.Text = roomName;
@@ -74,14 +77,28 @@ namespace RoomManegerApp.Contracts
                                     DialogResult result =  MessageBox.Show("Bạn muốn chọn phòng: " + roomName, "Thông báo", MessageBoxButtons.YesNo);
                                     if (result == DialogResult.Yes)
                                     {
-                                        FormAdd_check_in f = new FormAdd_check_in(roomName);
+                                        FormAdd_check_in f = new FormAdd_check_in(roomName, type);
                                         f.Show();
                                         this.Hide();
                                     }
                                     return;
                                 };
-
-                            flowLayoutPanel1.Controls.Add(button);
+                            if(type == "Superior")
+                            {
+                                flowLayoutPanel1.Controls.Add(button);
+                            }
+                            else if(type == "Deluxe")
+                            {
+                                flowLayoutPanel2.Controls.Add(button);
+                            }
+                            else if (type == "Executive")
+                            {
+                                flowLayoutPanel3.Controls.Add(button);
+                            }
+                            else 
+                            {
+                                flowLayoutPanel4.Controls.Add(button);
+                            }
                         }
                     }
                 }

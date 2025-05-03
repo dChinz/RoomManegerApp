@@ -60,7 +60,7 @@ namespace RoomManegerApp.Tetants
             string address = textBox5.Text.Trim();
             string note = textBox6.Text.Trim();
 
-            if(!string.IsNullOrWhiteSpace(name) || !string.IsNullOrWhiteSpace(gender) || !string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(note))
+            if(string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(gender))
             {
                 MessageBox.Show("Vui lòng điền đầy đủ thông tin.", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;

@@ -17,10 +17,12 @@ namespace RoomManegerApp.Contracts
     public partial class FormAdd_check_in : Form
     {
         private string nameRoom;
-        public FormAdd_check_in(string roomName)
+        private string type;
+        public FormAdd_check_in(string roomName, string roomType)
         {
             InitializeComponent();
             nameRoom = roomName;
+            type = roomType;
         }
         
 
@@ -36,6 +38,7 @@ namespace RoomManegerApp.Contracts
         private void load_add_contract()
         {
             labelNameRoom.Text = nameRoom;
+            labelTypeRoom.Text = type;
         }
 
         private void buttonCapnhat_Click(object sender, EventArgs e)
@@ -44,7 +47,7 @@ namespace RoomManegerApp.Contracts
             string nameTenant = textBoxNameTenant.Text;
             int start_date = Convert.ToInt32(dateTimePicker1.Value.ToString("yyyyMMdd"));
             int end_date = Convert.ToInt32(dateTimePicker2.Value.ToString("yyyyMMdd"));
-            double desposit = string.IsNullOrWhiteSpace(textBoxDesposit.Text) ? 0 : Convert.ToDouble(textBoxDesposit.Text);
+            string typeRoom = labelTypeRoom.Text;
 
             if (string.IsNullOrWhiteSpace(nameTenant) || !Regex.IsMatch(nameTenant, @"[^a-zA-z\s]"))
             {
@@ -55,12 +58,6 @@ namespace RoomManegerApp.Contracts
             if (end_date < start_date)
             {
                 MessageBox.Show("Lỗi dữ liệu ngày (Ngày kết thúc không thể bé hơn ngày bắt đầu)", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if(desposit <= 0)
-            {
-                MessageBox.Show("Vui lòng nhập đúng dữ liệu tiền cọc (lớn hơn 0)", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             using(ketnoi = Database_connect.connection())
@@ -95,7 +92,7 @@ namespace RoomManegerApp.Contracts
                         sql = @"select id from rooms where name = @name";
                         using (thuchien = new SQLiteCommand(sql, ketnoi))
                         {
-                            thuchien.Parameters.AddWithValue("@name", "Room " + nameRoom);
+                            thuchien.Parameters.AddWithValue("@name", nameRoom);
                             using (doc = thuchien.ExecuteReader())
                             {
                                 if (doc.Read())
@@ -105,14 +102,14 @@ namespace RoomManegerApp.Contracts
                             }
                         }
 
-                        sql = @"insert into contracts (room_id, tenant_id, start_date, end_date, desposit, status) values (@room_id, @tenant_id, @start_date, @end_date, @desposit, 'Còn hiệu lực')";
+                        sql = @"insert into check_in (room_id, tenant_id, start_date, end_date, type, status) values (@room_id, @tenant_id, @start_date, @end_date, @type, 'Còn hiệu lực')";
                         using (thuchien = new SQLiteCommand(sql, ketnoi))
                         {
                             thuchien.Parameters.AddWithValue("@room_id", idRoom);
                             thuchien.Parameters.AddWithValue("@tenant_id", idTenant);
                             thuchien.Parameters.AddWithValue("@start_date", start_date);
                             thuchien.Parameters.AddWithValue("@end_date", end_date);
-                            thuchien.Parameters.AddWithValue("@desposit", desposit);
+                            thuchien.Parameters.AddWithValue("@type", typeRoom);
                             thuchien.ExecuteNonQuery();
                         }
 

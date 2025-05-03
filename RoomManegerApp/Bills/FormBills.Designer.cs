@@ -28,21 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.check_in_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total_days = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.desposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonAdd_new = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.đãThanhToánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -55,7 +59,7 @@
             this.check_in_id,
             this.total_days,
             this.rent,
-            this.desposit,
+            this.type,
             this.total,
             this.status,
             this.note});
@@ -66,6 +70,7 @@
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(794, 399);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             // 
             // id
             // 
@@ -96,12 +101,12 @@
             this.rent.Name = "rent";
             this.rent.ReadOnly = true;
             // 
-            // desposit
+            // type
             // 
-            this.desposit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.desposit.HeaderText = "Tiền cọc";
-            this.desposit.Name = "desposit";
-            this.desposit.ReadOnly = true;
+            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.type.HeaderText = "Loại phòng";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
             // 
             // total
             // 
@@ -159,6 +164,20 @@
             this.buttonAdd_new.UseVisualStyleBackColor = true;
             this.buttonAdd_new.Click += new System.EventHandler(this.buttonAdd_new_Click);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.đãThanhToánToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            // 
+            // đãThanhToánToolStripMenuItem
+            // 
+            this.đãThanhToánToolStripMenuItem.Name = "đãThanhToánToolStripMenuItem";
+            this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.đãThanhToánToolStripMenuItem.Text = "Đã thanh toán";
+            this.đãThanhToánToolStripMenuItem.Click += new System.EventHandler(this.đãThanhToánToolStripMenuItem_Click);
+            // 
             // FormBills
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -171,6 +190,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -178,16 +198,18 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button buttonAdd_new;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn check_in_id;
         private System.Windows.Forms.DataGridViewTextBoxColumn total_days;
         private System.Windows.Forms.DataGridViewTextBoxColumn rent;
-        private System.Windows.Forms.DataGridViewTextBoxColumn desposit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn total;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewTextBoxColumn note;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button buttonAdd_new;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem đãThanhToánToolStripMenuItem;
     }
 }
