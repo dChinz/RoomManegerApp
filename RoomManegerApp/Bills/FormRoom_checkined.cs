@@ -12,11 +12,11 @@ using RoomManegerApp.Contracts;
 
 namespace RoomManegerApp.Bills
 {
-    public partial class FormStatus_room_2 : Form
+    public partial class FormRoom_checkined : Form
     {
         private Action _callback;
 
-        public FormStatus_room_2(Action callback)
+        public FormRoom_checkined(Action callback)
         {
             InitializeComponent();
             _callback = callback;

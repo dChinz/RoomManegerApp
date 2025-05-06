@@ -27,6 +27,7 @@ namespace RoomManegerApp
         private void FormDangNhap_Load(object sender, EventArgs e)
         {
             textBoxPassword.UseSystemPasswordChar = true;
+            this.AcceptButton = button1;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -55,6 +56,7 @@ namespace RoomManegerApp
                         {
                             string roleStr = doc["role"].ToString();
                             Role role = (Role)Enum.Parse(typeof(Role), roleStr, ignoreCase: true);
+                            doc.Close();
 
                             Forms.FormDashboard f = new Forms.FormDashboard();
                             f.UserRole = role;
@@ -65,6 +67,7 @@ namespace RoomManegerApp
                         }
                         else
                         {
+                            doc.Close();
                             MessageBox.Show("Tài khoản hoặc mật khẩu không chính xác", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }

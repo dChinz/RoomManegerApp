@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RoomManegerApp.Bills;
+using RoomManegerApp.Report;
 
 namespace RoomManegerApp.Forms
 {
@@ -39,31 +40,24 @@ namespace RoomManegerApp.Forms
             using(ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
-
-                sql = @"create table if not exists bills (
-                    id integer primary key autoincrement,
-                    check_in_id integer,
-                    total_days integer,
-                    rent real,
-                    type text,
-                    total real,
-                    status text,
-                    note text,
-                    foreign key (check_in_id) references check_in(id) on delete cascade
-                    foreign key (type) references check_in(type) on delete cascade)";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.ExecuteNonQuery();
-                }
-
-                sql = @"select id, check_in_id, total_days, rent, type, total, status, note from bills";
+                sql = @"select bills.id as b_id, bills.checkins_id as b_c_id, bills.status as b_status, end_date, start_date , rooms.price as r_price
+                        from bills
+                        inner join checkins on bills.checkins_id = checkins.id
+                        inner join rooms on checkins.room_id = rooms.id";
                 using (thuchien = new SQLiteCommand(sql, ketnoi))
                 {
                     using (doc = thuchien.ExecuteReader())
                     {
                         while (doc.Read())
                         {
-                            dataGridView1.Rows.Add(doc["id"], doc["check_in_id"], doc["total_days"], doc["rent"], doc["type"], doc["total"], doc["status"], doc["note"]);
+                            int startDate = Convert.ToInt32(doc["start_date"].ToString());
+                            int endDate = Convert.ToInt32(doc["end_date"].ToString());
+                            DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
+                            DateTime end = DateTime.ParseExact(endDate.ToString(), "yyyyMMdd", null);
+                            int totalDays = (end - start).Days;
+                            double price = Convert.ToDouble(doc["r_price"].ToString());
+
+                            dataGridView1.Rows.Add(doc["b_id"], doc["b_c_id"], totalDays, price, totalDays * price, doc["b_status"]);
                         }
                     }
                 }
@@ -72,7 +66,7 @@ namespace RoomManegerApp.Forms
 
         private void buttonAdd_new_Click(object sender, EventArgs e)
         {
-            FormStatus_room_2 form = new FormStatus_room_2(reloadData);
+            FormRoom_checkined form = new FormRoom_checkined(reloadData);
             form.Show();
         }
 
@@ -121,6 +115,13 @@ namespace RoomManegerApp.Forms
                 id = Int32.Parse(row.Cells[0].Value.ToString()); //lấy id từ dòng đã chọn
             }
             return id;
+        }
+
+        private void inHóaĐơnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int id = get_id_bill();
+            PrintBills form = new PrintBills(id);
+            form.ShowDialog();
         }
     }
 }

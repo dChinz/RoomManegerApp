@@ -28,18 +28,14 @@ namespace RoomManegerApp.Romms
         private void FormAdd_room_Load(object sender, EventArgs e)
         {
             load_add_room();
-
-            
         }
 
         private void load_add_room()
         {
-            comboBox1.SelectedIndex = 0;
             textBox2.ReadOnly = true;
             textBox1.Text = null;
-            comboBox1.SelectedIndex = 0;
-            textBox3.Text = null;
             textBox4.Text = null;
+            comboBox1.SelectedIndex = 0;
 
             sql = @"select id, name, status, price, note from rooms order by id desc limit 1";
             int i = 0;
@@ -66,16 +62,10 @@ namespace RoomManegerApp.Romms
 
         private void buttonCapnhat_Click(object sender, EventArgs e)
         {
-            if(new Control[] {textBox1, comboBox1, textBox3, textBox4}.Any(c => string.IsNullOrWhiteSpace(c.Text)))
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thiếu dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             string room = textBox1.Text.Trim();
-            string status = comboBox1.Text.Trim();
+            string status = label7.Text.Trim();
+            string type = comboBox1.Text.Trim();
             double price = 0;
-            bool checkPrice = double.TryParse(textBox3.Text, out price);
             string note = textBox4.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(room))
@@ -84,53 +74,68 @@ namespace RoomManegerApp.Romms
                 textBox1.Focus();
                 return;
             }
-            if (string.IsNullOrWhiteSpace(status))
+            if (string.IsNullOrWhiteSpace(type))
             {
-                MessageBox.Show("Vui lòng chọn trạng thái!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                comboBox1.Focus();
+                MessageBox.Show("Vui lòng chọn loại phòng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox1.Focus();
                 return;
             }
-            if (!checkPrice)
+            if(type == "Superior")
             {
-                MessageBox.Show("Vui lòng nhập đúng định dạng giá tiền!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBox3.Focus();
-                return;
+                price = 1300000;
             }
-            if (string.IsNullOrWhiteSpace(note))
+            else if(type == "Deluxe")
             {
-                MessageBox.Show("Vui lòng nhập ghi chú!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBox4.Focus();
-                return;
+                price = 1800000;
+            }
+            else if (type == "Executive")
+            {
+                price = 2000000;
+            }
+            else if (type == "Suite")
+            {
+                price = 2500000;
             }
 
-            if (room.StartsWith("room ", StringComparison.OrdinalIgnoreCase))
+            sql = @"select 1 from rooms where name = @name";
+            using(ketnoi = Database_connect.connection())
             {
-                room = "Room " + room.Substring(5).TrimStart();
-            }
-            else if (!room.StartsWith("Room "))
-            {
-                room = "Room " + room;
-            }
-
-            sql = @"insert into rooms (name, status, price, note) values(@name, @status, @price, @note)";
-            using (ketnoi = Database_connect.connection())
-            {
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                ketnoi.Open();
+                using(thuchien = new SQLiteCommand(sql, ketnoi))
                 {
                     thuchien.Parameters.AddWithValue("@name", room);
-                    thuchien.Parameters.AddWithValue("@status", status);
-                    thuchien.Parameters.AddWithValue("@price", price);
-                    thuchien.Parameters.AddWithValue("@note", note);
-                    ketnoi.Open();
-                    thuchien.ExecuteNonQuery();
+                    using(doc = thuchien.ExecuteReader())
+                    {
+                        if (doc.HasRows)
+                        {
+                            MessageBox.Show("Phòng này đã tồn tại!!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        else
+                        {
+                            sql = @"insert into rooms (name, status, type, price, note) values(@name, @status, @type, @price, @note)";
+                            using (ketnoi = Database_connect.connection())
+                            {
+                                ketnoi.Open();
+                                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                                {
+                                    thuchien.Parameters.AddWithValue("@name", room);
+                                    thuchien.Parameters.AddWithValue("@status", status);
+                                    thuchien.Parameters.AddWithValue("@type", type);
+                                    thuchien.Parameters.AddWithValue("@price", price);
+                                    thuchien.Parameters.AddWithValue("@note", note);
+                                    thuchien.ExecuteNonQuery();
+                                }
+                            }
+                            ;
+                            MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            // Gọi event nếu có người đăng ký
+                            room_added?.Invoke(this, EventArgs.Empty);
+                            load_add_room();
+                        }
+                    }
                 }
-            };
-            MessageBox.Show("Thêm thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Gọi event nếu có người đăng ký
-            room_added?.Invoke(this, EventArgs.Empty);
-
-            load_add_room();
+            }
         }
 
         public event EventHandler room_added;

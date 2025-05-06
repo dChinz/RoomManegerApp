@@ -14,9 +14,12 @@ namespace RoomManegerApp.Contracts
 {
     public partial class FormStatus_room : Form
     {
-        public FormStatus_room()
+        private Action _callback;
+
+        public FormStatus_room(Action callback)
         {
             InitializeComponent();
+            _callback = callback;
         }
 
         string sql;
@@ -77,7 +80,7 @@ namespace RoomManegerApp.Contracts
                                     DialogResult result =  MessageBox.Show("Bạn muốn chọn phòng: " + roomName, "Thông báo", MessageBoxButtons.YesNo);
                                     if (result == DialogResult.Yes)
                                     {
-                                        FormAdd_check_in f = new FormAdd_check_in(roomName, type);
+                                        FormAdd_check_in f = new FormAdd_check_in(roomName, type, _callback);
                                         f.Show();
                                         this.Hide();
                                     }

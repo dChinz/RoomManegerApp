@@ -37,10 +37,10 @@ namespace RoomManegerApp.Bills
 
         private void load_add_bill()
         {
-            sql = @"select tenants.name as t_name, rooms.name as r_name, check_in.start_date as c_s_date, check_in.end_date as c_e_date, check_in.type as c_type, rooms.price as r_price
-                    from check_in
-                    inner join rooms on check_in.room_id = rooms.id
-                    inner join tenants on check_in.tenant_id = tenants.id
+            sql = @"select tenants.name as t_name, rooms.name as r_name, checkins.start_date as c_s_date, checkins.end_date as c_e_date, rooms.type as r_type, rooms.price as r_price
+                    from checkins
+                    inner join rooms on checkins.room_id = rooms.id
+                    inner join tenants on checkins.tenant_id = tenants.id
                     where rooms.name = @name";
             using (ketnoi = Database_connect.connection())
             {
@@ -52,11 +52,17 @@ namespace RoomManegerApp.Bills
                     {
                         if (doc.Read())
                         {
+                            int startDate = Convert.ToInt32(doc["c_s_date"].ToString());
+                            int endDate = Convert.ToInt32(doc["c_e_date"].ToString());
+                            DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
+                            DateTime end = DateTime.ParseExact(endDate.ToString(), "yyyyMMdd", null);
+                            int totalDays = (end - start).Days;
+
                             label2.Text = doc["r_name"].ToString();
                             label4.Text = doc["t_name"].ToString();
-                            label6.Text = (Convert.ToInt32(doc["c_e_date"].ToString()) - Convert.ToInt32(doc["c_s_date"].ToString())).ToString();
+                            label6.Text = totalDays.ToString();
                             label8.Text = doc["r_price"].ToString();
-                            label10.Text = doc["c_type"].ToString();
+                            label10.Text = doc["r_type"].ToString();
                             double price = Convert.ToInt32(label6.Text) * Convert.ToInt32(label8.Text);
                             label12.Text = string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", price); 
                         }
@@ -79,9 +85,9 @@ namespace RoomManegerApp.Bills
                 return;
             }
 
-            sql = @"select check_in.id as c_id
-                    from check_in
-                    inner join rooms on check_in.room_id = rooms.id
+            sql = @"select checkins.id as c_id
+                    from checkins
+                    inner join rooms on checkins.room_id = rooms.id
                     where rooms.name = @name";
             using(ketnoi = Database_connect.connection())
             {
@@ -98,16 +104,12 @@ namespace RoomManegerApp.Bills
                     }
                 }
 
-                sql = @"insert into bills (check_in_id, total_days, rent, type, total, status, note) values (@check_in_id, @total_days, @rent, @type, @total, @status, @note)";
+                sql = @"insert into bills (checkins_id, total, status) values (@checkins_id, @total, @status)";
                 using(thuchien = new SQLiteCommand (sql, ketnoi))
                 {
-                    thuchien.Parameters.AddWithValue("@check_in_id", c_id);
-                    thuchien.Parameters.AddWithValue("@total_days", label6.Text);
-                    thuchien.Parameters.AddWithValue("@rent", label8.Text);
-                    thuchien.Parameters.AddWithValue("@type", label10.Text);
+                    thuchien.Parameters.AddWithValue("@checkins_id", c_id);
                     thuchien.Parameters.AddWithValue("@total", total);
                     thuchien.Parameters.AddWithValue("@status", status);
-                    thuchien.Parameters.AddWithValue("@note", note);
                     thuchien.ExecuteNonQuery();
                 }
 
@@ -118,7 +120,7 @@ namespace RoomManegerApp.Bills
                     thuchien.ExecuteNonQuery();
                 }
 
-                sql = @"delete from check_in where id = @id";
+                sql = @"update checkins set status = 'Hết hiệu lực' where id = @id";
                 using(thuchien = new SQLiteCommand(sql, ketnoi))
                 {
                     thuchien.Parameters.AddWithValue("@id", c_id);

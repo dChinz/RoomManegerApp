@@ -98,7 +98,7 @@
             this.textBoxNameTenant.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxNameTenant.Name = "textBoxNameTenant";
             this.textBoxNameTenant.Size = new System.Drawing.Size(200, 20);
-            this.textBoxNameTenant.TabIndex = 36;
+            this.textBoxNameTenant.TabIndex = 0;
             // 
             // dateTimePicker1
             // 

@@ -47,6 +47,12 @@ namespace RoomManegerApp.Forms
 
         public void load_tentant()
         {
+            positionIndex();
+            if (scrollPosition >= 0 && scrollPosition < dataGridView1.Rows.Count)
+            {
+                dataGridView1.FirstDisplayedScrollingRowIndex = scrollPosition;
+            }
+
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.Rows.Clear();
 
@@ -66,6 +72,12 @@ namespace RoomManegerApp.Forms
                     }
                 }
             }
+        }
+
+        private int scrollPosition = 0;
+        private void positionIndex()
+        {
+            scrollPosition = dataGridView1.FirstDisplayedScrollingRowIndex;
         }
 
         private void buttonAdd_one_tentant_Click(object sender, EventArgs e)
@@ -108,12 +120,13 @@ namespace RoomManegerApp.Forms
         {
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                string id = get_id_room().ToString();
+                int id = Convert.ToInt32(get_id_room().ToString());
 
-                FormEdit_tenant f = new FormEdit_tenant(id);
+                FormAdd_one_tenant f = new FormAdd_one_tenant(id);
 
                 // Đăng ký sự kiện reload lại danh sách khi form edit cập nhật
-                f.tentant_updateded += (s, args) => load_tentant();
+                positionIndex();
+                //f.tentant_updateded += (s, args) => load_tentant();
 
                 f.Show();
             }
@@ -132,6 +145,7 @@ namespace RoomManegerApp.Forms
                 }
             }
             MessageBox.Show("Xoá thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            positionIndex();
             load_tentant();
         }
         private void SetPlaceholderText(TextBox textBox, string placeholder)

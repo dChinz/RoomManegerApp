@@ -34,7 +34,6 @@
             this.check_in_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total_days = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,6 +42,7 @@
             this.buttonAdd_new = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.đãThanhToánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.inHóaĐơnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -59,7 +59,6 @@
             this.check_in_id,
             this.total_days,
             this.rent,
-            this.type,
             this.total,
             this.status,
             this.note});
@@ -100,13 +99,6 @@
             this.rent.HeaderText = "Giá thuê";
             this.rent.Name = "rent";
             this.rent.ReadOnly = true;
-            // 
-            // type
-            // 
-            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.type.HeaderText = "Loại phòng";
-            this.type.Name = "type";
-            this.type.ReadOnly = true;
             // 
             // total
             // 
@@ -167,9 +159,10 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.đãThanhToánToolStripMenuItem});
+            this.đãThanhToánToolStripMenuItem,
+            this.inHóaĐơnToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
             // 
             // đãThanhToánToolStripMenuItem
             // 
@@ -177,6 +170,13 @@
             this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.đãThanhToánToolStripMenuItem.Text = "Đã thanh toán";
             this.đãThanhToánToolStripMenuItem.Click += new System.EventHandler(this.đãThanhToánToolStripMenuItem_Click);
+            // 
+            // inHóaĐơnToolStripMenuItem
+            // 
+            this.inHóaĐơnToolStripMenuItem.Name = "inHóaĐơnToolStripMenuItem";
+            this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.inHóaĐơnToolStripMenuItem.Text = "In hóa đơn";
+            this.inHóaĐơnToolStripMenuItem.Click += new System.EventHandler(this.inHóaĐơnToolStripMenuItem_Click);
             // 
             // FormBills
             // 
@@ -201,15 +201,15 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button buttonAdd_new;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem đãThanhToánToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn check_in_id;
         private System.Windows.Forms.DataGridViewTextBoxColumn total_days;
         private System.Windows.Forms.DataGridViewTextBoxColumn rent;
-        private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn total;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewTextBoxColumn note;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem đãThanhToánToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem inHóaĐơnToolStripMenuItem;
     }
 }
