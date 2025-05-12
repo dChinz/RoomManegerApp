@@ -90,9 +90,9 @@ namespace RoomManegerApp.Tetants
                 textBox2.Focus();
                 return;
             }
-            if (id_card.Length != 12 || !Int64.TryParse(id_card, out long id_cardNumber))
+            if (string.IsNullOrWhiteSpace(id_card))
             {
-                MessageBox.Show("Số CCCD không đúng (CCCD gồm 12 số)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Số CCCD không đúng", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox3.Focus();
                 return;
             }

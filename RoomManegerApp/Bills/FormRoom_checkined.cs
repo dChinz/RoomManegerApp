@@ -44,8 +44,7 @@ namespace RoomManegerApp.Bills
                     {
                         while (doc.Read())
                         {
-                            string roomNameFull = doc["name"].ToString();
-                            string roomName = roomNameFull.Replace("Room ", "");
+                            string roomName = doc["name"].ToString();
                             string status = doc["status"].ToString();
 
                             Button button = new Button();
@@ -59,8 +58,8 @@ namespace RoomManegerApp.Bills
                             if (status == "Đã thuê")
                             {
                                 button.BackColor = Color.White;
-                                button.ForeColor = Color.DarkOrange; // chữ xanh đậm
-                                button.FlatAppearance.BorderColor = Color.Red; // viền xanh đậm
+                                button.ForeColor = Color.DarkOrange; 
+                                button.FlatAppearance.BorderColor = Color.Red; 
 
                                 // Hover sáng lên nhẹ
                                 button.MouseEnter += (s, e) => button.BackColor = Color.LightBlue;

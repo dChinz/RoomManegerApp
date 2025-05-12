@@ -15,15 +15,17 @@ namespace RoomManegerApp.Forms
 {
     public partial class FormBills : Form
     {
-        public FormBills()
+        private FormDashboard dashboard;
+        public FormBills(FormDashboard dashboard)
         {
             InitializeComponent();
+            this.dashboard = dashboard;
         }
 
         private void reloadData()
         {
-            dataGridView1.Rows.Clear();
             load_bill();
+            dashboard.reloadData();
         }
 
         string sql;
@@ -37,10 +39,11 @@ namespace RoomManegerApp.Forms
         }
         private void load_bill()
         {
-            using(ketnoi = Database_connect.connection())
+            dataGridView1.Rows.Clear();
+            using (ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
-                sql = @"select bills.id as b_id, bills.checkins_id as b_c_id, bills.status as b_status, end_date, start_date , rooms.price as r_price
+                sql = @"select bills.id as b_id, bills.checkins_id as b_c_id, bills.status as b_status, end_date, start_date , rooms.price as r_price, time
                         from bills
                         inner join checkins on bills.checkins_id = checkins.id
                         inner join rooms on checkins.room_id = rooms.id";
@@ -56,8 +59,10 @@ namespace RoomManegerApp.Forms
                             DateTime end = DateTime.ParseExact(endDate.ToString(), "yyyyMMdd", null);
                             int totalDays = (end - start).Days;
                             double price = Convert.ToDouble(doc["r_price"].ToString());
+                            double time = Convert.ToInt64(doc["time"].ToString());
+                            DateTime checkout = DateTime.ParseExact(time.ToString(), "yyyyMMddHHmmss", null);
 
-                            dataGridView1.Rows.Add(doc["b_id"], doc["b_c_id"], totalDays, price, totalDays * price, doc["b_status"]);
+                            dataGridView1.Rows.Add(doc["b_id"], doc["b_c_id"], totalDays, price, totalDays * price, doc["b_status"], checkout);
                         }
                     }
                 }

@@ -77,6 +77,7 @@ namespace RoomManegerApp.Bills
             string status = comboBox1.Text;
             string note = textBox1.Text;
             string total = label12.Text;
+            string time = DateTime.Now.ToString("yyyyMMddHHmmss");
             total = total.Replace("đ", "").Replace(".", "").Trim();
 
             if (string.IsNullOrEmpty(status))
@@ -104,12 +105,13 @@ namespace RoomManegerApp.Bills
                     }
                 }
 
-                sql = @"insert into bills (checkins_id, total, status) values (@checkins_id, @total, @status)";
+                sql = @"insert into bills (checkins_id, total, status, time) values (@checkins_id, @total, @status, @time)";
                 using(thuchien = new SQLiteCommand (sql, ketnoi))
                 {
                     thuchien.Parameters.AddWithValue("@checkins_id", c_id);
                     thuchien.Parameters.AddWithValue("@total", total);
                     thuchien.Parameters.AddWithValue("@status", status);
+                    thuchien.Parameters.AddWithValue("@time", time);
                     thuchien.ExecuteNonQuery();
                 }
 

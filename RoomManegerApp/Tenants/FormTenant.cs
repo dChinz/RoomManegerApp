@@ -67,7 +67,7 @@ namespace RoomManegerApp.Forms
                     {
                         while (doc.Read())
                         {
-                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"], doc["note"]);
+                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"]);
                         }
                     }
                 }

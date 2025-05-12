@@ -36,13 +36,14 @@
             this.rent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonAdd_new = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.đãThanhToánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inHóaĐơnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -61,13 +62,13 @@
             this.rent,
             this.total,
             this.status,
-            this.note});
+            this.time});
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 2);
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 48);
+            this.dataGridView1.Location = new System.Drawing.Point(3, 93);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(794, 399);
+            this.dataGridView1.Size = new System.Drawing.Size(794, 354);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             // 
@@ -114,24 +115,26 @@
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
-            // note
+            // time
             // 
-            this.note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.note.HeaderText = "Ghi chú";
-            this.note.Name = "note";
-            this.note.ReadOnly = true;
+            this.time.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.time.HeaderText = "Check out";
+            this.time.Name = "time";
+            this.time.ReadOnly = true;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
@@ -141,9 +144,9 @@
             // 
             this.flowLayoutPanel1.Controls.Add(this.buttonAdd_new);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 53);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(394, 39);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(394, 34);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // buttonAdd_new
@@ -162,21 +165,33 @@
             this.đãThanhToánToolStripMenuItem,
             this.inHóaĐơnToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(150, 48);
             // 
             // đãThanhToánToolStripMenuItem
             // 
             this.đãThanhToánToolStripMenuItem.Name = "đãThanhToánToolStripMenuItem";
-            this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.đãThanhToánToolStripMenuItem.Text = "Đã thanh toán";
             this.đãThanhToánToolStripMenuItem.Click += new System.EventHandler(this.đãThanhToánToolStripMenuItem_Click);
             // 
             // inHóaĐơnToolStripMenuItem
             // 
             this.inHóaĐơnToolStripMenuItem.Name = "inHóaĐơnToolStripMenuItem";
-            this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.inHóaĐơnToolStripMenuItem.Text = "In hóa đơn";
             this.inHóaĐơnToolStripMenuItem.Click += new System.EventHandler(this.inHóaĐơnToolStripMenuItem_Click);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(280, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(240, 31);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Quản lí check out";
             // 
             // FormBills
             // 
@@ -189,6 +204,7 @@
             this.Load += new System.EventHandler(this.FormBills_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -203,13 +219,14 @@
         private System.Windows.Forms.Button buttonAdd_new;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem đãThanhToánToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem inHóaĐơnToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn check_in_id;
         private System.Windows.Forms.DataGridViewTextBoxColumn total_days;
         private System.Windows.Forms.DataGridViewTextBoxColumn rent;
         private System.Windows.Forms.DataGridViewTextBoxColumn total;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn note;
-        private System.Windows.Forms.ToolStripMenuItem inHóaĐơnToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn time;
+        private System.Windows.Forms.Label label1;
     }
 }

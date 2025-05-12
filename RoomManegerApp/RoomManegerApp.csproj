@@ -87,13 +87,21 @@
     <Compile Include="Check-in\FormAdd_check_in.Designer.cs">
       <DependentUpon>FormAdd_check_in.cs</DependentUpon>
     </Compile>
-    <Compile Include="Check-in\FormStatus_room.cs">
+    <Compile Include="Check-in\FormAvailable_Guest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Check-in\FormStatus_room.Designer.cs">
-      <DependentUpon>FormStatus_room.cs</DependentUpon>
+    <Compile Include="Check-in\FormAvailable_Guest.Designer.cs">
+      <DependentUpon>FormAvailable_Guest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Check-in\FormAvailable_room.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Check-in\FormAvailable_room.Designer.cs">
+      <DependentUpon>FormAvailable_room.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GuestReport.cs" />
     <Compile Include="Models\M_PrintBills.cs" />
+    <Compile Include="Models\RateReport.cs" />
     <Compile Include="Models\ReportRevenue.cs" />
     <Compile Include="Report\FormReport.cs">
       <SubType>Form</SubType>
@@ -182,11 +190,14 @@
     <EmbeddedResource Include="Check-in\FormAdd_check_in.resx">
       <DependentUpon>FormAdd_check_in.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Check-in\FormAvailable_Guest.resx">
+      <DependentUpon>FormAvailable_Guest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Check-in\FormCheck_in.resx">
       <DependentUpon>FormCheck_in.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Check-in\FormStatus_room.resx">
-      <DependentUpon>FormStatus_room.cs</DependentUpon>
+    <EmbeddedResource Include="Check-in\FormAvailable_room.resx">
+      <DependentUpon>FormAvailable_room.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\FormReport.resx">
       <DependentUpon>FormReport.cs</DependentUpon>
@@ -196,6 +207,8 @@
       <DependentUpon>PrintBills.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\Report1.rdlc" />
+    <EmbeddedResource Include="Report\Report2.rdlc" />
+    <EmbeddedResource Include="Report\Report3.rdlc" />
     <EmbeddedResource Include="Users\FormDangNhap.resx">
       <DependentUpon>FormDangNhap.cs</DependentUpon>
     </EmbeddedResource>
@@ -226,7 +239,9 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\RoomManegerApp.Models.Bills.datasource" />
     <None Include="Properties\DataSources\RoomManegerApp.Models.Check_in.datasource" />
+    <None Include="Properties\DataSources\RoomManegerApp.Models.GuestReport.datasource" />
     <None Include="Properties\DataSources\RoomManegerApp.Models.M_PrintBills.datasource" />
+    <None Include="Properties\DataSources\RoomManegerApp.Models.RateReport.datasource" />
     <None Include="Properties\DataSources\RoomManegerApp.Models.Tenants.datasource" />
     <None Include="Properties\DataSources\RoomManegerApp.ModelsReport.ReportRevenue.datasource" />
     <None Include="Properties\DataSources\RoomManegerApp.Romms.FormAdd_one_room.datasource" />

@@ -17,6 +17,7 @@ namespace RoomManegerApp
         public FormDangNhap()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         string sql;

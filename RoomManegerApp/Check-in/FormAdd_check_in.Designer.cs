@@ -33,12 +33,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBoxNameTenant = new System.Windows.Forms.TextBox();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.label7 = new System.Windows.Forms.Label();
             this.labelNameRoom = new System.Windows.Forms.Label();
             this.labelTypeRoom = new System.Windows.Forms.Label();
+            this.labelStart_date = new System.Windows.Forms.Label();
+            this.labelGuestname = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonCapnhat
@@ -92,21 +92,6 @@
             this.label3.TabIndex = 29;
             this.label3.Text = "Phòng";
             // 
-            // textBoxNameTenant
-            // 
-            this.textBoxNameTenant.Location = new System.Drawing.Point(133, 76);
-            this.textBoxNameTenant.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxNameTenant.Name = "textBoxNameTenant";
-            this.textBoxNameTenant.Size = new System.Drawing.Size(200, 20);
-            this.textBoxNameTenant.TabIndex = 0;
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(133, 112);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1.TabIndex = 37;
-            // 
             // dateTimePicker2
             // 
             this.dateTimePicker2.Location = new System.Drawing.Point(133, 147);
@@ -142,17 +127,35 @@
             this.labelTypeRoom.TabIndex = 42;
             this.labelTypeRoom.Text = "label1";
             // 
+            // labelStart_date
+            // 
+            this.labelStart_date.AutoSize = true;
+            this.labelStart_date.Location = new System.Drawing.Point(131, 112);
+            this.labelStart_date.Name = "labelStart_date";
+            this.labelStart_date.Size = new System.Drawing.Size(35, 13);
+            this.labelStart_date.TabIndex = 43;
+            this.labelStart_date.Text = "label1";
+            // 
+            // labelGuestname
+            // 
+            this.labelGuestname.AutoSize = true;
+            this.labelGuestname.Location = new System.Drawing.Point(131, 79);
+            this.labelGuestname.Name = "labelGuestname";
+            this.labelGuestname.Size = new System.Drawing.Size(35, 13);
+            this.labelGuestname.TabIndex = 44;
+            this.labelGuestname.Text = "label1";
+            // 
             // FormAdd_check_in
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(372, 331);
+            this.Controls.Add(this.labelGuestname);
+            this.Controls.Add(this.labelStart_date);
             this.Controls.Add(this.labelTypeRoom);
             this.Controls.Add(this.labelNameRoom);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.dateTimePicker2);
-            this.Controls.Add(this.dateTimePicker1);
-            this.Controls.Add(this.textBoxNameTenant);
             this.Controls.Add(this.buttonCapnhat);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -172,11 +175,11 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBoxNameTenant;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label labelNameRoom;
         private System.Windows.Forms.Label labelTypeRoom;
+        private System.Windows.Forms.Label labelStart_date;
+        private System.Windows.Forms.Label labelGuestname;
     }
 }

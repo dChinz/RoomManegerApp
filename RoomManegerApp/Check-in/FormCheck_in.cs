@@ -14,14 +14,17 @@ namespace RoomManegerApp.Forms
 {
     public partial class FormCheck_in : Form
     {
-        public FormCheck_in()
+        private FormDashboard dashboard;
+        public FormCheck_in(FormDashboard dashboard)
         {
             InitializeComponent();
+            this.dashboard = dashboard;
         }
 
         private void reloadData()
         {
             load_check_in();
+            dashboard.reloadData();
         }
 
         string sql;
@@ -58,7 +61,7 @@ namespace RoomManegerApp.Forms
                 }
             }
             update_status();
-            cancel_status();
+            //cancel_status();
         }
 
         private void buttonSearch_Click(object sender, EventArgs e)
@@ -80,7 +83,7 @@ namespace RoomManegerApp.Forms
                     thuchien.Parameters.AddWithValue("@name", textbox);
                     using (doc = thuchien.ExecuteReader())
                     {
-                        if (doc == null)
+                        if (!doc.HasRows)
                         {
                             checkSearch = true;
                         }
@@ -94,7 +97,7 @@ namespace RoomManegerApp.Forms
                     from checkins
                     inner join rooms on checkins.room_id = rooms.id
                     inner join tenants on checkins.tenant_id = tenants.id
-                    where room_name like '%' || @name || '%'";
+                    where rooms.name like '%' || @name || '%'";
             }
             else
             {
@@ -102,7 +105,7 @@ namespace RoomManegerApp.Forms
                     from checkins
                     inner join rooms on checkins.room_id = rooms.id
                     inner join tenants on checkins.tenant_id = tenants.id
-                    where tenants_name like '%' || @name || '%'";
+                    where tenants.name like '%' || @name || '%'";
             }
             using (ketnoi = Database_connect.connection())
             {
@@ -205,7 +208,7 @@ namespace RoomManegerApp.Forms
 
         private void buttonAdd_new_Click(object sender, EventArgs e)
         {
-            FormStatus_room f = new FormStatus_room(reloadData);
+            FormAvailable_room f = new FormAvailable_room(reloadData);
             f.Show();
         }
 
@@ -243,7 +246,7 @@ namespace RoomManegerApp.Forms
                                     thuchien.ExecuteNonQuery();
                                 }
                                 MessageBox.Show("Hủy thành công", "Thông báo", MessageBoxButtons.OK);
-                                load_check_in();
+                                reloadData();
                             }
                             else
                             {
@@ -283,45 +286,45 @@ namespace RoomManegerApp.Forms
             return id;
         }
 
-        private void cancel_status()
-        {
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                sql = @"select id, room_id,start_date, status from checkins";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            string id = doc["id"].ToString();
-                            string room_id = doc["room_id"].ToString();
-                            string status = doc["status"].ToString();
-                            int startDate = Convert.ToInt32(doc["start_date"].ToString());
-                            DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
-                            DateTime current = DateTime.Now;
+        //private void cancel_status()
+        //{
+        //    using (ketnoi = Database_connect.connection())
+        //    {
+        //        ketnoi.Open();
+        //        sql = @"select id, room_id,start_date, status from checkins";
+        //        using (thuchien = new SQLiteCommand(sql, ketnoi))
+        //        {
+        //            using (doc = thuchien.ExecuteReader())
+        //            {
+        //                while (doc.Read())
+        //                {
+        //                    string id = doc["id"].ToString();
+        //                    string room_id = doc["room_id"].ToString();
+        //                    string status = doc["status"].ToString();
+        //                    int startDate = Convert.ToInt32(doc["start_date"].ToString());
+        //                    DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
+        //                    DateTime current = DateTime.Now;
 
-                            if ((current - start).Days > 1 && status == "Còn hiệu lực")
-                            {
-                                sql = @"update checkins set status = 'Hủy' where id = @id";
-                                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                                {
-                                    thuchien.Parameters.AddWithValue("@id", id);
-                                    thuchien.ExecuteNonQuery();
-                                }
+        //                    if ((current - start).Days > 1 && status == "Còn hiệu lực")
+        //                    {
+        //                        sql = @"update checkins set status = 'Hủy' where id = @id";
+        //                        using (thuchien = new SQLiteCommand(sql, ketnoi))
+        //                        {
+        //                            thuchien.Parameters.AddWithValue("@id", id);
+        //                            thuchien.ExecuteNonQuery();
+        //                        }
 
-                                sql = @"update rooms set status = 'Trống' where id = @id";
-                                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                                {
-                                    thuchien.Parameters.AddWithValue("@id", room_id);
-                                    thuchien.ExecuteNonQuery();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                        sql = @"update rooms set status = 'Trống' where id = @id";
+        //                        using (thuchien = new SQLiteCommand(sql, ketnoi))
+        //                        {
+        //                            thuchien.Parameters.AddWithValue("@id", room_id);
+        //                            thuchien.ExecuteNonQuery();
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }
