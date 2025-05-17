@@ -200,7 +200,7 @@ namespace RoomManegerApp.Forms
         private void SetStatusColor(DataGridViewRow row, string status)
         {
             Color color = Color.White;
-            if (status == "Còn hiệu lực") color = Color.LightGreen;
+            if (status == "Hiệu lực") color = Color.LightGreen;
             else if (status == "Hết hiệu lực") color = Color.OrangeRed;
 
             row.Cells["status"].Style.BackColor = color;

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách phòng</title>
+  <style>
+    #roomContainer{
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+    h1{
+      margin: 0 auto;
+    }
+    .type-header {
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .room-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .room-grid button {
+      width: calc(12.5% - 10px); /* 100% / 8 buttons per row - gap */
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .room-don{
+      background-Color: LightGreen;
+    }
+    .room-don:hover{
+      background-Color: MediumSeaGreen;
+      transform: scale(1.05);
+    }
+
+    .room-doi{
+      background-Color: LightBlue;
+    }
+    .room-doi:hover{
+      background-Color: DeepSkyBlue;
+      transform: scale(1.05);
+    }
+    .banner {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .menu {
+      background-color: #005599;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 5px 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      transition: background-color 0.2s;
+      border-radius: 4px;
+    }
+
+    .menu a:hover {
+      background-color: #007acc;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="banner">
+    Nesta Hotel Hanoi
+
+  <nav class="menu">
+    <a href="index.html">Trang chủ</a>
+    <a href="#">Danh sách phòng</a>
+  </nav>
+  <div id="roomContainer">
+    <h1>Danh sách phòng</h1>
+  </div>
+  
+  <div id="roomContainer"></div>
+
+  <script>
+  fetch("https://localhost:7149/api/room")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("roomContainer");
+
+      const types = ["Standard", "Superior", "Deluxe", "Executive", "VIP"];
+      types.forEach(type => {
+        const filteredRooms = data.filter(room => room.type === type);
+        if (filteredRooms.length > 0) {
+          const typeHeader = document.createElement("div");
+          typeHeader.className = "type-header";
+          typeHeader.textContent = type;
+          container.appendChild(typeHeader);
+
+          const grid = document.createElement("div");
+          grid.className = "room-grid";
+
+          filteredRooms.forEach(room => {
+            const btn = document.createElement("button");
+            btn.textContent = room.name;
+
+            // Tô màu theo size
+            if (room.size === "Đơn") {
+              btn.classList.add("room-don");
+            } else if (room.size === "Đôi") {
+              btn.classList.add("room-doi");
+            }
+
+            // Xử lý sự kiện nếu cần
+            btn.onclick = () => alert(`Phòng: ${room.name}`);
+            grid.appendChild(btn);
+          });
+
+          container.appendChild(grid);
+        }
+      });
+    })
+    .catch(err => console.error("Lỗi khi gọi API:", err));
+</script>
+
+</body>
+</html>

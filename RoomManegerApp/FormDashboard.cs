@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RoomManegerApp.Booking;
 using RoomManegerApp.Report;
 using static RoomManegerApp.FormDangNhap;
 
@@ -138,6 +139,7 @@ namespace RoomManegerApp.Forms
                         status text,
                         type text,
                         price real,
+                        size text,
                         note text)";
                 using(thuchien = new SQLiteCommand(sql, ketnoi))
                     thuchien.ExecuteNonQuery();
@@ -147,6 +149,7 @@ namespace RoomManegerApp.Forms
                         name text,
                         phone text,
                         id_card text,
+                        email text,
                         gender text,
                         address text)";
                 using (thuchien = new SQLiteCommand(sql, ketnoi))
@@ -252,6 +255,12 @@ namespace RoomManegerApp.Forms
         private void label4_Click(object sender, EventArgs e)
         {
             Application.Restart();
+        }
+
+        private void booking_Click(object sender, EventArgs e)
+        {
+            FormBooking form = new FormBooking();
+            LoadFormToTableLayout(form, 1, 1);
         }
     }
 }

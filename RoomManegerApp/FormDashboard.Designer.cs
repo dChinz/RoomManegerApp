@@ -43,6 +43,7 @@
             this.QLKhachHang = new System.Windows.Forms.Button();
             this.ThanhToan = new System.Windows.Forms.Button();
             this.BaoCao = new System.Windows.Forms.Button();
+            this.booking = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -151,7 +152,7 @@
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel2, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel1, 0, 1);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -159,8 +160,8 @@
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.5F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.5F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(150, 504);
             this.tableLayoutPanel3.TabIndex = 6;
             // 
@@ -173,12 +174,13 @@
             this.flowLayoutPanel2.Controls.Add(this.QLKhachHang);
             this.flowLayoutPanel2.Controls.Add(this.ThanhToan);
             this.flowLayoutPanel2.Controls.Add(this.BaoCao);
+            this.flowLayoutPanel2.Controls.Add(this.booking);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(150, 252);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(150, 315);
             this.flowLayoutPanel2.TabIndex = 1;
             // 
             // QLPhong
@@ -236,6 +238,17 @@
             this.BaoCao.UseVisualStyleBackColor = true;
             this.BaoCao.Click += new System.EventHandler(this.BaoCao_Click);
             // 
+            // booking
+            // 
+            this.booking.Location = new System.Drawing.Point(13, 435);
+            this.booking.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.booking.Name = "booking";
+            this.booking.Size = new System.Drawing.Size(125, 43);
+            this.booking.TabIndex = 5;
+            this.booking.Text = "Booking";
+            this.booking.UseVisualStyleBackColor = true;
+            this.booking.Click += new System.EventHandler(this.booking_Click);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
@@ -245,10 +258,10 @@
             this.flowLayoutPanel1.Controls.Add(this.label5);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 252);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 315);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 252);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 189);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
             // label2
@@ -345,5 +358,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button booking;
     }
 }

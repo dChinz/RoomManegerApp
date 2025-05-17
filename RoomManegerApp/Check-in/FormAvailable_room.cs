@@ -38,7 +38,7 @@ namespace RoomManegerApp.Contracts
 
         private void load_status_room()
         {
-            sql = @"select name, status, type from rooms";
+            sql = @"select name, status, type, size from rooms";
             using (ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
@@ -51,6 +51,7 @@ namespace RoomManegerApp.Contracts
                             string roomName = doc["name"].ToString();
                             string status = doc["status"].ToString();
                             string type = doc["type"].ToString();
+                            string size = doc["size"].ToString();
 
                             Button button = new Button();
                             button.Text = roomName;
@@ -62,13 +63,26 @@ namespace RoomManegerApp.Contracts
                             button.Font = new Font("Segoe UI", 10, FontStyle.Bold);
                             if (status == "Trống")
                             {
-                                button.BackColor = Color.LightGreen;
-                                button.ForeColor = Color.DarkGreen; // chữ xanh đậm
-                                button.FlatAppearance.BorderColor = Color.SeaGreen; // viền xanh đậm
+                                if(size == "Đơn")
+                                {
+                                    button.BackColor = Color.LightGreen;
+                                    button.ForeColor = Color.DarkGreen; // chữ xanh đậm
+                                    button.FlatAppearance.BorderColor = Color.SeaGreen; // viền xanh đậm
 
-                                // Hover sáng lên nhẹ
-                                button.MouseEnter += (s, e) => button.BackColor = Color.MediumSeaGreen;
-                                button.MouseLeave += (s, e) => button.BackColor = Color.LightGreen;
+                                    // Hover sáng lên nhẹ
+                                    button.MouseEnter += (s, e) => button.BackColor = Color.MediumSeaGreen;
+                                    button.MouseLeave += (s, e) => button.BackColor = Color.LightGreen;
+                                }
+                                else
+                                {
+                                    button.BackColor = Color.LightBlue;
+                                    button.ForeColor = Color.DarkBlue;
+                                    button.FlatAppearance.BorderColor = Color.SeaGreen; 
+
+                                    // Hover sáng lên nhẹ
+                                    button.MouseEnter += (s, e) => button.BackColor = Color.DeepSkyBlue;
+                                    button.MouseLeave += (s, e) => button.BackColor = Color.LightBlue;
+                                }
                             }
                             else if(status == "Đã thuê" || status == "Đang sửa chữa")
                             {

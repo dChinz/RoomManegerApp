@@ -94,7 +94,7 @@ namespace RoomManegerApp.Contracts
                         }
                     }
 
-                    sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, status) values (@room_id, @tenant_id, @start_date, @end_date, 'Còn hiệu lực')";
+                    sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, status) values (@room_id, @tenant_id, @start_date, @end_date, 'Hiệu lực')";
                     using (thuchien = new SQLiteCommand(sql, ketnoi))
                     {
                         thuchien.Parameters.AddWithValue("@room_id", idRoom);

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="banner">
+    Nesta Hotel Hanoi
+ 
+    <nav class="menu">
+      <a href="#">Home</a>
+      <a href="room.html">Booking</a>
+    </nav>
+  </div>
+  <img class="banner-image" src="img/banner.jpg" alt="Ảnh banner khách sạn">
+  <div class="intro-section">
+    <div class="intro-text">
+      <h2>Welcome to Nesta Hotel Group!</h2>
+      <h1>NESTA HOTEL GROUP</h1>
+      <hr style="width: 50px; margin-left: 0;">
+      <p>
+        NESTA HOTEL GROUP - Prestigious Hotel Group in Vietnam.  
+        We provide impeccable services and excellent value, offering a truly comfortable and memorable stay for both business and leisure travellers.
+        With a passion for the tourism and hotel industry, our core goal is to make our guests feel warmly welcomed and at home.
+      </p>
+      <button>Read More »</button>
+    </div>
+
+    <div class="slideshow-container">
+      <img class="slide active-slide" src="img/home-about-1.jpg" alt="Slide 1">
+      <img class="slide" src="img/home-about-2.jpg" alt="Slide 2">
+      <img class="slide" src="img/home-about-3.jpg" alt="Slide 3">
+      <img class="slide" src="img/home-about-4.jpg" alt="Slide 4">
+    </div>
+  </div>
+
+  <script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+
+    setInterval(() => {
+      slides[current].classList.remove('active-slide');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active-slide');
+    }, 3000);
+  </script>
+</body>
+</html>

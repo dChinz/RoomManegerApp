@@ -63,7 +63,7 @@ namespace RoomManegerApp
                     {
                         while (doc.Read())
                         {
-                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["type"], doc["price"], doc["note"]);
+                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["type"], doc["price"], doc["size"], doc["note"]);
                             SetStatusColor(dataGridView1.Rows[rowIndex], doc["status"].ToString());
                         }
                     }
@@ -351,7 +351,7 @@ namespace RoomManegerApp
                     {
                         while (doc.Read())
                         {
-                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["type"], doc["price"], doc["note"]);
+                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["type"], doc["price"], doc["size"], doc["note"]);
 
                             SetStatusColor(dataGridView1.Rows[rowIndex], doc["status"].ToString());
                         }

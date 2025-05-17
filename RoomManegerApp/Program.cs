@@ -14,6 +14,9 @@ namespace RoomManegerApp
         [STAThread]
         static void Main()
         {
+            HttpServer server = new HttpServer();
+            server.Start();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDangNhap());

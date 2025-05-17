@@ -37,7 +37,7 @@ namespace RoomManegerApp.Bills
 
         private void load_add_bill()
         {
-            sql = @"select tenants.name as t_name, rooms.name as r_name, checkins.start_date as c_s_date, checkins.end_date as c_e_date, rooms.type as r_type, rooms.price as r_price
+            sql = @"select tenants.name as t_name, rooms.name as r_name, checkins.start_date as c_s_date, checkins.end_date as c_e_date, rooms.type as r_type, rooms.price as r_price, rooms.size as r_size
                     from checkins
                     inner join rooms on checkins.room_id = rooms.id
                     inner join tenants on checkins.tenant_id = tenants.id
@@ -63,6 +63,7 @@ namespace RoomManegerApp.Bills
                             label6.Text = totalDays.ToString();
                             label8.Text = doc["r_price"].ToString();
                             label10.Text = doc["r_type"].ToString();
+                            label13.Text = doc["r_size"].ToString();
                             double price = Convert.ToInt32(label6.Text) * Convert.ToInt32(label8.Text);
                             label12.Text = string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", price); 
                         }

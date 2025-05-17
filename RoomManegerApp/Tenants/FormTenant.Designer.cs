@@ -34,12 +34,6 @@
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_card = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.address = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sửaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +42,13 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.email = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_card = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gender = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.address = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.flowLayoutPanel2.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -102,6 +103,7 @@
             this.id,
             this.name,
             this.phone,
+            this.email,
             this.id_card,
             this.gender,
             this.address});
@@ -116,55 +118,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(796, 328);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
-            // 
-            // id
-            // 
-            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.id.HeaderText = "id";
-            this.id.MinimumWidth = 8;
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
-            this.id.Width = 40;
-            // 
-            // name
-            // 
-            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.name.HeaderText = "Ho Ten";
-            this.name.MinimumWidth = 8;
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            // 
-            // phone
-            // 
-            this.phone.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.phone.HeaderText = "SDT";
-            this.phone.MinimumWidth = 8;
-            this.phone.Name = "phone";
-            this.phone.ReadOnly = true;
-            // 
-            // id_card
-            // 
-            this.id_card.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.id_card.HeaderText = "CMND/CCCD";
-            this.id_card.MinimumWidth = 8;
-            this.id_card.Name = "id_card";
-            this.id_card.ReadOnly = true;
-            // 
-            // gender
-            // 
-            this.gender.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.gender.HeaderText = "Gioi Tinh";
-            this.gender.MinimumWidth = 8;
-            this.gender.Name = "gender";
-            this.gender.ReadOnly = true;
-            this.gender.Width = 74;
-            // 
-            // address
-            // 
-            this.address.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.address.HeaderText = "Dia Chi";
-            this.address.Name = "address";
-            this.address.ReadOnly = true;
             // 
             // flowLayoutPanel2
             // 
@@ -258,6 +211,62 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Quản lí khách hàng";
             // 
+            // id
+            // 
+            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.id.HeaderText = "id";
+            this.id.MinimumWidth = 8;
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Width = 40;
+            // 
+            // name
+            // 
+            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.name.HeaderText = "Ho Ten";
+            this.name.MinimumWidth = 8;
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            // 
+            // phone
+            // 
+            this.phone.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.phone.HeaderText = "SDT";
+            this.phone.MinimumWidth = 8;
+            this.phone.Name = "phone";
+            this.phone.ReadOnly = true;
+            // 
+            // email
+            // 
+            this.email.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.email.HeaderText = "Email";
+            this.email.Name = "email";
+            this.email.ReadOnly = true;
+            // 
+            // id_card
+            // 
+            this.id_card.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.id_card.HeaderText = "CMND/CCCD";
+            this.id_card.MinimumWidth = 8;
+            this.id_card.Name = "id_card";
+            this.id_card.ReadOnly = true;
+            // 
+            // gender
+            // 
+            this.gender.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.gender.HeaderText = "Gioi Tinh";
+            this.gender.MinimumWidth = 8;
+            this.gender.Name = "gender";
+            this.gender.ReadOnly = true;
+            this.gender.Width = 74;
+            // 
+            // address
+            // 
+            this.address.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.address.HeaderText = "Dia Chi";
+            this.address.Name = "address";
+            this.address.ReadOnly = true;
+            // 
             // FormTenant
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -291,12 +300,13 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem sửaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem xóaToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn phone;
+        private System.Windows.Forms.DataGridViewTextBoxColumn email;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_card;
         private System.Windows.Forms.DataGridViewTextBoxColumn gender;
         private System.Windows.Forms.DataGridViewTextBoxColumn address;
-        private System.Windows.Forms.Label label2;
     }
 }

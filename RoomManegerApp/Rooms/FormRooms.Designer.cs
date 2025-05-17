@@ -30,12 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.xóaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonAdd = new System.Windows.Forms.Button();
@@ -66,6 +60,13 @@
             this.buttonSelect_all = new System.Windows.Forms.Button();
             this.buttonUn_selected_all = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -86,6 +87,7 @@
             this.status,
             this.type,
             this.price,
+            this.size,
             this.note});
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 2);
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -98,49 +100,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(853, 242);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
-            // 
-            // id
-            // 
-            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.id.HeaderText = "id";
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
-            this.id.Width = 40;
-            // 
-            // name
-            // 
-            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.name.HeaderText = "Tên phòng";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            // 
-            // status
-            // 
-            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.status.HeaderText = "Tình trạng";
-            this.status.Name = "status";
-            this.status.ReadOnly = true;
-            // 
-            // type
-            // 
-            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.type.HeaderText = "Loại phòng";
-            this.type.Name = "type";
-            this.type.ReadOnly = true;
-            // 
-            // price
-            // 
-            this.price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.price.HeaderText = "Giá phòng";
-            this.price.Name = "price";
-            this.price.ReadOnly = true;
-            // 
-            // note
-            // 
-            this.note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.note.HeaderText = "Ghi chú";
-            this.note.Name = "note";
-            this.note.ReadOnly = true;
             // 
             // contextMenuStrip1
             // 
@@ -469,6 +428,55 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "Quản lí phòng";
             // 
+            // id
+            // 
+            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.id.HeaderText = "id";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Width = 40;
+            // 
+            // name
+            // 
+            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.name.HeaderText = "Tên phòng";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            // 
+            // status
+            // 
+            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.status.HeaderText = "Tình trạng";
+            this.status.Name = "status";
+            this.status.ReadOnly = true;
+            // 
+            // type
+            // 
+            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.type.HeaderText = "Loại phòng";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
+            // 
+            // price
+            // 
+            this.price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.price.HeaderText = "Giá phòng";
+            this.price.Name = "price";
+            this.price.ReadOnly = true;
+            // 
+            // size
+            // 
+            this.size.HeaderText = "Số lượng";
+            this.size.Name = "size";
+            this.size.ReadOnly = true;
+            // 
+            // note
+            // 
+            this.note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.note.HeaderText = "Ghi chú";
+            this.note.Name = "note";
+            this.note.ReadOnly = true;
+            // 
             // FormRooms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -525,12 +533,13 @@
         private System.Windows.Forms.ToolStripMenuItem xóaToolStripMenuItem;
         private System.Windows.Forms.Button buttonSelect_all;
         private System.Windows.Forms.Button buttonUn_selected_all;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewTextBoxColumn type;
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
+        private System.Windows.Forms.DataGridViewTextBoxColumn size;
         private System.Windows.Forms.DataGridViewTextBoxColumn note;
-        private System.Windows.Forms.Label label2;
     }
 }

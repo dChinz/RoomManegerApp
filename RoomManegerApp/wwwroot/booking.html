@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đặt phòng</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="banner">
+    Nesta Hotel Hanoi
+ 
+    <nav class="menu">
+      <a href="index.html">Home</a>
+      <a href="room.html">Booking</a>
+    </nav>
+  </div>
+  <div id="bookingContainer">
+    <h2>Thông tin đặt phòng</h2>
+    <form onsubmit="sendData(); return false;">
+    <div class="room-type">Loại phòng: <span id="roomType"></span></div>
+        <table class="booking" >
+        <tr>
+            <td>Họ và tên:</td>
+            <td><input type="text" id="name" required></td>
+        </tr>
+        <tr>
+            <td>Số điện thoại:</td>
+            <td><input type="tel" id="phone" required></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="email" id="email"></td>
+        </tr>
+        <tr>
+            <td>Loại phòng:</td>
+            <td><label><input type="radio" name="roomSize" value="Đơn"> Đơn</label>
+                <label><input type="radio" name="roomSize" value="Đôi"> Đôi</label></td>
+        </tr>
+        <tr>
+            <td>Ngày nhận phòng:</td>
+            <td><input type="date" id="checkin" required></td>
+        </tr>
+        <tr>
+            <td>Ngày trả phòng:</td>
+            <td><input type="date" id="checkout" required></td>
+        </tr>
+        </table>
+
+        <button type="submit" class="submit-btn">Xác nhận đặt phòng</button>
+    </form>
+   </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    document.getElementById("roomType").innerText = type || "Không xác định";
+    function sendData(){
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+      const roomSize = document.querySelector('input[name="roomSize"]:checked')?.value || "";
+      const checkin = document.getElementById("checkin").value;
+      const checkout = document.getElementById("checkout").value;
+      fetch("http://localhost:8080/booking/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({name, phone, email, roomSize, checkin, checkout, type})
+      })
+      .then(response => response.text())
+      .then(data => alert(data))
+      .catch(error => {
+        console.error("Lỗi: ", error);
+        alert("Không thể kết nối đến server! Vui lòng thử lại sau ít phút.");
+      });
+    }
+  </script>
+</body>
+</html>
