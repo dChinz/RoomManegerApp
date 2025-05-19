@@ -32,15 +32,22 @@ namespace RoomManegerApp.Forms
         SQLiteConnection ketnoi;
         SQLiteCommand thuchien;
         SQLiteDataReader doc;
+        private Timer bookingTimer;
 
         private void FormDashboard_Load(object sender, EventArgs e)
         {
             createDTB();
             load_form();
+            updateBooking();
+
+            bookingTimer = new Timer();
+            bookingTimer.Interval = 30000;
+            bookingTimer.Tick += BookingTimer_Tick;
+            bookingTimer.Start();
         }
 
         private void load_form()
-        {
+        {            
             if (UserRole == Role.Admin)
             {
                 labelRole.Text = "Admin";
@@ -261,6 +268,41 @@ namespace RoomManegerApp.Forms
         {
             FormBooking form = new FormBooking();
             LoadFormToTableLayout(form, 1, 1);
+        }
+
+        private void updateBooking()
+        {
+            int count = 0;
+            sql = @"select count(*) from booking";
+            using (ketnoi = Database_connect.connection())
+            {
+                ketnoi.Open();
+                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                {
+                    using (doc = thuchien.ExecuteReader())
+                    {
+                        if (doc.Read())
+                        {
+                            count = Convert.ToInt32(doc[0].ToString());
+                        }
+                    }
+                }
+            }
+            booking.Text = $"Booking ({count})";
+            if (count > 0)
+            {
+                booking.BackColor = Color.Aqua;
+            }
+            else
+            {
+                booking.BackColor = SystemColors.ControlLight;
+            }
+        }
+
+        private void BookingTimer_Tick(object sender, EventArgs e)
+        {
+            load_form();
+            updateBooking();
         }
     }
 }

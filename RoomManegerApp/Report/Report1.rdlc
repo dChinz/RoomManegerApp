@@ -12,7 +12,7 @@
               <Width>1in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>1.03125in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -32,7 +32,9 @@
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox1</rd:DefaultName>
@@ -62,7 +64,9 @@
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox3</rd:DefaultName>
@@ -92,7 +96,9 @@
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox5</rd:DefaultName>
@@ -123,11 +129,13 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!date.Value</Value>
+                              <Value>=Format(CDate(Fields!date.Value), "dd/MM/yyyy")</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>date</rd:DefaultName>
@@ -157,7 +165,9 @@
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>rentCount</rd:DefaultName>
@@ -183,11 +193,13 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!revenueCount.Value</Value>
+                              <Value>=Format(Fields!revenueCount.Value, "#,##0")</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>revenueCount</rd:DefaultName>
@@ -226,10 +238,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet1</DataSetName>
-        <Top>0.57167in</Top>
-        <Left>0.63417in</Left>
         <Height>0.5in</Height>
-        <Width>3in</Width>
+        <Width>3.03125in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -243,7 +253,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Sum(Fields!revenueCount.Value, "DataSet1")</Value>
+                <Value>="Tổng doanh thu: " &amp; Format(Sum(Fields!revenueCount.Value, "DataSet1"), "#,##0")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -251,10 +261,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.155in</Top>
-        <Left>3.98833in</Left>
+        <Top>0.98833in</Top>
+        <Left>1.83333in</Left>
         <Height>0.25in</Height>
-        <Width>1in</Width>
+        <Width>1.94792in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -270,7 +280,7 @@
     <Height>1.78125in</Height>
     <Style />
   </Body>
-  <Width>6.5in</Width>
+  <Width>3.8125in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>

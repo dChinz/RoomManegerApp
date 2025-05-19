@@ -37,21 +37,27 @@ namespace RoomManegerApp.Booking
             using (ketnoi = Database_connect.connection())
             {
                 ketnoi.Open();
-                sql = "select * from booking";
+                sql = "select name, phone, email, roomSize, checkin, checkout, type from booking";
                 using (thuchien = new SQLiteCommand(sql, ketnoi))
                 {
                     using (doc = thuchien.ExecuteReader())
                     {
                         while (doc.Read())
                         {
-                            dataGridView1.Rows.Add(doc[0], doc[1], doc[2], doc[3], doc[4], doc[5], doc[6], doc[7]);
+                            DateTime.TryParseExact(doc["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckin);
+                            string checkin = dbcheckin.ToString("dd/MM/yyyy");
+
+                            DateTime.TryParseExact(doc["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckout);
+                            string checkout = dbcheckout.ToString("dd/MM/yyyy");
+
+                            dataGridView1.Rows.Add(doc[0], doc[1], doc[2], doc[3], checkin, checkout, doc[6]);
                         }
                     }
                 }
             }
 
             DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
-            btn.HeaderText = "accept";
+            btn.HeaderText = "Xác nhận";
             btn.Name = "accept";
             btn.Text = "Xác nhận";
             btn.UseColumnTextForButtonValue = true;

@@ -40,6 +40,11 @@ namespace RoomManegerApp.Report
                 comboBoxSelectTime.Enabled = false;
                 comboBoxTime.Enabled = false;
             }
+            else
+            {
+                comboBoxSelectTime.Enabled = true;
+                comboBoxTime.Enabled = true;
+            }
         }
 
         private void buttonCreate_Click(object sender, EventArgs e)

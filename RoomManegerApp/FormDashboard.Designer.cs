@@ -245,7 +245,6 @@
             this.booking.Name = "booking";
             this.booking.Size = new System.Drawing.Size(125, 43);
             this.booking.TabIndex = 5;
-            this.booking.Text = "Booking";
             this.booking.UseVisualStyleBackColor = true;
             this.booking.Click += new System.EventHandler(this.booking_Click);
             // 

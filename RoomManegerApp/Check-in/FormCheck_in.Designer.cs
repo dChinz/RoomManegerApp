@@ -45,9 +45,9 @@
             this.buttonSearch = new System.Windows.Forms.Button();
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.hủyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label2 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -197,7 +197,8 @@
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(313, 2);
+            this.buttonSearch.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonSearch.Location = new System.Drawing.Point(313, 3);
             this.buttonSearch.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(81, 20);
@@ -208,6 +209,7 @@
             // 
             // textBoxSearch
             // 
+            this.textBoxSearch.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBoxSearch.Location = new System.Drawing.Point(208, 3);
             this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.Size = new System.Drawing.Size(100, 20);
@@ -215,12 +217,25 @@
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 0);
+            this.label1.Location = new System.Drawing.Point(17, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(185, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Nhập tên phòng hoặc tên người thuê:";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label2.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(289, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(222, 31);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Quản lí check in";
             // 
             // contextMenuStrip1
             // 
@@ -235,18 +250,6 @@
             this.hủyToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
             this.hủyToolStripMenuItem.Text = "Hủy";
             this.hủyToolStripMenuItem.Click += new System.EventHandler(this.hủyToolStripMenuItem_Click);
-            // 
-            // label2
-            // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label2.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(289, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(222, 31);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Quản lí check in";
             // 
             // FormCheck_in
             // 

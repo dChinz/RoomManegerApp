@@ -28,7 +28,7 @@ public class HttpServer
         if (_listener != null && _listener.IsListening) return;
 
         _listener = new HttpListener();
-        _listener.Prefixes.Add("http://localhost:8080/booking/");
+        _listener.Prefixes.Add("http://+:8080/booking/");
         _listener.Start();
 
         Task.Run(ListenLoop);
