@@ -49,7 +49,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timerNow = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
@@ -307,9 +307,9 @@
             this.label5.TabIndex = 3;
             this.label5.Text = "label5";
             // 
-            // timer1
+            // timerNow
             // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timerNow.Tick += new System.EventHandler(this.timerNow_Tick);
             // 
             // FormDashboard
             // 
@@ -344,7 +344,7 @@
         private System.Windows.Forms.Button QLKhachHang;
         private System.Windows.Forms.Button ThanhToan;
         private System.Windows.Forms.Button BaoCao;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timerNow;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private System.Windows.Forms.Label labelDangXuat;

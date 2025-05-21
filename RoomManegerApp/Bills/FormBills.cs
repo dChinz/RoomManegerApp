@@ -22,51 +22,51 @@ namespace RoomManegerApp.Forms
             this.dashboard = dashboard;
         }
 
-        private void reloadData()
+        private async void reloadData()
         {
-            load_bill();
+            await load_bill();
             dashboard.reloadData();
         }
 
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
-        private void FormBills_Load(object sender, EventArgs e)
+        private async void FormBills_Load(object sender, EventArgs e)
         {
-            load_bill();
+            await load_bill();
         }
-        private void load_bill()
+        private async Task load_bill()
         {
-            dataGridView1.Rows.Clear();
-            using (ketnoi = Database_connect.connection())
+            try
             {
-                ketnoi.Open();
-                sql = @"select bills.id as b_id, bills.checkins_id as b_c_id, bills.status as b_status, end_date, start_date , rooms.price as r_price, time
+                dataGridView1.Rows.Clear();
+                string sql = @"select bills.id as b_id, bills.checkins_id as b_c_id, bills.status as b_status, end_date, start_date , rooms.price as r_price, time
                         from bills
                         inner join checkins on bills.checkins_id = checkins.id
                         inner join rooms on checkins.room_id = rooms.id";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
+                foreach (var row in data)
                 {
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            int startDate = Convert.ToInt32(doc["start_date"].ToString());
-                            int endDate = Convert.ToInt32(doc["end_date"].ToString());
-                            DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
-                            DateTime end = DateTime.ParseExact(endDate.ToString(), "yyyyMMdd", null);
-                            int totalDays = (end - start).Days;
-                            double price = Convert.ToDouble(doc["r_price"].ToString());
-                            double time = Convert.ToInt64(doc["time"].ToString());
-                            DateTime checkout = DateTime.ParseExact(time.ToString(), "yyyyMMddHHmmss", null);
-
-                            dataGridView1.Rows.Add(doc["b_id"], doc["b_c_id"], totalDays, price, totalDays * price, doc["b_status"], checkout);
-                        }
-                    }
+                    FillDataGridView(row);
                 }
             }
+            catch (Exception ex) 
+            {
+                MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void FillDataGridView(Dictionary<string, object> row)
+        {
+            int startDate = Convert.ToInt32(row["start_date"].ToString());
+            int endDate = Convert.ToInt32(row["end_date"].ToString());
+            DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
+            DateTime end = DateTime.ParseExact(endDate.ToString(), "yyyyMMdd", null);
+
+            int totalDays = (end - start).Days;
+            double price = Convert.ToDouble(row["r_price"].ToString());
+
+            double time = Convert.ToInt64(row["time"].ToString());
+            DateTime checkout = DateTime.ParseExact(time.ToString(), "yyyyMMddHHmmss", null);
+
+            dataGridView1.Rows.Add(row["b_id"], row["b_c_id"], totalDays, price, totalDays * price, row["b_status"], checkout);
         }
 
         private void buttonAdd_new_Click(object sender, EventArgs e)
@@ -92,34 +92,37 @@ namespace RoomManegerApp.Forms
             }
         }
 
-        private void đãThanhToánToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void đãThanhToánToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            sql = @"update bills set status = 'Đã thanh toán' where id = @id";
-            int id = get_id_bill();
-            using(ketnoi = Database_connect.connection())
+            try
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                string sql = @"update bills set status = 'Đã thanh toán' where id = @id";
+                int id = get_id_bill();
+                int rowAffected = Convert.ToInt16(Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } }));
+                if (rowAffected > 0)
                 {
-                    thuchien.Parameters.AddWithValue("@id", id);
-                    thuchien.ExecuteNonQuery();
+                    MessageBox.Show("Update thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    dataGridView1.Rows.Clear();
+                    await load_bill();
                 }
-                
+                else
+                {
+                    MessageBox.Show("Cập nhật không thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            MessageBox.Show("Update thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            dataGridView1.Rows.Clear();
-            load_bill();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public int get_id_bill()
         {
-            int id = -1;
-            if (dataGridView1.SelectedRows.Count > 0)
+            if (dataGridView1.SelectedRows.Count > 0 && Int32.TryParse(dataGridView1.SelectedRows[0].Cells[0].Value.ToString(), out int id))
             {
-                var row = dataGridView1.SelectedRows[0];
-                id = Int32.Parse(row.Cells[0].Value.ToString()); //lấy id từ dòng đã chọn
+                return id;
             }
-            return id;
+            return -1;
         }
 
         private void inHóaĐơnToolStripMenuItem_Click(object sender, EventArgs e)

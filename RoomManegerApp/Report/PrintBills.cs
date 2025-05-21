@@ -24,11 +24,6 @@ namespace RoomManegerApp.Report
             idBills = id;
         }
 
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
         private void PrintBills_Load(object sender, EventArgs e)
         {
             List<M_PrintBills> list = GetData();
@@ -45,34 +40,24 @@ namespace RoomManegerApp.Report
         private List<M_PrintBills> GetData()
         {
             var list = new List<M_PrintBills>();
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                sql = @"select tenants.name as t_name, rooms.name as r_name, rooms.type, checkins.start_date, checkins.end_date, bills.total
+            string sql = @"select tenants.name as t_name, rooms.name as r_name, rooms.type, checkins.start_date, checkins.end_date, bills.total
                         from bills
                         inner join checkins on bills.checkins_id = checkins.id
                         inner join rooms on checkins.room_id = rooms.id
                         inner join tenants on checkins.tenant_id = tenants.id
                         where bills.id = @id";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+            var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@id", idBills } });
+            foreach (var row in data)
+            {
+                list.Add(new M_PrintBills
                 {
-                    thuchien.Parameters.AddWithValue("@id", idBills);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if(doc.Read())
-                        {
-                            list.Add(new M_PrintBills
-                            {
-                                t_name = doc["t_name"].ToString(),
-                                r_name = doc["r_name"].ToString(),
-                                type = doc["type"].ToString(),
-                                start_date = DateTime.ParseExact(doc["start_date"].ToString(), "yyyyMMdd", null),
-                                end_date = DateTime.ParseExact(doc["end_date"].ToString(), "yyyyMMdd", null),
-                                total = string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", doc["total"])
-                            });
-                        }
-                    }
-                }
+                    t_name = row["t_name"].ToString(),
+                    r_name = row["r_name"].ToString(),
+                    type = row["type"].ToString(),
+                    start_date = DateTime.ParseExact(row["start_date"].ToString(), "yyyyMMdd", null),
+                    end_date = DateTime.ParseExact(row["end_date"].ToString(), "yyyyMMdd", null),
+                    total = string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", row["total"])
+                });
             }
             return list;
         }

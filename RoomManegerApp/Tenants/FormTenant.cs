@@ -25,19 +25,9 @@ namespace RoomManegerApp.Forms
                 System.Reflection.BindingFlags.Instance |
                 System.Reflection.BindingFlags.SetProperty,
                 null, dataGridView1, new object[] { true });
-        }
-
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
-        private void FormTenant_Load(object sender, EventArgs e)
-        {
-
-            load_tentant();
 
             dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
 
             this.AcceptButton = buttonSearch;
 
@@ -45,39 +35,47 @@ namespace RoomManegerApp.Forms
             SetPlaceholderText(textBoxId_card, "Nhập số CCCD...");
         }
 
-        public void load_tentant()
+        private async void FormTenant_Load(object sender, EventArgs e)
+        {
+            await load_tentant();
+        }
+
+        private async Task load_tentant()
         {
             positionIndex();
-            if (scrollPosition >= 0 && scrollPosition < dataGridView1.Rows.Count)
+            try
             {
-                dataGridView1.FirstDisplayedScrollingRowIndex = scrollPosition;
-            }
+                string sql = @"select * from tenants";
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
 
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Rows.Clear();
-
-            sql = @"select * from tenants";
-            using(ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                dataGridView1.Invoke(new Action(() =>
                 {
-                    //dataGridView1.Rows.Clear();
-                    using (doc = thuchien.ExecuteReader()) 
+                    dataGridView1.Rows.Clear();
+                    foreach (var row in data)
                     {
-                        while (doc.Read())
-                        {
-                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["email"], doc["id_card"], doc["gender"], doc["address"]);
-                        }
+                        dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["email"], row["id_card"], row["gender"], row["address"]);
                     }
-                }
+
+                    if (scrollPosition >= 0 && scrollPosition < dataGridView1.Rows.Count)
+                    {
+                        dataGridView1.FirstDisplayedScrollingRowIndex = scrollPosition;
+                    }
+                }));
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("lỗi khi tải dữ liệu: " +  ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private int scrollPosition = 0;
         private void positionIndex()
         {
-            scrollPosition = dataGridView1.FirstDisplayedScrollingRowIndex;
+            if(dataGridView1.FirstDisplayedScrollingRowIndex > 0)
+            {
+                scrollPosition = dataGridView1.FirstDisplayedScrollingRowIndex;
+            }
         }
 
         private void buttonAdd_one_tentant_Click(object sender, EventArgs e)
@@ -85,7 +83,7 @@ namespace RoomManegerApp.Forms
             FormAdd_one_tenant f = new FormAdd_one_tenant();
             f.Show();
 
-            f.tentant_added += (s, args) => load_tentant();
+            f.tentant_added += async (s, args) => await load_tentant();
         }
 
         private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
@@ -107,51 +105,44 @@ namespace RoomManegerApp.Forms
 
         public int get_id_room()
         {
-            int id = -1;
-            if (dataGridView1.SelectedRows.Count > 0)
+            if(dataGridView1.SelectedRows.Count > 0 &&
+                int.TryParse(dataGridView1.SelectedRows[0].Cells[0].Value?.ToString(), out int id))
             {
-                var row = dataGridView1.SelectedRows[0];
-                id = Int32.Parse(row.Cells[0].Value.ToString()); //lấy id từ dòng đã chọn
+                return id;
             }
-            return id;
+            return -1;
         }
 
         private void sửaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                int id = Convert.ToInt32(get_id_room().ToString());
+            int id = get_id_room();
+            if (id < 0) return;
 
-                FormAdd_one_tenant f = new FormAdd_one_tenant(id);
-
-                // Đăng ký sự kiện reload lại danh sách khi form edit cập nhật
-                positionIndex();
-                //f.tentant_updateded += (s, args) => load_tentant();
-
-                f.Show();
-            }
+            var f = new FormAdd_one_tenant(id);
+            positionIndex();
+            f.Show();
         }
 
-        private void xóaToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void xóaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            sql = @"delete from tenants where id = @id";
-            using(ketnoi = Database_connect.connection())
+            string sql = @"delete from tenants where id = @id";
+            int id = get_id_room();
+            int rowAffected = Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
+            if (rowAffected > 0) 
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@id", get_id_room());
-                    thuchien.ExecuteNonQuery();
-                }
+                MessageBox.Show("Xoá thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                positionIndex();
+                await load_tentant();
             }
-            MessageBox.Show("Xoá thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            positionIndex();
-            load_tentant();
+            else
+            {
+                MessageBox.Show("Xoá không thành công hoặc không tìm thấy bản ghi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         private void SetPlaceholderText(TextBox textBox, string placeholder)
         {
             // Nếu TextBox rỗng, đặt giá trị là placeholder và thay đổi màu chữ thành Gray
-            if (textBox.Text == "")
+            if (string.IsNullOrWhiteSpace(textBox.Text))
             {
                 textBox.Text = placeholder;
                 textBox.ForeColor = Color.Gray;
@@ -182,44 +173,46 @@ namespace RoomManegerApp.Forms
         {
             string name = textBoxName.Text;
             string id_card = textBoxId_card.Text;
-            sql = "select * from tenants";
-            List<string> list = new List<string>();
 
-            if(name != "" && name != "Nhập tên...")
-            {
-                list.Add("name like '%' || @name || '%'");
-            }
-            if(id_card != "" & Int64.TryParse(id_card, out long checkId_card))
-            {
-                list.Add("id_card = @id_card");
-            }
-            if(list.Count > 0)
-            {
-                sql += " where " + string.Join(" and ", list);
-            }
+            var conditions = new List<string>();
+            var parameters = new Dictionary<string, object>();
 
-            using(ketnoi = Database_connect.connection())
+            if(!string.IsNullOrEmpty(name) && name != "Nhập tên...")
             {
-                ketnoi.Open();
-                using(thuchien = new SQLiteCommand(sql, ketnoi))
+                conditions.Add("name like '%' || @name || '%'");
+                parameters.Add("@name", name);
+            }
+            if(!string.IsNullOrEmpty(id_card) && id_card != "Nhập số CCCD...")
+            {
+                if(Int64.TryParse(id_card, out long tmp))
                 {
-                    if (name != "" && name != "Nhập tên...")
-                    {
-                        thuchien.Parameters.AddWithValue("@name", name);
-                    }
-                    if (id_card != "" & checkId_card != 0)
-                    {
-                        thuchien.Parameters.AddWithValue("@id_card", id_card);
-                    }
-                    dataGridView1.Rows.Clear();
-                    using(doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["email"], doc["gender"], doc["address"], doc["note"]);
-                        }
-                    }
+                    conditions.Add("id_card = @id_card");
+                    parameters.Add("@id_card", id_card);
                 }
+                else
+                {
+                    MessageBox.Show("Số CCCD không hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+            string sql = "select * from tenants";
+            if(conditions.Count > 0)
+            {
+                sql += " where " + string.Join(" and ", conditions);
+            }
+            try
+            {
+                var data = Database_connect.ExecuteReader(sql, parameters);
+                dataGridView1.Rows.Clear();
+
+                foreach (var row in data)
+                {
+                    dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["email"], row["id_card"], row["gender"], row["address"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tìm kiếm: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

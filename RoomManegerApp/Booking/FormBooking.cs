@@ -20,166 +20,156 @@ namespace RoomManegerApp.Booking
         public FormBooking()
         {
             InitializeComponent();
+
+            AddOptionButton();
         }
 
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
-        private void FormBooking_Load(object sender, EventArgs e)
+        private async void FormBooking_Load(object sender, EventArgs e)
         {
-            load_form();
+            await load_form();
         }
-        private void load_form()
+        private async Task load_form()
         {
             dataGridView1.Rows.Clear();
-            using (ketnoi = Database_connect.connection())
+            string sql = "select id, name, phone, email, roomSize, checkin, checkout, type from booking";
+            var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
+            foreach (var row in data)
             {
-                ketnoi.Open();
-                sql = "select name, phone, email, roomSize, checkin, checkout, type from booking";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            DateTime.TryParseExact(doc["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckin);
-                            string checkin = dbcheckin.ToString("dd/MM/yyyy");
-
-                            DateTime.TryParseExact(doc["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckout);
-                            string checkout = dbcheckout.ToString("dd/MM/yyyy");
-
-                            dataGridView1.Rows.Add(doc[0], doc[1], doc[2], doc[3], checkin, checkout, doc[6]);
-                        }
-                    }
-                }
+                FillDataGridView(row);
             }
-
-            DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
-            btn.HeaderText = "Xác nhận";
-            btn.Name = "accept";
-            btn.Text = "Xác nhận";
-            btn.UseColumnTextForButtonValue = true;
-            dataGridView1.Columns.Add(btn);
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void FillDataGridView(Dictionary<string, object> row)
         {
-            if(e.ColumnIndex == 8)
+            DateTime.TryParseExact(row["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckin);
+            string checkin = dbcheckin.ToString("dd/MM/yyyy");
+
+            DateTime.TryParseExact(row["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckout);
+            string checkout = dbcheckout.ToString("dd/MM/yyyy");
+
+            dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["email"], row["roomSize"], checkin, checkout, row["type"]);
+        }
+
+        private void AddOptionButton()
+        {
+            DataGridViewButtonColumn btnAccept = new DataGridViewButtonColumn();
+            btnAccept.HeaderText = "";
+            btnAccept.Name = "accept";
+            btnAccept.Text = "Xác nhận";
+            btnAccept.UseColumnTextForButtonValue = true;
+            dataGridView1.Columns.Add(btnAccept);
+
+            DataGridViewButtonColumn btnCancel = new DataGridViewButtonColumn();
+            btnCancel.HeaderText = "";
+            btnCancel.Name = "cancel";
+            btnCancel.Text = "Hủy";
+            btnCancel.UseColumnTextForButtonValue = true;
+            dataGridView1.Columns.Add(btnCancel);
+        }
+
+        private async void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+            string id = row.Cells["id"].Value.ToString();
+            string name = row.Cells["name"].Value.ToString();
+            string phone = row.Cells["phone"].Value.ToString();
+            string email = row.Cells["email"].Value.ToString();
+            string roomSize = row.Cells["roomSize"].Value.ToString();
+            string checkin = row.Cells[4].Value.ToString();
+            string checkout = row.Cells[5].Value.ToString();
+            string type = row.Cells["type"].Value.ToString();
+            if (e.ColumnIndex == 8)
             {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-                string id_room = "";
-                string id_tenant = "";
-                string id = row.Cells[0].Value.ToString();
-                string name = row.Cells[1].Value.ToString();
-                string phone = row.Cells[2].Value.ToString();
-                string email = row.Cells[3].Value.ToString();
-                string roomSize = row.Cells[4].Value.ToString();
-                string checkin = row.Cells[5].Value.ToString();
-                string checkout = row.Cells[6].Value.ToString();
-                string type = row.Cells[7].Value.ToString();
                 try
                 {
-                    using(ketnoi = Database_connect.connection())
+                    //Kiểm tra và cập nhật khách hàng
+                    string sql = "select 1 from tenants where name = @name";
+                    int rowCount = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@name", name } }));
+                    if (rowCount > 0)
                     {
-                        ketnoi.Open();
-                        sql = "select 1 from tenants where name = @name";
-                        using(thuchien = new SQLiteCommand(sql, ketnoi))
-                        {
-                            thuchien.Parameters.AddWithValue("@name", name);
-                            using(doc = thuchien.ExecuteReader())
-                            {
-                                if (doc.Read())
-                                {
-                                    doc.Close();
-                                    sql = @"update tenants set phone = @phone, email = @email where name = @name";
-                                }
-                                else
-                                {
-                                    doc.Close();
-                                    sql = @"insert into tenants (name, phone, email) values (@name, @phone, @email)";
-                                }
-                                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                                {
-                                    thuchien.Parameters.AddWithValue("@phone", phone);
-                                    thuchien.Parameters.AddWithValue("@email", email);
-                                    thuchien.Parameters.AddWithValue("@name", name);
-                                    thuchien.ExecuteNonQuery();
-                                }
-                            }
-                        }
+                        sql = @"update tenants set phone = @phone, email = @email where name = @name";
+                    }
+                    else
+                    {
+                        sql = @"insert into tenants (name, phone, email) values (@name, @phone, @email)";
+                    }
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
+                    {
+                        { "@name", name},
+                        { "@email", email },
+                        { "@phone", phone},
+                    });
 
-                        sql = @"select id
+                    //Lấy phòng tương ứng
+                    sql = @"select id
                                 from rooms
                                 where status = @status and size = @size and type = @type
                                 order by id asc
                                 limit 1";
-                        using(thuchien = new SQLiteCommand(sql, ketnoi))
-                        {
-                            thuchien.Parameters.AddWithValue("@status", "Trống");
-                            thuchien.Parameters.AddWithValue("@size", roomSize);
-                            thuchien.Parameters.AddWithValue("@type", type);
-                            using(doc = thuchien.ExecuteReader())
-                            {
-                                if (doc.Read())
-                                {
-                                    id_room = doc["id"].ToString();
-                                    doc.Close();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Không có phòng tương ứng.", "Hết phòng", MessageBoxButtons.OK);
-                                    return;
-                                }
-                            }
-                        }
+                    int idRoom = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object>
+                    {
+                        { "@status", "Trống"},
+                        { "@type", type},
+                        { "@size", roomSize },
+                    }));
+                    if (idRoom == 0)
+                    {
+                        MessageBox.Show("Không có phòng tương ứng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
 
-                        sql = @"select id from tenants where name = @name";
-                        using (thuchien = new SQLiteCommand(sql, ketnoi))
-                        {
-                            thuchien.Parameters.AddWithValue("@name", name);
-                            using (doc = thuchien.ExecuteReader())
-                            {
-                                if (doc.Read())
-                                {
-                                    id_tenant = doc["id"].ToString();
-                                }
-                            }
-                        }
+                    //Lấy id khách hàng
+                    sql = @"select id from tenants where name = @name";
+                    int idTenant = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@name", name } }));
+                    if (idTenant == 0)
+                    {
+                        MessageBox.Show("Không có khách hàng tương ứng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
 
-                        sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, status) values (@room_id, @tenant_id, @start_date, @end_date, @status)";
-                        using(thuchien = new SQLiteCommand(sql, ketnoi))
-                        {
-                            thuchien.Parameters.AddWithValue("@room_id", id_room);
-                            thuchien.Parameters.AddWithValue("@tenant_id", id_tenant);
-                            thuchien.Parameters.AddWithValue("@start_date", checkin);
-                            thuchien.Parameters.AddWithValue("@end_date", checkout);
-                            thuchien.Parameters.AddWithValue("@status", "Hiệu lực");
-                            thuchien.ExecuteNonQuery();
-                        }
-
+                    //Tạo checkins 
+                    sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, status) values (@room_id, @tenant_id, @start_date, @end_date, @status)";
+                    int rowAffected = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object>
+                    {
+                        { "@room_id", idRoom},
+                        { "@tenant_id", idTenant},
+                        { "@start_date", checkin},
+                        { "@end_date", checkout},
+                        { "@status", "Hiệu lực"},
+                    }));
+                    if (rowAffected != 0)
+                    {
                         sql = @"update rooms set status = 'Đã thuê' where id = @id";
-                        using (thuchien = new SQLiteCommand(sql, ketnoi))
-                        {
-                            thuchien.Parameters.AddWithValue("@id", id_room);
-                            thuchien.ExecuteNonQuery();
-                        }
+                        Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", idRoom } });
 
                         sql = @"delete from booking where id = @id";
-                        using(thuchien = new SQLiteCommand(sql, ketnoi))
-                        {
-                            thuchien.Parameters.AddWithValue("@id", id);
-                            thuchien.ExecuteNonQuery() ;
-                        }
+                        Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
+
                         MessageBox.Show("Xác nhận thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        load_form();
+                        await load_form();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi: {ex}");
+                    MessageBox.Show($"Lỗi đã xảy ra: {ex}");
                 }
+            }
+            else if(e.ColumnIndex == 9)
+            {
+                DialogResult result = MessageBox.Show("Xác nhận hủy?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                {
+                    string sql = @"delete from booking where id = @id";
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
+
+                    MessageBox.Show("Hủy thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await load_form();
+                }
+                else
+                {
+                    return;
+                }
+                
             }
         }
     }

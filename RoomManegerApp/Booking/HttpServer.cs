@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Net;
@@ -33,10 +34,6 @@ public class HttpServer
 
         Task.Run(ListenLoop);
     }
-
-    string sql;
-    SQLiteConnection ketnoi;
-    SQLiteCommand thuchien;
 
     private async Task ListenLoop()
     {
@@ -78,23 +75,17 @@ public class HttpServer
 
                 if (data != null)
                 {
-                    using (ketnoi = Database_connect.connection())
+                    string sql = @"insert into booking (name, phone, email, roomSize, checkin, checkout, type) values (@name, @phone, @email, @roomSize, @checkin, @checkout, @type)";
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>()
                     {
-                        ketnoi.Open();
-                        sql = @"insert into booking (name, phone, email, roomSize, checkin, checkout, type) values (@name, @phone, @email, @roomSize, @checkin, @checkout, @type)";
-                        using (thuchien = new SQLiteCommand(sql, ketnoi))
-                        {
-                            thuchien.Parameters.AddWithValue("@name", data.name);
-                            thuchien.Parameters.AddWithValue("@phone", data.phone);
-                            thuchien.Parameters.AddWithValue("@email", data.email);
-                            thuchien.Parameters.AddWithValue("@roomSize", data.roomSize);
-                            thuchien.Parameters.AddWithValue("@checkin", DateTime.Parse(data.checkin).ToString("yyyyMMdd"));
-                            thuchien.Parameters.AddWithValue("@checkout", DateTime.Parse(data.checkout).ToString("yyyyMMdd"));
-
-                            thuchien.Parameters.AddWithValue("@type", data.type);
-                            thuchien.ExecuteNonQuery();
-                        }
-                    }
+                        { "@name", data.name},
+                        { "@phone", data.phone},
+                        { "@email", data.email},
+                        { "@roomSize", data.roomSize},
+                        { "@checkin", DateTime.Parse(data.checkin).ToString("yyyyMMdd")},
+                        { "@checkout", DateTime.Parse(data.checkout).ToString("yyyyMMdd")},
+                        { "@type", data.type},
+                    });
                 }
 
                 context.Response.AddHeader("Access-Control-Allow-Origin", "*");

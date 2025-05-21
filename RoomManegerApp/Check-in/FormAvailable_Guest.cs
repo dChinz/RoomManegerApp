@@ -26,57 +26,30 @@ namespace RoomManegerApp.Check_in
             _callback = callback;
         }
 
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
         private void FormAvailable_Guest_Load(object sender, EventArgs e)
         {
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.Rows.Clear();
 
-            sql = @"select tenants.id, name, phone, id_card, gender, address from tenants
-                    left join checkins on checkins.tenant_id = tenants.id
-                    where checkins.tenant_id is null";
-            using (ketnoi = Database_connect.connection())
+            string sql = @"select tenants.id, name, phone, id_card, gender, address from tenants
+                    left join checkins on checkins.tenant_id = tenants.id";
+            var data = Database_connect.ExecuteReader(sql);
+            foreach(var row in data)
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    //dataGridView1.Rows.Clear();
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"]);
-                        }
-                    }
-                }
+                dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["id_card"], row["gender"], row["address"]);
             }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            sql = @"select tenants.id, name, phone, id_card, gender, address from tenants
+            dataGridView1.Rows.Clear();
+            string sql = @"select tenants.id, name, phone, id_card, gender, address from tenants
                     left join checkins on checkins.tenant_id = tenants.id
-                    where checkins.tenant_id is null
-                    and tenants.name like '%'|| @find ||'%' or id_card like '%'|| @find ||'%'";
-            using (ketnoi = Database_connect.connection())
+                    where tenants.name like '%'|| @find ||'%' or id_card like '%'|| @find ||'%'";
+            var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@find", textBox1.Text} });
+            foreach (var row in data)
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@find", textBox1.Text);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        dataGridView1.Rows.Clear();
-                        while (doc.Read())
-                        {
-                            dataGridView1.Rows.Add(doc["id"], doc["name"], doc["phone"], doc["id_card"], doc["gender"], doc["address"]);
-                        }
-                    }
-                }
+                dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["id_card"], row["gender"], row["address"]);
             }
         }
 
@@ -118,31 +91,9 @@ namespace RoomManegerApp.Check_in
 
         private void buttonCreat_Click(object sender, EventArgs e)
         {
-            sql = @"select tenants.id, name, phone, id_card, gender, address from tenants
-                    left join checkins on checkins.tenant_id = tenants.id
-                    where checkins.tenant_id is null
-                    and tenants.name like '%'|| @find ||'%' or id_card like '%'|| @find ||'%'";
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@find", textBox1.Text);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if (doc.HasRows)
-                        {
-                            MessageBox.Show("Dữ liệu đã tồn tại", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                        else
-                        {
-                            string Tenant = textBox1.Text;
-                            FormAdd_one_tenant f = new FormAdd_one_tenant(Tenant);
-                            f.Show();
-                        }
-                    }
-                }
-            }
+            string Tenant = textBox1.Text;
+            FormAdd_one_tenant f = new FormAdd_one_tenant(Tenant);
+            f.Show();
         }
     }
 }

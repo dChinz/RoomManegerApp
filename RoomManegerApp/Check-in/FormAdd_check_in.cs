@@ -28,12 +28,6 @@ namespace RoomManegerApp.Contracts
             type = roomType;
             _callback = callback;
         }
-        
-
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
 
         private void FormAdd_contract_Load(object sender, EventArgs e)
         {
@@ -61,64 +55,38 @@ namespace RoomManegerApp.Contracts
                 MessageBox.Show("Lỗi dữ liệu ngày", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            using(ketnoi = Database_connect.connection())
+
+            try
             {
-                ketnoi.Open();
-                try
+                string sql = @"select id from tenants where name = @name";
+                int idTenant = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@name", Tenant } }));
+
+                sql = @"select id from rooms where name = @name";
+                int idRoom = Convert.ToInt16(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@name", Room } }));
+
+                sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, status) values (@room_id, @tenant_id, @start_date, @end_date, @status)";
+                int rowAffected = Convert.ToInt16(Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
+                    {
+                        { "@room_id", idRoom },
+                        { "@tenant_id", idTenant},
+                        { "@start_date", start_date},
+                        { "@end_date", end_date},
+                        { "@status", "Hiệu lực"}
+                    }));
+
+                if (rowAffected > 0)
                 {
-                    int idTenant = 0;
-                    sql = @"select id from tenants where name = @name";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    {
-                        thuchien.Parameters.AddWithValue("@name", Tenant);
-                        using (doc = thuchien.ExecuteReader())
-                        {
-                            if (doc.Read())
-                            {
-                                idTenant = Convert.ToInt32(doc["id"].ToString());
-                            }
-                        }
-                    }
-
-                    int idRoom = 0;
-                    sql = @"select id from rooms where name = @name";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    {
-                        thuchien.Parameters.AddWithValue("@name", nameRoom);
-                        using (doc = thuchien.ExecuteReader())
-                        {
-                            if (doc.Read())
-                            {
-                                idRoom = Convert.ToInt32(doc["id"].ToString());
-                            }
-                        }
-                    }
-
-                    sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, status) values (@room_id, @tenant_id, @start_date, @end_date, 'Hiệu lực')";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    {
-                        thuchien.Parameters.AddWithValue("@room_id", idRoom);
-                        thuchien.Parameters.AddWithValue("@tenant_id", idTenant);
-                        thuchien.Parameters.AddWithValue("@start_date", start_date);
-                        thuchien.Parameters.AddWithValue("@end_date", end_date);
-                        thuchien.ExecuteNonQuery();
-                    }
-
                     sql = @"update rooms set status = 'Đã thuê' where id = @id";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    {
-                        thuchien.Parameters.AddWithValue("@id", idRoom);
-                        thuchien.ExecuteNonQuery();
-                    }
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", idRoom } });
 
                     MessageBox.Show("Check in thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     _callback?.Invoke();
                     this.Close();
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi thao tác dữ liệu: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Microsoft.Reporting.WinForms;
 using RoomManegerApp.Models;
 using RoomManegerApp.ModelsReport;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace RoomManegerApp.Report
 {
@@ -22,14 +23,17 @@ namespace RoomManegerApp.Report
             InitializeComponent();
         }
 
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
         private void FormReport_Load(object sender, EventArgs e)
         {
-            this.reportViewer1.RefreshReport();
+            comboBoxReport.SelectedIndex = 0;
+            comboBoxTime.SelectedIndex = 0;
+            ComboBoxTime_SelectedIndexChanged(null, null);
+            comboBoxSelectTime.SelectedItem = DateTime.Now.Month;
+
+            this.BeginInvoke(new Action(() =>
+            {
+                buttonCreate.PerformClick();
+            }));
         }
 
         private void comboBoxReport_SelectedIndexChanged(object sender, EventArgs e)
@@ -44,246 +48,76 @@ namespace RoomManegerApp.Report
             {
                 comboBoxSelectTime.Enabled = true;
                 comboBoxTime.Enabled = true;
+                ComboBoxTime_SelectedIndexChanged(null, null);
             }
         }
+
+        private ReportService reportService = new ReportService();
 
         private void buttonCreate_Click(object sender, EventArgs e)
         {
+            ReportDataSource rds;
             string report = comboBoxReport.Text;
+            string timeType = comboBoxTime.Text;
+            int timeValue = Convert.ToInt32(comboBoxSelectTime.Text);
 
             if (report == "Báo cáo doanh thu" && comboBoxTime.SelectedItem != null)
             {
-                string month = comboBoxTime.Text;
-                List<ReportRevenue> reportRevenues = GetRevenueReports();
+                var data = reportService.GetRevenueReports(timeType, timeValue);
 
-                ReportDataSource rds = new ReportDataSource("DataSet1", reportRevenues);
+                rds = new ReportDataSource("DataSet1", data);
                 reportViewer1.LocalReport.ReportPath = "../../Report/Report1.rdlc";
-                reportViewer1.LocalReport.DataSources.Clear();
-                reportViewer1.LocalReport.DataSources.Add(rds);
-                reportViewer1.RefreshReport();
             }
             else if(report == "Báo cáo công suất phòng")
             {
-                string month = comboBoxTime.Text;
-                List<RateReport> rateReports = GetRateReports();
-
-                ReportDataSource rds = new ReportDataSource("DataSet1", rateReports);
+                var data = reportService.GetRateReports(timeType, timeValue);
+                rds = new ReportDataSource("DataSet1", data);
                 reportViewer1.LocalReport.ReportPath = "../../Report/Report2.rdlc";
-                reportViewer1.LocalReport.DataSources.Clear();
-                reportViewer1.LocalReport.DataSources.Add(rds);
-                reportViewer1.RefreshReport();
             }
             else
             {
-                List<GuestReport> guestReports = GetGuestReports();
-
-                ReportDataSource rds = new ReportDataSource("DataSet1", guestReports);
+                var data = reportService.GetGuestReports();
+                rds = new ReportDataSource("DataSet1", data);
                 reportViewer1.LocalReport.ReportPath = "../../Report/Report3.rdlc";
-                reportViewer1.LocalReport.DataSources.Clear();
-                reportViewer1.LocalReport.DataSources.Add(rds);
-                reportViewer1.RefreshReport();
             }
-        }
-
-        private List<ReportRevenue> GetRevenueReports()
-        {
-            var list = new List<ReportRevenue>();
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                sql = @"SELECT
-                        substr(start_date, 1, 4) || '-' ||
-                        substr(start_date, 5, 2) || '-' ||
-                        substr(start_date, 7, 2) as date,
-                        count(*) as rent_count,
-                        sum(bills.total) as total_revenue
-                        from bills
-                        inner join checkins on checkins.id = bills.checkins_id";
-                if (comboBoxTime.Text == "Tháng")
-                {
-                    string condition = @" where substr(start_date, 5, 2) = @time
-                                        GROUP by date
-                                        order by date";
-                    sql += condition;
-                }
-                if(comboBoxTime.Text == "Quý")
-                {
-                    string condition = @" where substr(start_date, 5, 2) between @startMonth and @endMonth
-                                        GROUP by date
-                                        order by date";
-                    sql += condition;
-                }
-                if (comboBoxTime.Text == "Năm")
-                {
-                    string condition = @" where substr(start_date, 1, 4) = @time
-                                        GROUP by date
-                                        order by date";
-                    sql += condition;
-                }
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    int seletedTime = Convert.ToInt16(comboBoxSelectTime.SelectedItem);
-                    string time = seletedTime.ToString("D2");
-                    if(comboBoxTime.Text == "Tháng" || comboBoxTime.Text == "Năm")
-                    {
-                        thuchien.Parameters.AddWithValue("@time", time);
-                    } 
-                    if(comboBoxTime.Text == "Quý")
-                    {
-                        thuchien.Parameters.AddWithValue("@startMonth", (seletedTime * 3 - 2).ToString("D2"));
-                        thuchien.Parameters.AddWithValue("@endMonth", (seletedTime * 3 ).ToString("D2"));
-                    }
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            list.Add(new ReportRevenue
-                            {
-                                date = doc["date"].ToString(),
-                                rentCount = doc["rent_count"].ToString(),
-                                revenueCount = Convert.ToDouble(doc["total_revenue"].ToString())
-                            });
-                        }
-                    }
-                }
-            }
-            
-            return list;
-        }
-
-        List<RateReport> GetRateReports()
-        {
-            var list = new List<RateReport>();
-            sql = @"SELECT
-                    substr(start_date, 1, 4) || '-' ||
-                    substr(start_date, 5, 2) || '-' ||
-                    substr(start_date, 7, 2) as date,
-                    (select count(*) from rooms) as totalRoom,
-                    count(DISTINCT bills.id) as roomInUse,
-                    round((count(distinct bills.id) * 100.0) /
-                          (select count(*) from rooms), 2) as occupancyRate
-                    from bills
-                    inner join checkins on checkins.id = bills.checkins_id
-                    inner join rooms on checkins.room_id = rooms.id";
-            using(ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                if (comboBoxTime.Text == "Tháng")
-                {
-                    string condition = @" where substr(start_date, 5, 2) = @time
-                                        GROUP by date
-                                        order by date";
-                    sql += condition;
-                }
-                if (comboBoxTime.Text == "Quý")
-                {
-                    string condition = @" where substr(start_date, 5, 2) between @startMonth and @endMonth
-                                        GROUP by date
-                                        order by date";
-                    sql += condition;
-                }
-                if (comboBoxTime.Text == "Năm")
-                {
-                    string condition = @" where substr(start_date, 1, 4) = @time
-                                        GROUP by date
-                                        order by date";
-                    sql += condition;
-                }
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    int seletedTime = Convert.ToInt16(comboBoxSelectTime.SelectedItem);
-                    string time = seletedTime.ToString("D2");
-                    if (comboBoxTime.Text == "Tháng" || comboBoxTime.Text == "Năm")
-                    {
-                        thuchien.Parameters.AddWithValue("@time", time);
-                    }
-                    if (comboBoxTime.Text == "Quý")
-                    {
-                        thuchien.Parameters.AddWithValue("@startMonth", (seletedTime * 3 - 2).ToString("D2"));
-                        thuchien.Parameters.AddWithValue("@endMonth", (seletedTime * 3).ToString("D2"));
-                    }
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            list.Add(new RateReport
-                            {
-                                date = doc["date"].ToString(),
-                                totalRoom = Convert.ToInt32(doc["totalRoom"].ToString()),
-                                roomInUse = Convert.ToInt32(doc["roomInUse"].ToString()),
-                                occupancyRate = Convert.ToDouble(doc["occupancyRate"].ToString())
-                            });
-                        }
-                    }
-                }
-            }
-            return list;
-        }
-
-        List<GuestReport> GetGuestReports()
-        {
-            var list = new List<GuestReport>();
-            sql = @"select name, phone, id_card, gender, count(checkins.id) as checkinCount, sum(bills.total) as total
-from tenants
-inner join checkins on tenants.id = checkins.tenant_id
-inner join bills on checkins.id = bills.checkins_id
-group by name
-order by name";
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            list.Add(new GuestReport
-                            {
-                                name = doc["name"].ToString(),
-                                phone = doc["phone"].ToString(),
-                                id_card = doc["id_card"].ToString(),
-                                gender = doc["gender"].ToString(),
-                                checkisCount = doc["checkinCount"].ToString(),
-                                total = doc["total"].ToString()
-                            });
-                        }
-                    }
-                }
-            }
-            return list;
+            reportViewer1.LocalReport.DataSources.Clear();
+            reportViewer1.LocalReport.DataSources.Add(rds);
+            reportViewer1.RefreshReport();
         }
 
         private void ComboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBoxSelectTime.Items.Clear();
-            if (comboBoxTime.SelectedIndex == 0)
+            if (comboBoxTime.SelectedIndex >= 0)
             {
-                for(int i = 1; i <= 12; i++)
-                {
-                    comboBoxSelectTime.Items.Add(i.ToString());
-                }
-                int month = DateTime.Now.Month;
-                comboBoxSelectTime.SelectedItem = month.ToString();
+                LoadTimeOption(comboBoxTime.Text);
             }
-            else if(comboBoxTime.SelectedIndex == 1)
+        }
+
+        private void LoadTimeOption(string type)
+        {
+            comboBoxSelectTime.Items.Clear();
+            if (type == "Tháng")
+            {
+                for (int i = 1; i <= 12; i++)
+                    comboBoxSelectTime.Items.Add(i.ToString());
+
+                comboBoxSelectTime.SelectedItem = DateTime.Now.Month.ToString();
+            }
+            else if (type == "Quý")
             {
                 for (int i = 1; i <= 4; i++)
-                {
                     comboBoxSelectTime.Items.Add(i.ToString());
-                }
-                int month = DateTime.Now.Month;
-                int quarter = (month - 1) / 3 + 1;
-                comboBoxSelectTime.SelectedItem = quarter.ToString();
+
+                int quarter = (DateTime.Now.Month - 1) / 3 + 1;
+                comboBoxSelectTime.SelectedItem = DateTime.Now.Month.ToString();
             }
-            else if( comboBoxTime.SelectedIndex == 2)
+            else if (type == "Năm")
             {
                 int year = DateTime.Now.Year;
-                for (int i = year - 5; i <= year+1; i++)
-                {
+                for (int i = year - 5; i <= year + 1; i++)
                     comboBoxSelectTime.Items.Add(i.ToString());
-                }
-                comboBoxSelectTime.SelectedItem = year.ToString();
+
+                comboBoxSelectTime.SelectedItem = DateTime.Now.Month.ToString();
             }
         }
     }

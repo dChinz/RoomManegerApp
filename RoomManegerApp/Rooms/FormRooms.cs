@@ -26,62 +26,66 @@ namespace RoomManegerApp
                 System.Reflection.BindingFlags.Instance |
                 System.Reflection.BindingFlags.SetProperty,
                 null, dataGridView1, new object[] { true });
-        }
-
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
-        private void FormRooms_Load(object sender, EventArgs e)
-        {
-            load_rooms();
 
             SetPlaceholderText(textBoxName, "Nhập số phòng...");
             SetPlaceholderText(textBoxPrice, "Nhập giá tiền...");
 
             this.AcceptButton = buttonSearch;
-        }
 
-        public void load_rooms()
-        {
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.ReadOnly = true;
-
-            updateStatus();
-            positionIndex();
             dataGridView1.EditMode = DataGridViewEditMode.EditOnEnter;
+        }
 
-            sql = @"select * from rooms";
-            using(ketnoi = Database_connect.connection())
+        private async void FormRooms_Load(object sender, EventArgs e)
+        {
+            await load_rooms();
+            loadStatusRoom();
+        }
+
+        public async Task load_rooms()
+        {
+            positionIndex();
+            try
             {
-                ketnoi.Open();
-                using(thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    dataGridView1.Rows.Clear();
-                    using(doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["type"], doc["price"], doc["size"], doc["note"]);
-                            SetStatusColor(dataGridView1.Rows[rowIndex], doc["status"].ToString());
-                        }
-                    }
-                }
+                string sql = @"select * from rooms";
+
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
+                BeginInvoke(new Action(() => FillDataGirdView(data)));
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show("lỗi khi tải dữ liệu: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            if(scrollPosition >= 0 && scrollPosition < dataGridView1.Rows.Count)
-            {
-                dataGridView1.FirstDisplayedScrollingRowIndex = scrollPosition;
-            }
 
-            label8.Text = countStatusRoom("Trống").ToString();
-            label6.Text = countStatusRoom("Đã thuê").ToString();
-            label4.Text = countStatusRoom("Đang sửa chữa").ToString();
             buttonSave.Visible = false;
             buttonExit.Visible = false;
             buttonSelect_all.Visible = false;
             buttonUn_selected_all.Visible = false;
+        }
+
+        private void FillDataGirdView(List<Dictionary<string, object>> data)
+        {
+            dataGridView1.SuspendLayout();
+            dataGridView1.Rows.Clear();
+            foreach (var row in data)
+            {
+                int rowIndex = dataGridView1.Rows.Add(row["id"], row["name"], row["status"], row["type"], row["price"], row["size"], row["note"]);
+                SetStatusColor(dataGridView1.Rows[rowIndex], row["status"].ToString());
+            }
+
+            if (scrollPosition >= 0 && scrollPosition < dataGridView1.Rows.Count)
+            {
+                dataGridView1.FirstDisplayedScrollingRowIndex = scrollPosition;
+            }
+        }
+
+        private void loadStatusRoom()
+        {
+            label8.Text = countStatusRoom("Trống").ToString();
+            label6.Text = countStatusRoom("Đã thuê").ToString();
+            label4.Text = countStatusRoom("Đang sửa chữa").ToString();
         }
 
         private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
@@ -103,46 +107,37 @@ namespace RoomManegerApp
 
         public int get_id_room()
         {
-            int id = -1;
-            if (dataGridView1.SelectedRows.Count > 0)
+            if (dataGridView1.SelectedRows.Count > 0 &&
+                int.TryParse(dataGridView1.SelectedRows[0].Cells[0].Value?.ToString(), out int id))
             {
-                var row = dataGridView1.SelectedRows[0];
-                id = Int32.Parse(row.Cells[0].Value.ToString()); //lấy id từ dòng đã chọn
+                return id;
             }
-            return id;
+            return -1;
         }
 
-        private void xóaToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void xóaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int id = get_id_room();
-            using(ketnoi = Database_connect.connection())
+            string sql = @"delete from rooms where id = @id";
+            DialogResult dialogResult = MessageBox.Show("Bạn có chắc chắn muốn xóa không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes) 
             {
-                ketnoi.Open();
-                sql = @"select name from rooms where id = @id";
-                using(thuchien = new SQLiteCommand(sql, ketnoi))
+                int rowAffected = Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
+                if(rowAffected > 0)
                 {
-                    thuchien.Parameters.AddWithValue("@id", id);
-                    using(doc = thuchien.ExecuteReader())
-                    {
-                        if(doc.Read())
-                        {
-                            string name = doc["name"].ToString();
-                            doc.Close();
-                            DialogResult result =  MessageBox.Show($"Bạn muốn xóa phòng {name}", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                            if (result == DialogResult.Yes)
-                            {
-                                sql = @"delete from rooms where id = @id";
-                                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                                {
-                                    thuchien.Parameters.AddWithValue("@id", id);
-                                    thuchien.ExecuteNonQuery();
-                                }
-                                MessageBox.Show("Xoá thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                load_rooms();
-                            }
-                        }   
-                    }
+                    MessageBox.Show($"Xóa thành công {rowAffected} bản ghi", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    positionIndex();
+                    await load_rooms();
+                    loadStatusRoom();
                 }
+                else
+                {
+                    MessageBox.Show("Xoá không thành công hoặc không tìm thấy bản ghi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                return;
             }
         }
 
@@ -152,33 +147,21 @@ namespace RoomManegerApp
             formAdd_Room.Show();
 
             // Đăng ký sự kiện reload lại danh sách khi form edit cập nhật
-            formAdd_Room.room_added += (s, args) => load_rooms();
+            formAdd_Room.room_added += async (s, args) =>
+            {
+                await load_rooms();
+                loadStatusRoom();
+            };
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Bạn đang bật trạng thái cập nhật. Hiện tại bạn có thể sửa luôn vào bảng.", "Thông báo");
+            MessageBox.Show("Bạn đang bật trạng thái cập nhật. Hiện tại bạn có thể sửa tại bảng.", "Thông báo");
+            ModeUpdate();
             positionIndex();
-            load_rooms();
-
-            buttonUpdate.Enabled = false;
-            buttonAdd.Enabled = false;
-            buttonDelete.Enabled = false;
-
-            buttonUpdate.Text = "Đang cập nhật...";
-            buttonUpdate.BackColor = Color.Orange;
-            buttonUpdate.ForeColor = Color.White;
-
-            buttonSave.Visible = true;
-            buttonExit.Visible = true;
-
-            dataGridView1.ReadOnly = false;
-            dataGridView1.Columns[0].ReadOnly = true;
-            dataGridView1.Columns[1].ReadOnly = true;
-            dataGridView1.Columns[2].ReadOnly = true;
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private async void buttonSave_Click(object sender, EventArgs e)
         {
             if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
             {
@@ -198,69 +181,33 @@ namespace RoomManegerApp
                     return;
                 }
 
-                DialogResult result = MessageBox.Show("Bạn chắc chắn muốn xóa?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
+                DialogResult result = MessageBox.Show("Bạn chắc chắn muốn xóa không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                int rowAffected = 0;
                 if (result == DialogResult.Yes) 
                 {
-                    sql = @"delete from rooms where id = @id";
-                    using (ketnoi = Database_connect.connection())
+                    string sql = @"delete from rooms where id = @id";
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
-                        ketnoi.Open();
-                        using (thuchien = new SQLiteCommand(sql, ketnoi))
+                        var cell = row.Cells[0] as DataGridViewCheckBoxCell;
+                        if (cell != null && Convert.ToBoolean(cell.Value) == true)
                         {
-                            foreach (DataGridViewRow row in dataGridView1.Rows)
-                            {
-                                DataGridViewCheckBoxCell cell = row.Cells[0] as DataGridViewCheckBoxCell;
-                                if (cell != null && Convert.ToBoolean(cell.Value) == true)
-                                {
-                                    thuchien.Parameters.Clear();
-                                    thuchien.Parameters.AddWithValue("@id", row.Cells[1].Value);
-                                    thuchien.ExecuteNonQuery();
-                                }
-                            }
-
+                            var parameters = new Dictionary<string, object> { { "@id", row.Cells[0].Value } };
+                            rowAffected += Convert.ToInt32(Database_connect.ExecuteNonQuery(sql, parameters));
                         }
                     }
                 }
 
-                MessageBox.Show("Đã xóa thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Đã xóa thành công {rowAffected}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                dataGridView1.Columns.RemoveAt(0);
-                buttonDelete.Text = "Xóa";
-                buttonDelete.BackColor = SystemColors.ControlLight;
-                buttonDelete.ForeColor = Color.Black;
-                buttonUpdate.Enabled = true;
-                buttonAdd.Enabled = true;
-                buttonDelete.Enabled = true;
-                load_rooms();
+                ModeNormal();
+                await load_rooms();
             }
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Vào trạng thái xóa. Tích ô trước dòng cần xóa và bấm xác nhận để xóa", "Thông báo", MessageBoxButtons.OK);
-            buttonUpdate.Enabled = false;
-            buttonAdd.Enabled = false;
-            buttonDelete.Enabled = false;
-
-            buttonDelete.Text = "Đang xóa...";
-            buttonDelete.BackColor = Color.Orange;
-            buttonDelete.ForeColor = Color.White;
-
-            buttonSelect_all.Visible = true;
-            buttonUn_selected_all.Visible = true;
-            buttonSave.Visible = true;
-            buttonExit.Visible = true;
-
-            DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
-            dataGridView1.Columns.Insert(0, checkBoxColumn);
-
-            dataGridView1.ReadOnly = false;
-            dataGridView1.Columns[1].ReadOnly = true;
-            dataGridView1.Columns[2].ReadOnly = true;
-            dataGridView1.Columns[3].ReadOnly = true;
-            dataGridView1.Columns[4].ReadOnly = true;
-            dataGridView1.Columns[5].ReadOnly = true;
+            ModeDelete();
         }
 
         private void SetPlaceholderText(TextBox textBox, string placeholder)
@@ -295,10 +242,13 @@ namespace RoomManegerApp
 
         private void SetStatusColor(DataGridViewRow row, string status)
         {
-            Color color = Color.White;
-            if (status == "Trống") color = Color.LightGreen;
-            else if (status == "Đã thuê") color = Color.OrangeRed;
-            else if (status == "Đang sửa chữa") color = Color.Orange;
+            Color color = status switch
+            {
+                "Trống" => Color.LightGreen,
+                "Đã thuê" => Color.OrangeRed,
+                "Đang sữa chữa" => Color.Orange,
+                _ => Color.White
+            };
 
             row.Cells["status"].Style.BackColor = color;
         }
@@ -306,58 +256,50 @@ namespace RoomManegerApp
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
 
-            List<string> conditions = new List<string>();
-            if(textBoxName.Text != "Nhập số phòng..." && textBoxName.Text != "")
+            var conditions = new List<string>();
+            var parameters = new Dictionary<string, object>();
+            if (textBoxName.Text != "Nhập số phòng..." && !string.IsNullOrEmpty(textBoxName.Text))
             {
                 conditions.Add("name like '%' || @name || '%'");
+                parameters.Add("@name", textBoxName.Text);
             }
             if(comboBoxStatus.Text != "")
             {
                 conditions.Add("status = @status");
+                parameters.Add("@status", comboBoxStatus.Text);
             }
-            if(textBoxPrice.Text != "Nhập giá tiền..." && textBoxPrice.Text != "")
+            if(textBoxPrice.Text != "Nhập giá tiền..." && !string.IsNullOrEmpty(textBoxPrice.Text))
             {
-                conditions.Add("price between @price - 200000 and @price + 200000");
+                if (Int32.TryParse(textBoxPrice.Text, out int tmp))
+                {
+                    conditions.Add("price between @price - 200000 and @price + 200000");
+                    parameters.Add("@price", textBoxPrice.Text);
+                }
+                else
+                {
+                    MessageBox.Show("Số tiền không hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
             }
 
-            sql = @"select * from rooms";
+            string sql = @"select * from rooms";
             if (conditions.Count > 0) 
             {
                 sql += " where " + string.Join(" and ", conditions);
             }
 
-            using (ketnoi = Database_connect.connection())
+            try
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    if (textBoxName.Text != "Nhập số phòng..." && textBoxName.Text != "")
-                    {
-                        thuchien.Parameters.AddWithValue("@name", textBoxName.Text);
-                    }
-                    if (comboBoxStatus.Text != "")
-                    {
-                        thuchien.Parameters.AddWithValue("@status", comboBoxStatus.Text);
-                    }
-                    if (textBoxPrice.Text != "Nhập giá tiền..." && textBoxPrice.Text != "")
-                    {
-                        thuchien.Parameters.AddWithValue("@price", textBoxPrice.Text);
-                    }
-                    dataGridView1.Rows.Clear();
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            int rowIndex = dataGridView1.Rows.Add(doc["id"], doc["name"], doc["status"], doc["type"], doc["price"], doc["size"], doc["note"]);
-
-                            SetStatusColor(dataGridView1.Rows[rowIndex], doc["status"].ToString());
-                        }
-                    }
-                }
+                var data = Database_connect.ExecuteReader(sql, parameters);
+                FillDataGirdView(data);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tìm kiếm: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             comboBoxStatus.SelectedIndex = -1;
         }
 
@@ -369,46 +311,17 @@ namespace RoomManegerApp
 
         private int countStatusRoom(string status)
         {
-            sql = @"select count(status) as total 
+            string sql = @"select count(status) as total 
                     from rooms
                     where status = @status";
-            int total = 0;
-            using(ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                using(thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@status", status);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            total = Int32.Parse(doc[0].ToString());
-                        }
-                    }
-                }
-            }
+            int total = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", status} }));
             return total;
         }
 
-        private void buttonExit_edit_Click(object sender, EventArgs e)
+        private async void buttonExit_edit_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
-            {
-                dataGridView1.Columns.RemoveAt(0);
-            }
-            buttonDelete.Text = "Xóa";
-            buttonDelete.BackColor = SystemColors.ControlLight;
-            buttonDelete.ForeColor = Color.Black;
-
-            buttonUpdate.Text = "Cập nhật";
-            buttonUpdate.BackColor = SystemColors.ControlLight;
-            buttonUpdate.ForeColor = Color.Black;
-
-            buttonUpdate.Enabled = true;
-            buttonAdd.Enabled = true;
-            buttonDelete.Enabled = true;
-            load_rooms();
+            ModeNormal();
+            await load_rooms();
         }
 
         private void buttonSelect_all_Click(object sender, EventArgs e)
@@ -417,11 +330,8 @@ namespace RoomManegerApp
             {
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {   
-                    DataGridViewCheckBoxCell cell = row.Cells[0] as DataGridViewCheckBoxCell;
-                    if (cell != null)
-                    {
+                    if (row.Cells[0] is DataGridViewCheckBoxCell cell)
                         cell.Value = true;
-                    }
                 }
             }
         }
@@ -441,36 +351,74 @@ namespace RoomManegerApp
             }
         }
 
-        private void updateStatus()
+        private void ModeNormal()
         {
-            sql = @"select rooms.id from rooms
-                    left join checkins on rooms.id = checkins.room_id
-                    where checkins.id is null or checkins.status = 'Hết hiệu lực';";
-            List<string> id = new List<string>();
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            id.Add(doc["id"].ToString());
-                        }
-                    }
-                }
+            buttonUpdate.Enabled = true;
+            buttonAdd.Enabled = true;
+            buttonDelete.Enabled = true;
 
-                foreach(var i in id)
-                {
-                    sql = @"update rooms set status = 'Trống' where id = @id";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    {
-                        thuchien.Parameters.AddWithValue("@id", i);
-                        thuchien.ExecuteNonQuery();
-                    }
-                }
-            }
+            buttonDelete.Text = "Xóa";
+            buttonDelete.BackColor = SystemColors.ControlLight;
+            buttonDelete.ForeColor = Color.Black;
+
+            buttonUpdate.Text = "Cập nhật";
+            buttonUpdate.BackColor = SystemColors.ControlLight;
+            buttonUpdate.ForeColor = Color.Black;
+
+            buttonSave.Visible = false;
+            buttonExit.Visible = false;
+            buttonSelect_all.Visible = false;
+            buttonUn_selected_all.Visible = false;
+
+            if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
+                dataGridView1.Columns.RemoveAt(0);
+
+            dataGridView1.ReadOnly = true;
+        }
+
+        private void ModeUpdate()
+        {
+            buttonUpdate.Enabled = false;
+            buttonAdd.Enabled = false;
+            buttonDelete.Enabled = false;
+
+            buttonUpdate.Text = "Đang cập nhật...";
+            buttonUpdate.BackColor = Color.Orange;
+            buttonUpdate.ForeColor = Color.White;
+
+            buttonSave.Visible = true;
+            buttonExit.Visible = true;
+
+            dataGridView1.ReadOnly = false;
+            dataGridView1.Columns[0].ReadOnly = true;
+            dataGridView1.Columns[1].ReadOnly = true;
+            dataGridView1.Columns[2].ReadOnly = true;
+        }
+
+        private void ModeDelete()
+        {
+            buttonUpdate.Enabled = false;
+            buttonAdd.Enabled = false;
+            buttonDelete.Enabled = false;
+
+            buttonDelete.Text = "Đang xóa...";
+            buttonDelete.BackColor = Color.Orange;
+            buttonDelete.ForeColor = Color.White;
+
+            buttonSelect_all.Visible = true;
+            buttonUn_selected_all.Visible = true;
+            buttonSave.Visible = true;
+            buttonExit.Visible = true;
+
+            DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
+            dataGridView1.Columns.Insert(0, checkBoxColumn);
+
+            dataGridView1.ReadOnly = false;
+            dataGridView1.Columns[1].ReadOnly = true;
+            dataGridView1.Columns[2].ReadOnly = true;
+            dataGridView1.Columns[3].ReadOnly = true;
+            dataGridView1.Columns[4].ReadOnly = true;
+            dataGridView1.Columns[5].ReadOnly = true;
         }
     }
 }

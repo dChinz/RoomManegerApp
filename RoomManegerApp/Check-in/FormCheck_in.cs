@@ -21,187 +21,78 @@ namespace RoomManegerApp.Forms
             this.dashboard = dashboard;
         }
 
-        private void reloadData()
+        private async void reloadData()
         {
-            load_check_in();
+            await load_check_in();
             dashboard.reloadData();
         }
-
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
-        private void FormCheck_in_Load(object sender, EventArgs e)
+        private async void FormCheck_in_Load(object sender, EventArgs e)
         {
-            load_check_in();
+            await load_check_in();
+            updateStatus();
         }
 
-        public void load_check_in()
+        public async Task load_check_in()
         {
             dataGridView1.Rows.Clear();
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-
-                sql = @"select checkins.id as checkins_id, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, rooms.type as r_type, checkins.status as checkins_status
+            string sql = @"select checkins.id as checkins_id, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, rooms.type as r_type, checkins.status as checkins_status
                     from checkins
                     inner join rooms on checkins.room_id = rooms.id
                     inner join tenants on checkins.tenant_id = tenants.id";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            load_datagridview(doc);
-                        }
-                        doc.Close();
-                    }
-                }
+            var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
+            foreach (var row in data)
+            {
+                load_datagridview(row);
             }
-            update_status();
-            //cancel_status();
         }
 
-        private void buttonSearch_Click(object sender, EventArgs e)
+        private async void buttonSearch_Click(object sender, EventArgs e)
         {
-            string textbox = textBoxSearch.Text.Trim();
+            string name = textBoxSearch.Text.Trim();
 
-            if (string.IsNullOrEmpty(textbox))
+            if (string.IsNullOrEmpty(name))
             {
-                load_check_in();
+                await load_check_in();
             }
 
-            bool checkSearch = false;
-            sql = @"select * from rooms where name = @name";
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@name", textbox);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if (!doc.HasRows)
-                        {
-                            checkSearch = true;
-                        }
-                    }
-                }
-            }
-
-            if (!checkSearch)
-            {
-                sql = @"select checkins.id as checkins_id,rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, rooms.type as r_type, checkins.status as checkins_status
+            string sql = @"select checkins.id as checkins_id,rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, rooms.type as r_type, checkins.status as checkins_status
                     from checkins
                     inner join rooms on checkins.room_id = rooms.id
                     inner join tenants on checkins.tenant_id = tenants.id
-                    where rooms.name like '%' || @name || '%'";
-            }
-            else
+                    where rooms.name like '%' || @name || '%' or tenants.name like '%' || @name || '%'";
+            var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@name", name} });
+            foreach(var row in data)
             {
-                sql = @"select checkins.id as checkins_id, rooms.name as room_name, tenants.name as tenants_name, tenants.phone as tenants_phone, start_date, end_date, rooms.type as r_type, checkins.status as checkins_status
-                    from checkins
-                    inner join rooms on checkins.room_id = rooms.id
-                    inner join tenants on checkins.tenant_id = tenants.id
-                    where tenants.name like '%' || @name || '%'";
-            }
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@name", textbox);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        dataGridView1.Rows.Clear();
-                        while (doc.Read())
-                        {
-                            load_datagridview(doc);
-                        }
-                    }
-                }
+                load_datagridview(row);
             }
 
             textBoxSearch.Text = null;
         }
-        private void load_datagridview(SQLiteDataReader doc)
+        private void load_datagridview(Dictionary<string, object> row)
         {
-            string dbStart_date = doc["start_date"].ToString();
+            string dbStart_date = row["start_date"].ToString();
             DateTime.TryParseExact(dbStart_date, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime start_date);
             string formattedStart_date = start_date.ToString("dd/MM/yyyy");
 
-            string dbEnd_date = doc["end_date"].ToString();
+            string dbEnd_date = row["end_date"].ToString();
             DateTime.TryParseExact(dbEnd_date, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime end_date);
             string formattedEnd_date = end_date.ToString("dd/MM/yyyy");
 
-            int rowIndex = dataGridView1.Rows.Add(doc["checkins_id"], doc["room_name"], doc["tenants_name"], doc["tenants_phone"], formattedStart_date, formattedEnd_date, doc["r_type"], doc["checkins_status"]);
+            int rowIndex = dataGridView1.Rows.Add(row["checkins_id"], row["room_name"], row["tenants_name"], row["tenants_phone"], formattedStart_date, formattedEnd_date, row["r_type"], row["checkins_status"]);
 
-            SetStatusColor(dataGridView1.Rows[rowIndex], doc["checkins_status"].ToString());
+            SetStatusColor(dataGridView1.Rows[rowIndex], row["checkins_status"].ToString());
         }
-
-        private void update_status()
-        {
-            using (ketnoi = Database_connect.connection())
-            {
-                ketnoi.Open();
-                List<string> listID = new List<string>();
-
-                foreach (DataGridViewRow row in dataGridView1.Rows)
-                {
-                    if (row.IsNewRow || row.Cells["id"].Value == null) continue;
-
-                    string id = row.Cells["id"].Value.ToString();
-
-                    sql = @"select end_date from checkins where id = @id";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    {
-                        thuchien.Parameters.AddWithValue("@id", id);
-
-                        using (doc = thuchien.ExecuteReader())
-                        {
-                            if (doc.Read())
-                            {
-                                int end = Convert.ToInt32(doc["end_date"].ToString());
-                                int today = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
-
-                                if (end < today)
-                                {
-                                    listID.Add(id);
-                                }
-                            }
-                        }
-                    }
-                }
-                foreach (string id in listID)
-                {
-                    sql = @"update checkins set status = 'Hết hiệu lực' where id = @id";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    {
-                        thuchien.Parameters.AddWithValue("@id", id);
-                        thuchien.ExecuteNonQuery();
-                    }
-                }
-                foreach(DataGridViewRow row in dataGridView1.Rows)
-                {
-                    if (row.IsNewRow || row.Cells["id"].Value == null) continue;
-
-                    if (listID.Contains(row.Cells["id"].Value.ToString()))
-                    {
-                        row.Cells["status"].Value = "Hết hiệu lực";
-                        SetStatusColor(row, "Hết hiệu lực");
-                    }
-                }
-            }
-        }
-
 
         private void SetStatusColor(DataGridViewRow row, string status)
         {
-            Color color = Color.White;
-            if (status == "Hiệu lực") color = Color.LightGreen;
-            else if (status == "Hết hiệu lực") color = Color.OrangeRed;
+            Color color = status switch
+            {
+                "Hiệu lực" => Color.LightGreen,
+                "Hết hiệu lục" => Color.OrangeRed,
+                "Đã xử lý" => Color.Aqua,
+                "Hủy" => Color.Gray,
+                _ => Color.White,
+            };
 
             row.Cells["status"].Style.BackColor = color;
         }
@@ -212,48 +103,30 @@ namespace RoomManegerApp.Forms
             f.Show();
         }
 
-        private void hủyToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void hủyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int id = get_id();
-            using (ketnoi = Database_connect.connection())
+            string sql = @"select room_id, status from checkins where id = @id";
+            var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@id", id } });
+            foreach (var row in data)
             {
-                ketnoi.Open();
-                sql = @"select room_id, status from checkins where id = @id";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                string room_id = row["room_id"].ToString();
+                string status = row["status"].ToString();
+                if(status == "Còn hiệu lực")
                 {
-                    thuchien.Parameters.AddWithValue("@id", id);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if (doc.Read())
-                        {
-                            
-                            string room_id = doc["room_id"].ToString();
-                            string status = doc["status"].ToString();
-                            doc.Close();
-                            if(status == "Còn hiệu lực")
-                            {
-                                sql = @"update checkins set status = 'Hủy' where id = @id";
-                                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                                {
-                                    thuchien.Parameters.AddWithValue("@id", id);
-                                    thuchien.ExecuteNonQuery();
-                                }
+                    sql = @"update checkins set status = ' Đã hủy' where id = @id";
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
 
-                                sql = @"update rooms set status = 'Trống' where id = @id";
-                                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                                {
-                                    thuchien.Parameters.AddWithValue("@id", room_id);
-                                    thuchien.ExecuteNonQuery();
-                                }
-                                MessageBox.Show("Hủy thành công", "Thông báo", MessageBoxButtons.OK);
-                                reloadData();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Lịch này đã hết hiệu lực", "Thông báo", MessageBoxButtons.OK);
-                            }
-                        }
-                    }
+                    sql = @"update rooms set status = 'Trống' where id = @id";
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", room_id } });
+
+                    MessageBox.Show("Hủy thành công", "Thông báo", MessageBoxButtons.OK);
+                    await load_check_in();
+                }
+                else
+                {
+                    MessageBox.Show("Lịch này đã hết hiệu lực", "Thông báo", MessageBoxButtons.OK);
+                    return;
                 }
             }
         }
@@ -277,54 +150,29 @@ namespace RoomManegerApp.Forms
 
         public int get_id()
         {
-            int id = -1;
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                var row = dataGridView1.SelectedRows[0];
-                id = Int32.Parse(row.Cells[0].Value.ToString()); //lấy id từ dòng đã chọn
+            if (dataGridView1.SelectedRows.Count > 0 && Int32.TryParse(dataGridView1.SelectedRows[0].Cells[0].Value.ToString(), out int id))
+                {
+                return id;
             }
-            return id;
+            return - 1;
         }
 
-        //private void cancel_status()
-        //{
-        //    using (ketnoi = Database_connect.connection())
-        //    {
-        //        ketnoi.Open();
-        //        sql = @"select id, room_id,start_date, status from checkins";
-        //        using (thuchien = new SQLiteCommand(sql, ketnoi))
-        //        {
-        //            using (doc = thuchien.ExecuteReader())
-        //            {
-        //                while (doc.Read())
-        //                {
-        //                    string id = doc["id"].ToString();
-        //                    string room_id = doc["room_id"].ToString();
-        //                    string status = doc["status"].ToString();
-        //                    int startDate = Convert.ToInt32(doc["start_date"].ToString());
-        //                    DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
-        //                    DateTime current = DateTime.Now;
-
-        //                    if ((current - start).Days > 1 && status == "Còn hiệu lực")
-        //                    {
-        //                        sql = @"update checkins set status = 'Hủy' where id = @id";
-        //                        using (thuchien = new SQLiteCommand(sql, ketnoi))
-        //                        {
-        //                            thuchien.Parameters.AddWithValue("@id", id);
-        //                            thuchien.ExecuteNonQuery();
-        //                        }
-
-        //                        sql = @"update rooms set status = 'Trống' where id = @id";
-        //                        using (thuchien = new SQLiteCommand(sql, ketnoi))
-        //                        {
-        //                            thuchien.Parameters.AddWithValue("@id", room_id);
-        //                            thuchien.ExecuteNonQuery();
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        private void updateStatus()
+        {
+            string sql = @"select id, end_date, status from checkins";
+            var data = Database_connect.ExecuteReader(sql);
+            DateTime now = DateTime.Now;
+            foreach (var row in data)
+            {
+                string id = row["id"].ToString();
+                string end_date = row["end_date"].ToString();
+                DateTime end = DateTime.ParseExact(end_date, "yyyyMMdd", null);
+                if ((end - now).Days >= 0)
+                {
+                    sql = @"update checkins set status = 'Hết hiệu lực' where id = @id";
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
+                }
+            }
+        }
     }
 }

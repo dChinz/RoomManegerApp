@@ -21,33 +21,27 @@ namespace RoomManegerApp.Forms
         public FormDashboard()
         {
             InitializeComponent();
-            
         }
         public void reloadData()
         {
-            load_form();
+            loadTodayBooking();
+            loadTodayRevenue();
         }
         public Role UserRole { get; set; }
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
         private Timer bookingTimer;
 
-        private void FormDashboard_Load(object sender, EventArgs e)
+        private async void FormDashboard_Load(object sender, EventArgs e)
         {
             createDTB();
-            load_form();
+            loadUI();
+            await loadRoomStatus();
+            loadTodayRevenue();
+            loadTodayBooking();
             updateBooking();
-
-            bookingTimer = new Timer();
-            bookingTimer.Interval = 30000;
-            bookingTimer.Tick += BookingTimer_Tick;
-            bookingTimer.Start();
         }
 
-        private void load_form()
-        {            
+        private void loadUI()
+        {
             if (UserRole == Role.Admin)
             {
                 labelRole.Text = "Admin";
@@ -61,84 +55,94 @@ namespace RoomManegerApp.Forms
                 labelRole.Text = "Staff";
             }
 
-            timer1.Interval = 1000;
-            timer1.Tick += timer1_Tick;
-            timer1.Start();
+            timerNow.Interval = 1000;
+            timerNow.Tick += timerNow_Tick;
+            timerNow.Start();
+
+            bookingTimer = new Timer();
+            bookingTimer.Interval = 30000;
+            bookingTimer.Tick += BookingTimer_Tick;
+            bookingTimer.Start();
+
             labelDangXuat.MouseEnter += (s, e) => labelDangXuat.BackColor = Color.LightGreen;
             labelDangXuat.MouseLeave += (s, e) => labelDangXuat.BackColor = SystemColors.ActiveCaption;
-            label2.Text = "Phòng trống: " + countStatusRoom("Trống");
-            label3.Text = "Đang thuê: " + countStatusRoom("Đã thuê");
+        }
+        private async Task loadRoomStatus()
+        {
+            int emptyRoom = await countStatusRoom("Trống");
+            int rentedRoom = await countStatusRoom("Đã thuê");
+            label2.Text = "Phòng trống: " + emptyRoom;
+            label3.Text = "Đang thuê: " + rentedRoom;
+        }
 
-            
-            using(ketnoi = Database_connect.connection())
+        private void loadTodayBooking() 
+        {
+            try
             {
-                ketnoi.Open();
-                sql = @"select count(*) as count from checkins
-                    where status = 'Còn hiệu lực' and start_date = @time";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@time", DateTime.Now.ToString("yyyyMMdd"));
-                    using(doc = thuchien.ExecuteReader())
-                    {
-                        if (doc.Read())
-                        {
-                            label4.Text = "Thuê hôm nay: " + doc["count"].ToString();
-                        }
-                    }
-                }
+                int todayBooking = Convert.ToInt32(Database_connect.ExecuteScalar(@"select count(*) from checkins
+                    where status = @status and start_date = @time",
+                    new Dictionary<string, object> {
+                        { "@status", "Còn hiệu lực" },
+                        { "@time", DateTime.Now.ToString("yyyyMMdd") }
+                    }));
+                label4.Text = "Thuê hôm nay: " + todayBooking.ToString();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show("Lỗi " +  ex.Message,"Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+        } 
 
-                sql = @"select ifnull(sum(total), 0) as total from bills
-                    where substr(time, 1, 8) = @time";
-                using(thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@time", DateTime.Now.ToString("yyyyMMdd"));
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if (doc.Read())
-                        {
-                            double total = Convert.ToDouble(doc["total"].ToString());
-                            label5.Text = "Doanh thu: " + string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", total);
-                        }
-                    }
-                }
+        private void loadTodayRevenue() 
+        {
+            try
+            {
+                double todayRevenue = Convert.ToDouble(Database_connect.ExecuteScalar(
+                @"select ifnull(sum(total), 0) as total from bills
+                    where substr(time, 1, 8) = @time",
+                new Dictionary<string, object> {
+                    { "@time", DateTime.Now.ToString("yyyyMMdd") }
+                }));
+                label5.Text = "Doanh thu: " + string.Format(new CultureInfo("vi-VN"), "{0:N0}", todayRevenue);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private int countStatusRoom(string status)
+        private async Task<int> countStatusRoom(string status)
         {
-            sql = @"select count(status) as total 
-                    from rooms
-                    where status = @status";
-            int total = 0;
-            using (ketnoi = Database_connect.connection())
+            string sql = "select count(*) from rooms where status = @status";
+            try
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    thuchien.Parameters.AddWithValue("@status", status);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {
-                            total = Int32.Parse(doc[0].ToString());
-                        }
-                    }
-                }
+                int total = await Task.Run(() =>
+                    Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", status } })
+                ));
+                return total;
             }
-            return total;
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
+            }
+            
         }
 
         public void createDTB()
         {
-            using(ketnoi = Database_connect.connection())
+            string sql;
+            SQLiteCommand command;
+            using(var conn = Database_connect.connection())
             {
-                ketnoi.Open();
+                conn.Open();
 
-                using (var cmd = new SQLiteCommand("PRAGMA journal_mode = WAL;", ketnoi))
-                    cmd.ExecuteNonQuery();
+                using (command = new SQLiteCommand("PRAGMA journal_mode = WAL;", conn))
+                    command.ExecuteNonQuery();
 
-                using (var cmd = new SQLiteCommand("PRAGMA busy_timeout = 5000;", ketnoi))
-                    cmd.ExecuteNonQuery();
+                using (command = new SQLiteCommand("PRAGMA busy_timeout = 5000;", conn))
+                    command.ExecuteNonQuery();
 
                 sql = @"create table if not exists rooms(
                         id integer primary key autoincrement,
@@ -148,8 +152,8 @@ namespace RoomManegerApp.Forms
                         price real,
                         size text,
                         note text)";
-                using(thuchien = new SQLiteCommand(sql, ketnoi))
-                    thuchien.ExecuteNonQuery();
+                using(command = new SQLiteCommand(sql, conn))
+                    command.ExecuteNonQuery();
 
                 sql = @"create table if not exists tenants(
                         id integer primary key autoincrement,
@@ -159,16 +163,16 @@ namespace RoomManegerApp.Forms
                         email text,
                         gender text,
                         address text)";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    thuchien.ExecuteNonQuery();
+                using (command = new SQLiteCommand(sql, conn))
+                    command.ExecuteNonQuery();
 
                 sql = @"create table if not exists users(
                         id integer primary key autoincrement,
                         username text,
                         password text,
                         role text)";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    thuchien.ExecuteNonQuery();
+                using (command = new SQLiteCommand(sql, conn))
+                    command.ExecuteNonQuery();
 
                 sql = @"create table if not exists checkins(
                     id integer primary key autoincrement,
@@ -179,8 +183,8 @@ namespace RoomManegerApp.Forms
                     status text,
                     foreign key (room_id) references rooms(id) on delete cascade,
                     foreign key (tenant_id) references tenants(id) on delete cascade);";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    thuchien.ExecuteNonQuery();
+                using (command = new SQLiteCommand(sql, conn))
+                    command.ExecuteNonQuery();
 
                 sql = @"create table if not exists bills(
                     id integer primary key autoincrement,
@@ -189,19 +193,19 @@ namespace RoomManegerApp.Forms
                     time integer,
                     status text,
                     foreign key (checkins_id) references checkins(id) on delete cascade)";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    thuchien.ExecuteNonQuery();
+                using (command = new SQLiteCommand(sql, conn))
+                    command.ExecuteNonQuery();
 
                 sql = @"create table if not exists service(
                     id integer primary key autoincrement,
                     name text,
                     price real)";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                    thuchien.ExecuteNonQuery();
+                using (command = new SQLiteCommand(sql, conn))
+                    command.ExecuteNonQuery();
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timerNow_Tick(object sender, EventArgs e)
         {
             labelTime.Text = DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy");
         }
@@ -231,8 +235,16 @@ namespace RoomManegerApp.Forms
 
         private void QLPhong_Click(object sender, EventArgs e)
         {
-            FormRooms form = new FormRooms();
-            LoadFormToTableLayout(form, 1, 1);
+            if(UserRole == Role.Staff)
+            {
+                MessageBox.Show("Bạn không được phân quyền tại đây");
+                return;
+            }
+            else
+            {
+                FormRooms form = new FormRooms();
+                LoadFormToTableLayout(form, 1, 1);
+            }
         }
 
         private void QLDatPhong_Click(object sender, EventArgs e)
@@ -243,8 +255,16 @@ namespace RoomManegerApp.Forms
 
         private void QLKhachHang_Click(object sender, EventArgs e)
         {
-            FormTenant form = new FormTenant();
-            LoadFormToTableLayout(form, 1, 1);
+            if (UserRole == Role.Staff)
+            {
+                MessageBox.Show("Bạn không được phân quyền tại đây");
+                return;
+            }
+            else
+            {
+                FormTenant form = new FormTenant();
+                LoadFormToTableLayout(form, 1, 1);
+            }
         }
 
         private void ThanhToan_Click(object sender, EventArgs e)
@@ -272,36 +292,21 @@ namespace RoomManegerApp.Forms
 
         private void updateBooking()
         {
-            int count = 0;
-            sql = @"select count(*) from booking";
-            using (ketnoi = Database_connect.connection())
+            try
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
-                {
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if (doc.Read())
-                        {
-                            count = Convert.ToInt32(doc[0].ToString());
-                        }
-                    }
-                }
+                int count = Convert.ToInt32(Database_connect.ExecuteScalar("select count(*) from booking"));
+                booking.Text = $"Booking ({count})";
+                booking.BackColor = count > 0 ? Color.Aqua : SystemColors.ControlLight;
             }
-            booking.Text = $"Booking ({count})";
-            if (count > 0)
+            catch (Exception ex)
             {
-                booking.BackColor = Color.Aqua;
-            }
-            else
-            {
-                booking.BackColor = SystemColors.ControlLight;
+                MessageBox.Show("Lỗi" + ex.Message,"Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void BookingTimer_Tick(object sender, EventArgs e)
         {
-            load_form();
+            loadUI();
             updateBooking();
         }
     }

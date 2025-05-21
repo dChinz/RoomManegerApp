@@ -33,11 +33,6 @@ namespace RoomManegerApp.Tetants
             InitializeComponent();
         }
 
-        string sql;
-        SQLiteConnection ketnoi;
-        SQLiteCommand thuchien;
-        SQLiteDataReader doc;
-
         private void FormAdd_one_tentant_Load(object sender, EventArgs e)
         {
             if(id != 0)
@@ -47,37 +42,36 @@ namespace RoomManegerApp.Tetants
         }
         private void load_form()
         {
-            sql = @"select * from tenants where id = @id";
-            using (ketnoi = Database_connect.connection())
+            try
             {
-                ketnoi.Open();
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                string sql = @"select * from tenants where id = @id";
+                var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@id", id } });
+                foreach (var row in data)
                 {
-                    thuchien.Parameters.AddWithValue("@id", id);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if (doc.Read())
-                        {
-                            textBox1.Text = doc["name"].ToString();
-                            textBox2.Text = doc["phone"].ToString();
-                            textBox3.Text = doc["id_card"].ToString();
-                            comboBox1.Text = doc["gender"].ToString();
-                            textBox5.Text = doc["address"].ToString();
-                            textBox6.Text = doc["note"].ToString();
-                        }
-                    }
+                    textBox1.Text = row["name"].ToString();
+                    textBox2.Text = row["phone"].ToString();
+                    textBox6.Text = row["email"].ToString();
+                    textBox3.Text = row["id_card"].ToString();
+                    comboBox1.Text = row["gender"].ToString();
+                    textBox5.Text = row["address"].ToString();
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi gọi dữ liệu: " +  ex.Message,"Thông báo",MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
 
         private void buttonCapnhat_Click(object sender, EventArgs e)
         {
+            string sql;
             string name = textBox1.Text.Trim();
             string phone = textBox2.Text.Trim();
+            string email = textBox6.Text.Trim();
             string id_card = textBox3.Text.Trim(); 
             string gender = comboBox1.Text.Trim();
             string address = textBox5.Text.Trim();
-            string note = textBox6.Text.Trim();
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(gender))
             {
@@ -97,60 +91,63 @@ namespace RoomManegerApp.Tetants
                 return;
             }
 
-            using(ketnoi = Database_connect.connection())
+            if (id != 0)
             {
-                ketnoi.Open();
-
-                if (id != 0)
-                {
-                    sql = @"update tenants set name = @name, phone = @phone, id_card = @id_card, gender = @gender, address = @address, note = @note where id = @id";
-                    using (thuchien = new SQLiteCommand(sql, ketnoi))
+                sql = @"update tenants set name = @name, phone = @phone, id_card = @id_card, gender = @gender, address = @address, note = @note where id = @id";
+                int rowAffected = Convert.ToInt16(Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
                     {
-                        thuchien.Parameters.AddWithValue("@id", id);
-                        thuchien.Parameters.AddWithValue("@name", name);
-                        thuchien.Parameters.AddWithValue("@phone", phone);
-                        thuchien.Parameters.AddWithValue("@id_card", id_card);
-                        thuchien.Parameters.AddWithValue("@gender", gender);
-                        thuchien.Parameters.AddWithValue("@address", address);
-                        thuchien.Parameters.AddWithValue("@note", note);
-                        thuchien.ExecuteNonQuery();
-                        MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Close();
-                        return;
-                    }
-                }
-
-                sql = "select 1 from tenants where name = @name or phone = @phone or id_card = @id_card";
-                using (thuchien = new SQLiteCommand(sql, ketnoi))
+                        { "id", id },
+                        { "name", name },
+                        { "@phone",  phone },
+                        { "@email", email },
+                        { "@id_card", id_card},
+                        { "@gender", gender},
+                        { "address", address},
+                    }));
+                if (rowAffected > 0)
                 {
-                    thuchien.Parameters.AddWithValue("@name", name);
-                    thuchien.Parameters.AddWithValue("@phone", phone);
-                    thuchien.Parameters.AddWithValue("@id_card", id_card);
-                    using (doc = thuchien.ExecuteReader())
-                    {
-                        if (doc.HasRows)
-                        {
-                            MessageBox.Show("Bản ghi đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        else
-                        {
-                            sql = @"insert into tenants (name, phone, id_card, gender, address, note) values (@name, @phone, @id_card, @gender, @address, @note)";
-                            using (thuchien = new SQLiteCommand(sql, ketnoi))
-                            {
-                                thuchien.Parameters.AddWithValue("@name", name);
-                                thuchien.Parameters.AddWithValue("@phone", phone);
-                                thuchien.Parameters.AddWithValue("@id_card", id_card);
-                                thuchien.Parameters.AddWithValue("@gender", gender);
-                                thuchien.Parameters.AddWithValue("@address", address);
-                                thuchien.Parameters.AddWithValue("@note", note);
-                                thuchien.ExecuteNonQuery();
-                            }
-                            MessageBox.Show("Thêm khách hàng thành công!", "Thông bào", MessageBoxButtons.OK);
-                        }
-                    }
+                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                    return;
                 }
-                
+                else
+                {
+                    MessageBox.Show("Lỗi cập nhật dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            sql = "select 1 from tenants where name = @name";
+            int row = Convert.ToInt16(Database_connect.ExecuteScalar(sql, new Dictionary<string, object>
+                {
+                    { "@name", name },
+                }));
+            if (row == 0)
+            {
+                sql = @"insert into tenants (name, phone, email, id_card, gender, address) values (@name, @phone, @email, @id_card, @gender, @address)";
+                int rowAffected = Convert.ToInt16(Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
+                    {
+                        { "name", name },
+                        { "@phone",  phone },
+                        { "@email", email },
+                        { "@id_card", id_card},
+                        { "@gender", gender},
+                        { "address", address},
+                    }));
+                if (rowAffected > 0)
+                {
+                    MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("Lỗi cập nhật dữ liệu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bản ghi đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             resetForm();
