@@ -32,21 +32,34 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.check_in_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.roomName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tenant = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total_days = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.roomType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.rent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.staff = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonAdd_new = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.btnFirst = new System.Windows.Forms.Button();
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnLast = new System.Windows.Forms.Button();
+            this.labelPageInfo = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.đãThanhToánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inHóaĐơnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,27 +71,31 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
             this.check_in_id,
+            this.roomName,
+            this.tenant,
             this.total_days,
+            this.roomType,
             this.rent,
+            this.deposit,
             this.total,
             this.status,
-            this.time});
+            this.staff});
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 2);
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 93);
+            this.dataGridView1.Location = new System.Drawing.Point(3, 47);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(794, 354);
+            this.dataGridView1.Size = new System.Drawing.Size(794, 376);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             // 
             // id
             // 
             this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.id.HeaderText = "id";
+            this.id.HeaderText = "STT";
             this.id.Name = "id";
             this.id.ReadOnly = true;
-            this.id.Width = 40;
+            this.id.Width = 53;
             // 
             // check_in_id
             // 
@@ -87,6 +104,20 @@
             this.check_in_id.Name = "check_in_id";
             this.check_in_id.ReadOnly = true;
             // 
+            // roomName
+            // 
+            this.roomName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.roomName.HeaderText = "Tên phòng";
+            this.roomName.Name = "roomName";
+            this.roomName.ReadOnly = true;
+            // 
+            // tenant
+            // 
+            this.tenant.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tenant.HeaderText = "Khách hàng";
+            this.tenant.Name = "tenant";
+            this.tenant.ReadOnly = true;
+            // 
             // total_days
             // 
             this.total_days.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -94,17 +125,31 @@
             this.total_days.Name = "total_days";
             this.total_days.ReadOnly = true;
             // 
+            // roomType
+            // 
+            this.roomType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.roomType.HeaderText = "Loại phòng";
+            this.roomType.Name = "roomType";
+            this.roomType.ReadOnly = true;
+            // 
             // rent
             // 
             this.rent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.rent.HeaderText = "Giá thuê";
+            this.rent.HeaderText = "Giá thuê (VNĐ)";
             this.rent.Name = "rent";
             this.rent.ReadOnly = true;
+            // 
+            // deposit
+            // 
+            this.deposit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.deposit.HeaderText = "Tiền cọc (VNĐ)";
+            this.deposit.Name = "deposit";
+            this.deposit.ReadOnly = true;
             // 
             // total
             // 
             this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.total.HeaderText = "Tổng tiền";
+            this.total.HeaderText = "Tiền cần thanh toán (VNĐ)";
             this.total.Name = "total";
             this.total.ReadOnly = true;
             // 
@@ -115,12 +160,12 @@
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
-            // time
+            // staff
             // 
-            this.time.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.time.HeaderText = "Check out";
-            this.time.Name = "time";
-            this.time.ReadOnly = true;
+            this.staff.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.staff.HeaderText = "Nhân viên thanh toán";
+            this.staff.Name = "staff";
+            this.staff.ReadOnly = true;
             // 
             // tableLayoutPanel1
             // 
@@ -130,13 +175,16 @@
             this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
@@ -144,42 +192,21 @@
             // 
             this.flowLayoutPanel1.Controls.Add(this.buttonAdd_new);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 53);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(2, 24);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(394, 34);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(396, 18);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // buttonAdd_new
             // 
             this.buttonAdd_new.Location = new System.Drawing.Point(3, 3);
             this.buttonAdd_new.Name = "buttonAdd_new";
-            this.buttonAdd_new.Size = new System.Drawing.Size(83, 36);
+            this.buttonAdd_new.Size = new System.Drawing.Size(83, 30);
             this.buttonAdd_new.TabIndex = 0;
             this.buttonAdd_new.Text = "Tạo mới";
             this.buttonAdd_new.UseVisualStyleBackColor = true;
             this.buttonAdd_new.Click += new System.EventHandler(this.buttonAdd_new_Click);
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.đãThanhToánToolStripMenuItem,
-            this.inHóaĐơnToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(150, 48);
-            // 
-            // đãThanhToánToolStripMenuItem
-            // 
-            this.đãThanhToánToolStripMenuItem.Name = "đãThanhToánToolStripMenuItem";
-            this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
-            this.đãThanhToánToolStripMenuItem.Text = "Đã thanh toán";
-            this.đãThanhToánToolStripMenuItem.Click += new System.EventHandler(this.đãThanhToánToolStripMenuItem_Click);
-            // 
-            // inHóaĐơnToolStripMenuItem
-            // 
-            this.inHóaĐơnToolStripMenuItem.Name = "inHóaĐơnToolStripMenuItem";
-            this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
-            this.inHóaĐơnToolStripMenuItem.Text = "In hóa đơn";
-            this.inHóaĐơnToolStripMenuItem.Click += new System.EventHandler(this.inHóaĐơnToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -187,11 +214,111 @@
             this.label1.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(280, 9);
+            this.label1.Location = new System.Drawing.Point(280, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(240, 31);
+            this.label1.Size = new System.Drawing.Size(240, 22);
             this.label1.TabIndex = 2;
             this.label1.Text = "Quản lí check out";
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.btnPrev);
+            this.flowLayoutPanel2.Controls.Add(this.btnFirst);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 426);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(400, 24);
+            this.flowLayoutPanel2.TabIndex = 3;
+            // 
+            // btnPrev
+            // 
+            this.btnPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrev.Location = new System.Drawing.Point(342, 3);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(55, 29);
+            this.btnPrev.TabIndex = 4;
+            this.btnPrev.Text = "<";
+            this.btnPrev.UseVisualStyleBackColor = true;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            // 
+            // btnFirst
+            // 
+            this.btnFirst.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFirst.Location = new System.Drawing.Point(281, 3);
+            this.btnFirst.Name = "btnFirst";
+            this.btnFirst.Size = new System.Drawing.Size(55, 29);
+            this.btnFirst.TabIndex = 5;
+            this.btnFirst.Text = "<<";
+            this.btnFirst.UseVisualStyleBackColor = true;
+            this.btnFirst.Click += new System.EventHandler(this.btnFirst_Click);
+            // 
+            // flowLayoutPanel3
+            // 
+            this.flowLayoutPanel3.Controls.Add(this.btnNext);
+            this.flowLayoutPanel3.Controls.Add(this.btnLast);
+            this.flowLayoutPanel3.Controls.Add(this.labelPageInfo);
+            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(400, 426);
+            this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(400, 24);
+            this.flowLayoutPanel3.TabIndex = 4;
+            // 
+            // btnNext
+            // 
+            this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNext.Location = new System.Drawing.Point(3, 3);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(55, 29);
+            this.btnNext.TabIndex = 7;
+            this.btnNext.Text = ">";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // btnLast
+            // 
+            this.btnLast.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLast.Location = new System.Drawing.Point(64, 3);
+            this.btnLast.Name = "btnLast";
+            this.btnLast.Size = new System.Drawing.Size(55, 29);
+            this.btnLast.TabIndex = 8;
+            this.btnLast.Text = ">>";
+            this.btnLast.UseVisualStyleBackColor = true;
+            this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
+            // 
+            // labelPageInfo
+            // 
+            this.labelPageInfo.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.labelPageInfo.AutoSize = true;
+            this.labelPageInfo.Location = new System.Drawing.Point(125, 11);
+            this.labelPageInfo.Name = "labelPageInfo";
+            this.labelPageInfo.Size = new System.Drawing.Size(35, 13);
+            this.labelPageInfo.TabIndex = 9;
+            this.labelPageInfo.Text = "label3";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.đãThanhToánToolStripMenuItem,
+            this.inHóaĐơnToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(229, 70);
+            // 
+            // đãThanhToánToolStripMenuItem
+            // 
+            this.đãThanhToánToolStripMenuItem.Name = "đãThanhToánToolStripMenuItem";
+            this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.đãThanhToánToolStripMenuItem.Text = "Xác nhận thanh toán toàn bộ";
+            this.đãThanhToánToolStripMenuItem.Click += new System.EventHandler(this.đãThanhToánToolStripMenuItem_Click);
+            // 
+            // inHóaĐơnToolStripMenuItem
+            // 
+            this.inHóaĐơnToolStripMenuItem.Name = "inHóaĐơnToolStripMenuItem";
+            this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.inHóaĐơnToolStripMenuItem.Text = "In hóa đơn";
+            this.inHóaĐơnToolStripMenuItem.Click += new System.EventHandler(this.inHóaĐơnToolStripMenuItem_Click);
             // 
             // FormBills
             // 
@@ -206,6 +333,9 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel3.ResumeLayout(false);
+            this.flowLayoutPanel3.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -220,13 +350,24 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem đãThanhToánToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem inHóaĐơnToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.Button btnPrev;
+        private System.Windows.Forms.Button btnFirst;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Button btnLast;
+        private System.Windows.Forms.Label labelPageInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn check_in_id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn roomName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tenant;
         private System.Windows.Forms.DataGridViewTextBoxColumn total_days;
+        private System.Windows.Forms.DataGridViewTextBoxColumn roomType;
         private System.Windows.Forms.DataGridViewTextBoxColumn rent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deposit;
         private System.Windows.Forms.DataGridViewTextBoxColumn total;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn time;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn staff;
     }
 }

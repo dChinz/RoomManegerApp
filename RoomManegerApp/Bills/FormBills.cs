@@ -22,6 +22,11 @@ namespace RoomManegerApp.Forms
             this.dashboard = dashboard;
         }
 
+        private int currentPage = 1;
+        private int pageSize = 22;
+        private int totalPages = 0;
+        private int totalRecords = 0;
+
         private async void reloadData()
         {
             await load_bill();
@@ -34,14 +39,23 @@ namespace RoomManegerApp.Forms
         }
         private async Task load_bill()
         {
+            UpdatePaginationInfo();
+            int offset = (currentPage - 1) * pageSize;
             try
             {
                 dataGridView1.Rows.Clear();
-                string sql = @"select bills.id as b_id, bills.checkins_id as b_c_id, bills.status as b_status, end_date, start_date , rooms.price as r_price, time
+                string sql = @"select bills.id as billId, bills.checkins_id as checkinId, rooms.name as roomName, tenants.name as tenantName, start_date, end_date,
+                        rooms.type as roomType, rooms.price as roomPrice, checkins.deposit as checkinDeposit, bills.status as billStatus, bills.userId as billUserId
                         from bills
                         inner join checkins on bills.checkins_id = checkins.id
-                        inner join rooms on checkins.room_id = rooms.id";
-                var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
+                        inner join rooms on checkins.room_id = rooms.id
+                        inner join tenants on checkins.tenant_id = tenants.id
+                        limit @pageSize offset @offset";
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql, new Dictionary<string, object>
+                {
+                    { "@pageSize", pageSize},
+                    { "@offset", offset},
+                }));
                 foreach (var row in data)
                 {
                     FillDataGridView(row);
@@ -51,6 +65,8 @@ namespace RoomManegerApp.Forms
             {
                 MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
         }
 
         private void FillDataGridView(Dictionary<string, object> row)
@@ -59,14 +75,27 @@ namespace RoomManegerApp.Forms
             int endDate = Convert.ToInt32(row["end_date"].ToString());
             DateTime start = DateTime.ParseExact(startDate.ToString(), "yyyyMMdd", null);
             DateTime end = DateTime.ParseExact(endDate.ToString(), "yyyyMMdd", null);
+            string userName = "";
+
+            string sql = @"select username from users where id = @id";
+            var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@id", row["billUserId"] } });
+            foreach(var row2 in data)
+            {
+                userName = row2["username"].ToString();
+            }
 
             int totalDays = (end - start).Days;
-            double price = Convert.ToDouble(row["r_price"].ToString());
+            double price = Convert.ToDouble(row["roomPrice"].ToString());
+            double deposit = Convert.ToDouble(row["checkinDeposit"].ToString());
 
-            double time = Convert.ToInt64(row["time"].ToString());
-            DateTime checkout = DateTime.ParseExact(time.ToString(), "yyyyMMddHHmmss", null);
+            dataGridView1.Rows.Add(row["billId"], row["checkinId"], row["roomName"], row["tenantName"], totalDays, row["roomType"], Convert.ToInt32(row["roomPrice"]).ToString("#,##0"), Convert.ToInt32(deposit).ToString("#,##0"), Convert.ToInt32(totalDays * price - deposit).ToString("#,##0"), row["billStatus"], userName);
+        }
 
-            dataGridView1.Rows.Add(row["b_id"], row["b_c_id"], totalDays, price, totalDays * price, row["b_status"], checkout);
+        private void UpdatePaginationInfo()
+        {
+            string sql = "SELECT COUNT(*) FROM bills";
+            totalRecords = Convert.ToInt32(Database_connect.ExecuteScalar(sql));
+            totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
         }
 
         private void buttonAdd_new_Click(object sender, EventArgs e)
@@ -130,6 +159,36 @@ namespace RoomManegerApp.Forms
             int id = get_id_bill();
             PrintBills form = new PrintBills(id);
             form.ShowDialog();
+        }
+
+        private async void btnFirst_Click(object sender, EventArgs e)
+        {
+            currentPage = 1;
+            await load_bill();
+        }
+
+        private async void btnPrev_Click(object sender, EventArgs e)
+        {
+            if (currentPage > 1)
+            {
+                currentPage--;
+                await load_bill();
+            }
+        }
+
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                await load_bill();
+            }
+        }
+
+        private async void btnLast_Click(object sender, EventArgs e)
+        {
+            currentPage = totalPages;
+            await load_bill();
         }
     }
 }

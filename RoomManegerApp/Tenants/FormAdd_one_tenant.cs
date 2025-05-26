@@ -22,15 +22,21 @@ namespace RoomManegerApp.Tetants
             InitializeComponent();
             tenantName = name;
             textBox1.Text = tenantName;
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
         public FormAdd_one_tenant(int tenantId)
         {
             InitializeComponent();
             id = tenantId;
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
         public FormAdd_one_tenant()
         {
             InitializeComponent();
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void FormAdd_one_tentant_Load(object sender, EventArgs e)

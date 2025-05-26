@@ -18,12 +18,16 @@ namespace RoomManegerApp.Check_in
         private string nameRoom;
         private string type;
         private Action _callback;
-        public FormAvailable_Guest(string roomName, string roomType, Action callback)
+        private string checkin;
+        private string checkout;
+        public FormAvailable_Guest(string roomName, string roomType, Action callback, string checkin, string checkout)
         {
             InitializeComponent();
             nameRoom = roomName;
             type = roomType;
             _callback = callback;
+            this.checkin = checkin;
+            this.checkout = checkout;
         }
 
         private void FormAvailable_Guest_Load(object sender, EventArgs e)
@@ -56,9 +60,8 @@ namespace RoomManegerApp.Check_in
         private void chọnToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string nameGuest = get_name();
-            FormAdd_check_in f = new FormAdd_check_in(nameRoom, nameGuest, type, _callback);
-            f.Show();
-            this.Close();
+            FormAdd_check_in f = new FormAdd_check_in(nameRoom, nameGuest, type, _callback, checkin, checkout);
+            f.ShowDialog();
         }
 
         private void dataGridView1_MouseDown(object sender, MouseEventArgs e)

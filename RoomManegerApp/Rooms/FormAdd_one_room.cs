@@ -18,6 +18,8 @@ namespace RoomManegerApp.Romms
         public FormAdd_one_room()
         {
             InitializeComponent();
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void FormAdd_room_Load(object sender, EventArgs e)

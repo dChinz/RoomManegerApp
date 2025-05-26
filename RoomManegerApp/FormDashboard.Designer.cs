@@ -38,12 +38,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.QLPhong = new System.Windows.Forms.Button();
             this.QLDatPhong = new System.Windows.Forms.Button();
-            this.QLKhachHang = new System.Windows.Forms.Button();
+            this.booking = new System.Windows.Forms.Button();
             this.ThanhToan = new System.Windows.Forms.Button();
             this.BaoCao = new System.Windows.Forms.Button();
-            this.booking = new System.Windows.Forms.Button();
+            this.QLKhachHang = new System.Windows.Forms.Button();
+            this.QLPhong = new System.Windows.Forms.Button();
+            this.QLUser = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -60,7 +61,6 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -86,12 +86,12 @@
             this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel3, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(1, 1);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1065, 55);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1067, 56);
             this.tableLayoutPanel2.TabIndex = 5;
             // 
             // flowLayoutPanel3
@@ -105,14 +105,14 @@
             this.flowLayoutPanel3.Location = new System.Drawing.Point(710, 0);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(355, 55);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(357, 56);
             this.flowLayoutPanel3.TabIndex = 1;
             // 
             // labelDangXuat
             // 
             this.labelDangXuat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDangXuat.AutoSize = true;
-            this.labelDangXuat.Location = new System.Drawing.Point(280, 0);
+            this.labelDangXuat.Location = new System.Drawing.Point(282, 0);
             this.labelDangXuat.Name = "labelDangXuat";
             this.labelDangXuat.Size = new System.Drawing.Size(72, 17);
             this.labelDangXuat.TabIndex = 3;
@@ -123,7 +123,7 @@
             // 
             this.labelRole.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelRole.AutoSize = true;
-            this.labelRole.Location = new System.Drawing.Point(228, 0);
+            this.labelRole.Location = new System.Drawing.Point(230, 0);
             this.labelRole.Name = "labelRole";
             this.labelRole.Size = new System.Drawing.Size(46, 17);
             this.labelRole.TabIndex = 2;
@@ -133,7 +133,7 @@
             // 
             this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(222, 0);
+            this.labelTime.Location = new System.Drawing.Point(224, 0);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(0, 17);
             this.labelTime.TabIndex = 1;
@@ -156,47 +156,37 @@
             this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel2, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel1, 0, 1);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(1, 57);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 56);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.5F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.5F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(150, 504);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 67.56757F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 32.43243F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(150, 506);
             this.tableLayoutPanel3.TabIndex = 6;
             // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.AutoScroll = true;
-            this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.flowLayoutPanel2.Controls.Add(this.QLPhong);
+            this.flowLayoutPanel2.BackColor = System.Drawing.Color.SkyBlue;
             this.flowLayoutPanel2.Controls.Add(this.QLDatPhong);
-            this.flowLayoutPanel2.Controls.Add(this.QLKhachHang);
+            this.flowLayoutPanel2.Controls.Add(this.booking);
             this.flowLayoutPanel2.Controls.Add(this.ThanhToan);
             this.flowLayoutPanel2.Controls.Add(this.BaoCao);
-            this.flowLayoutPanel2.Controls.Add(this.booking);
+            this.flowLayoutPanel2.Controls.Add(this.QLKhachHang);
+            this.flowLayoutPanel2.Controls.Add(this.QLPhong);
+            this.flowLayoutPanel2.Controls.Add(this.QLUser);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(150, 315);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(150, 341);
             this.flowLayoutPanel2.TabIndex = 1;
-            // 
-            // QLPhong
-            // 
-            this.QLPhong.Location = new System.Drawing.Point(13, 20);
-            this.QLPhong.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
-            this.QLPhong.Name = "QLPhong";
-            this.QLPhong.Size = new System.Drawing.Size(125, 43);
-            this.QLPhong.TabIndex = 0;
-            this.QLPhong.Text = "Quản lí phòng";
-            this.QLPhong.UseVisualStyleBackColor = true;
-            this.QLPhong.Click += new System.EventHandler(this.QLPhong_Click);
             // 
             // QLDatPhong
             // 
-            this.QLDatPhong.Location = new System.Drawing.Point(13, 103);
+            this.QLDatPhong.Location = new System.Drawing.Point(13, 20);
             this.QLDatPhong.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
             this.QLDatPhong.Name = "QLDatPhong";
             this.QLDatPhong.Size = new System.Drawing.Size(125, 43);
@@ -205,20 +195,19 @@
             this.QLDatPhong.UseVisualStyleBackColor = true;
             this.QLDatPhong.Click += new System.EventHandler(this.QLDatPhong_Click);
             // 
-            // QLKhachHang
+            // booking
             // 
-            this.QLKhachHang.Location = new System.Drawing.Point(13, 186);
-            this.QLKhachHang.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
-            this.QLKhachHang.Name = "QLKhachHang";
-            this.QLKhachHang.Size = new System.Drawing.Size(125, 43);
-            this.QLKhachHang.TabIndex = 2;
-            this.QLKhachHang.Text = "Quản lí khách hàng";
-            this.QLKhachHang.UseVisualStyleBackColor = true;
-            this.QLKhachHang.Click += new System.EventHandler(this.QLKhachHang_Click);
+            this.booking.Location = new System.Drawing.Point(13, 103);
+            this.booking.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.booking.Name = "booking";
+            this.booking.Size = new System.Drawing.Size(125, 43);
+            this.booking.TabIndex = 5;
+            this.booking.UseVisualStyleBackColor = true;
+            this.booking.Click += new System.EventHandler(this.booking_Click);
             // 
             // ThanhToan
             // 
-            this.ThanhToan.Location = new System.Drawing.Point(13, 269);
+            this.ThanhToan.Location = new System.Drawing.Point(13, 186);
             this.ThanhToan.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
             this.ThanhToan.Name = "ThanhToan";
             this.ThanhToan.Size = new System.Drawing.Size(125, 43);
@@ -229,7 +218,7 @@
             // 
             // BaoCao
             // 
-            this.BaoCao.Location = new System.Drawing.Point(13, 352);
+            this.BaoCao.Location = new System.Drawing.Point(13, 269);
             this.BaoCao.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
             this.BaoCao.Name = "BaoCao";
             this.BaoCao.Size = new System.Drawing.Size(125, 43);
@@ -238,29 +227,53 @@
             this.BaoCao.UseVisualStyleBackColor = true;
             this.BaoCao.Click += new System.EventHandler(this.BaoCao_Click);
             // 
-            // booking
+            // QLKhachHang
             // 
-            this.booking.Location = new System.Drawing.Point(13, 435);
-            this.booking.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
-            this.booking.Name = "booking";
-            this.booking.Size = new System.Drawing.Size(125, 43);
-            this.booking.TabIndex = 5;
-            this.booking.UseVisualStyleBackColor = true;
-            this.booking.Click += new System.EventHandler(this.booking_Click);
+            this.QLKhachHang.Location = new System.Drawing.Point(13, 352);
+            this.QLKhachHang.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.QLKhachHang.Name = "QLKhachHang";
+            this.QLKhachHang.Size = new System.Drawing.Size(125, 43);
+            this.QLKhachHang.TabIndex = 2;
+            this.QLKhachHang.Text = "Quản lí khách hàng";
+            this.QLKhachHang.UseVisualStyleBackColor = true;
+            this.QLKhachHang.Click += new System.EventHandler(this.QLKhachHang_Click);
+            // 
+            // QLPhong
+            // 
+            this.QLPhong.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.QLPhong.Location = new System.Drawing.Point(13, 435);
+            this.QLPhong.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.QLPhong.Name = "QLPhong";
+            this.QLPhong.Size = new System.Drawing.Size(125, 43);
+            this.QLPhong.TabIndex = 0;
+            this.QLPhong.Text = "Quản lí phòng";
+            this.QLPhong.UseVisualStyleBackColor = false;
+            this.QLPhong.Click += new System.EventHandler(this.QLPhong_Click);
+            // 
+            // QLUser
+            // 
+            this.QLUser.Location = new System.Drawing.Point(13, 518);
+            this.QLUser.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.QLUser.Name = "QLUser";
+            this.QLUser.Size = new System.Drawing.Size(125, 43);
+            this.QLUser.TabIndex = 6;
+            this.QLUser.Text = "Quản lí người dùng";
+            this.QLUser.UseVisualStyleBackColor = true;
+            this.QLUser.Click += new System.EventHandler(this.QLUser_Click);
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.flowLayoutPanel1.Controls.Add(this.label2);
             this.flowLayoutPanel1.Controls.Add(this.label3);
             this.flowLayoutPanel1.Controls.Add(this.label4);
             this.flowLayoutPanel1.Controls.Add(this.label5);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 315);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 341);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 189);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 165);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
             // label2
@@ -358,5 +371,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button booking;
+        private System.Windows.Forms.Button QLUser;
     }
 }

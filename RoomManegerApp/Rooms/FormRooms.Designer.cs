@@ -28,15 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.xóaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonAdd = new System.Windows.Forms.Button();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonUpdate = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonDelete = new System.Windows.Forms.Button();
-            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonSearch = new System.Windows.Forms.Button();
@@ -57,23 +58,22 @@
             this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
-            this.buttonSelect_all = new System.Windows.Forms.Button();
-            this.buttonUn_selected_all = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.btnFirst = new System.Windows.Forms.Button();
+            this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnLast = new System.Windows.Forms.Button();
+            this.labelPageInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
             this.flowLayoutPanel5.SuspendLayout();
+            this.flowLayoutPanel6.SuspendLayout();
+            this.flowLayoutPanel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -91,84 +91,85 @@
             this.note});
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 2);
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(2, 124);
+            this.dataGridView1.Location = new System.Drawing.Point(2, 59);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(853, 242);
+            this.dataGridView1.Size = new System.Drawing.Size(853, 286);
             this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
+            this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
             // 
-            // contextMenuStrip1
+            // id
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.xóaToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(95, 26);
+            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.id.HeaderText = "id";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Width = 40;
             // 
-            // xóaToolStripMenuItem
+            // name
             // 
-            this.xóaToolStripMenuItem.Name = "xóaToolStripMenuItem";
-            this.xóaToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
-            this.xóaToolStripMenuItem.Text = "Xóa";
-            this.xóaToolStripMenuItem.Click += new System.EventHandler(this.xóaToolStripMenuItem_Click);
+            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.name.HeaderText = "Tên phòng";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
             // 
-            // buttonAdd
+            // status
             // 
-            this.buttonAdd.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonAdd.Location = new System.Drawing.Point(2, 2);
-            this.buttonAdd.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(83, 36);
-            this.buttonAdd.TabIndex = 1;
-            this.buttonAdd.Text = "Thêm";
-            this.buttonAdd.UseVisualStyleBackColor = false;
-            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_one_room_Click);
+            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.status.HeaderText = "Tình trạng";
+            this.status.Name = "status";
+            this.status.ReadOnly = true;
+            // 
+            // type
+            // 
+            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.type.HeaderText = "Loại phòng";
+            this.type.Name = "type";
+            this.type.ReadOnly = true;
+            // 
+            // price
+            // 
+            this.price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.price.HeaderText = "Giá phòng";
+            this.price.Name = "price";
+            this.price.ReadOnly = true;
+            // 
+            // size
+            // 
+            this.size.HeaderText = "Số lượng";
+            this.size.Name = "size";
+            this.size.ReadOnly = true;
+            // 
+            // note
+            // 
+            this.note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.note.HeaderText = "Ghi chú";
+            this.note.Name = "note";
+            this.note.ReadOnly = true;
             // 
             // buttonUpdate
             // 
-            this.buttonUpdate.Location = new System.Drawing.Point(89, 2);
-            this.buttonUpdate.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonUpdate.Location = new System.Drawing.Point(0, 0);
+            this.buttonUpdate.Margin = new System.Windows.Forms.Padding(0);
             this.buttonUpdate.Name = "buttonUpdate";
-            this.buttonUpdate.Size = new System.Drawing.Size(83, 36);
+            this.buttonUpdate.Size = new System.Drawing.Size(91, 30);
             this.buttonUpdate.TabIndex = 3;
-            this.buttonUpdate.Text = "Sửa";
+            this.buttonUpdate.Text = "Cập nhật phòng";
             this.buttonUpdate.UseVisualStyleBackColor = true;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Controls.Add(this.buttonAdd);
             this.flowLayoutPanel1.Controls.Add(this.buttonUpdate);
-            this.flowLayoutPanel1.Controls.Add(this.buttonDelete);
-            this.flowLayoutPanel1.Controls.Add(this.flowLayoutPanel4);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(2, 52);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(2, 21);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(424, 38);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(424, 15);
             this.flowLayoutPanel1.TabIndex = 4;
-            // 
-            // buttonDelete
-            // 
-            this.buttonDelete.Location = new System.Drawing.Point(176, 2);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(83, 36);
-            this.buttonDelete.TabIndex = 4;
-            this.buttonDelete.Text = "Xóa";
-            this.buttonDelete.UseVisualStyleBackColor = true;
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
-            // 
-            // flowLayoutPanel4
-            // 
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 43);
-            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(200, 100);
-            this.flowLayoutPanel4.TabIndex = 5;
             // 
             // tableLayoutPanel1
             // 
@@ -181,15 +182,18 @@
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel5, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel7, 1, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.263158F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.263158F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.263158F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 78.94736F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.263158F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(857, 368);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
@@ -202,10 +206,10 @@
             this.flowLayoutPanel2.Controls.Add(this.label1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(430, 52);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(430, 21);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(425, 38);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(425, 15);
             this.flowLayoutPanel2.TabIndex = 5;
             // 
             // buttonSearch
@@ -213,7 +217,7 @@
             this.buttonSearch.Location = new System.Drawing.Point(342, 2);
             this.buttonSearch.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(81, 18);
+            this.buttonSearch.Size = new System.Drawing.Size(81, 21);
             this.buttonSearch.TabIndex = 3;
             this.buttonSearch.Text = "Làm mới";
             this.buttonSearch.UseVisualStyleBackColor = true;
@@ -273,11 +277,11 @@
             this.flowLayoutPanel3.Controls.Add(this.panel4);
             this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(430, 94);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(430, 40);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Padding = new System.Windows.Forms.Padding(0, 0, 7, 0);
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(425, 26);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(425, 15);
             this.flowLayoutPanel3.TabIndex = 6;
             // 
             // label4
@@ -301,7 +305,7 @@
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.Orange;
+            this.panel2.BackColor = System.Drawing.Color.LightGray;
             this.panel2.Location = new System.Drawing.Point(315, 2);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
@@ -320,17 +324,17 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(259, 0);
+            this.label7.Location = new System.Drawing.Point(247, 0);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(48, 13);
+            this.label7.Size = new System.Drawing.Size(60, 13);
             this.label7.TabIndex = 7;
-            this.label7.Text = "Đã thuê:";
+            this.label7.Text = "Đang thuê:";
             // 
             // panel3
             // 
-            this.panel3.BackColor = System.Drawing.Color.OrangeRed;
-            this.panel3.Location = new System.Drawing.Point(245, 2);
+            this.panel3.BackColor = System.Drawing.Color.LightSalmon;
+            this.panel3.Location = new System.Drawing.Point(233, 2);
             this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(10, 10);
@@ -339,7 +343,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(241, 0);
+            this.label8.Location = new System.Drawing.Point(229, 0);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(0, 13);
@@ -348,7 +352,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(199, 0);
+            this.label9.Location = new System.Drawing.Point(187, 0);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(38, 13);
@@ -358,7 +362,7 @@
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.LightGreen;
-            this.panel4.Location = new System.Drawing.Point(185, 2);
+            this.panel4.Location = new System.Drawing.Point(173, 2);
             this.panel4.Margin = new System.Windows.Forms.Padding(2);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(10, 10);
@@ -368,12 +372,10 @@
             // 
             this.flowLayoutPanel5.Controls.Add(this.buttonSave);
             this.flowLayoutPanel5.Controls.Add(this.buttonExit);
-            this.flowLayoutPanel5.Controls.Add(this.buttonSelect_all);
-            this.flowLayoutPanel5.Controls.Add(this.buttonUn_selected_all);
             this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 95);
+            this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 41);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(422, 24);
+            this.flowLayoutPanel5.Size = new System.Drawing.Size(422, 13);
             this.flowLayoutPanel5.TabIndex = 7;
             // 
             // buttonSave
@@ -396,86 +398,95 @@
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_edit_Click);
             // 
-            // buttonSelect_all
-            // 
-            this.buttonSelect_all.Location = new System.Drawing.Point(183, 3);
-            this.buttonSelect_all.Name = "buttonSelect_all";
-            this.buttonSelect_all.Size = new System.Drawing.Size(84, 20);
-            this.buttonSelect_all.TabIndex = 9;
-            this.buttonSelect_all.Text = "Chọn tất cả";
-            this.buttonSelect_all.UseVisualStyleBackColor = true;
-            this.buttonSelect_all.Click += new System.EventHandler(this.buttonSelect_all_Click);
-            // 
-            // buttonUn_selected_all
-            // 
-            this.buttonUn_selected_all.Location = new System.Drawing.Point(273, 3);
-            this.buttonUn_selected_all.Name = "buttonUn_selected_all";
-            this.buttonUn_selected_all.Size = new System.Drawing.Size(84, 20);
-            this.buttonUn_selected_all.TabIndex = 10;
-            this.buttonUn_selected_all.Text = "Bỏ chọn tất cả";
-            this.buttonUn_selected_all.UseVisualStyleBackColor = true;
-            this.buttonUn_selected_all.Click += new System.EventHandler(this.buttonUn_selected_all_Click);
-            // 
             // label2
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(331, 9);
+            this.label2.Location = new System.Drawing.Point(331, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(194, 31);
+            this.label2.Size = new System.Drawing.Size(194, 19);
             this.label2.TabIndex = 8;
             this.label2.Text = "Quản lí phòng";
             // 
-            // id
+            // flowLayoutPanel6
             // 
-            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.id.HeaderText = "id";
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
-            this.id.Width = 40;
+            this.flowLayoutPanel6.Controls.Add(this.btnPrev);
+            this.flowLayoutPanel6.Controls.Add(this.btnFirst);
+            this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel6.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 347);
+            this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel6.Name = "flowLayoutPanel6";
+            this.flowLayoutPanel6.Size = new System.Drawing.Size(428, 21);
+            this.flowLayoutPanel6.TabIndex = 9;
             // 
-            // name
+            // btnPrev
             // 
-            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.name.HeaderText = "Tên phòng";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
+            this.btnPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrev.Location = new System.Drawing.Point(370, 3);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(55, 29);
+            this.btnPrev.TabIndex = 2;
+            this.btnPrev.Text = "<";
+            this.btnPrev.UseVisualStyleBackColor = true;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
             // 
-            // status
+            // btnFirst
             // 
-            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.status.HeaderText = "Tình trạng";
-            this.status.Name = "status";
-            this.status.ReadOnly = true;
+            this.btnFirst.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFirst.Location = new System.Drawing.Point(309, 3);
+            this.btnFirst.Name = "btnFirst";
+            this.btnFirst.Size = new System.Drawing.Size(55, 29);
+            this.btnFirst.TabIndex = 3;
+            this.btnFirst.Text = "<<";
+            this.btnFirst.UseVisualStyleBackColor = true;
+            this.btnFirst.Click += new System.EventHandler(this.btnFirst_Click);
             // 
-            // type
+            // flowLayoutPanel7
             // 
-            this.type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.type.HeaderText = "Loại phòng";
-            this.type.Name = "type";
-            this.type.ReadOnly = true;
+            this.flowLayoutPanel7.Controls.Add(this.btnNext);
+            this.flowLayoutPanel7.Controls.Add(this.btnLast);
+            this.flowLayoutPanel7.Controls.Add(this.labelPageInfo);
+            this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel7.Location = new System.Drawing.Point(428, 347);
+            this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel7.Name = "flowLayoutPanel7";
+            this.flowLayoutPanel7.Size = new System.Drawing.Size(429, 21);
+            this.flowLayoutPanel7.TabIndex = 10;
             // 
-            // price
+            // btnNext
             // 
-            this.price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.price.HeaderText = "Giá phòng";
-            this.price.Name = "price";
-            this.price.ReadOnly = true;
+            this.btnNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNext.Location = new System.Drawing.Point(3, 3);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(55, 29);
+            this.btnNext.TabIndex = 4;
+            this.btnNext.Text = ">";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
-            // size
+            // btnLast
             // 
-            this.size.HeaderText = "Số lượng";
-            this.size.Name = "size";
-            this.size.ReadOnly = true;
+            this.btnLast.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLast.Location = new System.Drawing.Point(64, 3);
+            this.btnLast.Name = "btnLast";
+            this.btnLast.Size = new System.Drawing.Size(55, 29);
+            this.btnLast.TabIndex = 5;
+            this.btnLast.Text = ">>";
+            this.btnLast.UseVisualStyleBackColor = true;
+            this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
             // 
-            // note
+            // labelPageInfo
             // 
-            this.note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.note.HeaderText = "Ghi chú";
-            this.note.Name = "note";
-            this.note.ReadOnly = true;
+            this.labelPageInfo.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.labelPageInfo.AutoSize = true;
+            this.labelPageInfo.Location = new System.Drawing.Point(125, 11);
+            this.labelPageInfo.Name = "labelPageInfo";
+            this.labelPageInfo.Size = new System.Drawing.Size(35, 13);
+            this.labelPageInfo.TabIndex = 6;
+            this.labelPageInfo.Text = "label3";
             // 
             // FormRooms
             // 
@@ -488,7 +499,6 @@
             this.Text = "FormRooms";
             this.Load += new System.EventHandler(this.FormRooms_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -497,6 +507,9 @@
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
             this.flowLayoutPanel5.ResumeLayout(false);
+            this.flowLayoutPanel6.ResumeLayout(false);
+            this.flowLayoutPanel7.ResumeLayout(false);
+            this.flowLayoutPanel7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -504,8 +517,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.Button buttonAdd;
         private System.Windows.Forms.Button buttonUpdate;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -515,7 +526,6 @@
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxPrice;
-        private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
@@ -527,12 +537,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button buttonSave;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
         private System.Windows.Forms.Button buttonExit;
-        private System.Windows.Forms.ToolStripMenuItem xóaToolStripMenuItem;
-        private System.Windows.Forms.Button buttonSelect_all;
-        private System.Windows.Forms.Button buttonUn_selected_all;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
@@ -541,5 +547,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
         private System.Windows.Forms.DataGridViewTextBoxColumn size;
         private System.Windows.Forms.DataGridViewTextBoxColumn note;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel6;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
+        private System.Windows.Forms.Button btnPrev;
+        private System.Windows.Forms.Button btnFirst;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Button btnLast;
+        private System.Windows.Forms.Label labelPageInfo;
     }
 }

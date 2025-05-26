@@ -75,6 +75,22 @@ namespace RoomManegerApp
             return result;
         }
 
+        public static long ExecutiveInsertAndGetId(string sql, Dictionary<string, object> parameters)
+        {
+            using(var con = connection())
+            {
+                con.Open();
+                using (var cmd = new SQLiteCommand(sql + "; select last_insert_rowid();", con))
+                {
+                    foreach (var param in parameters)
+                    {
+                        AddParameters(cmd, parameters);
+                    }
+                    return (long)cmd.ExecuteScalar();
+                }
+            }
+        }
+
         private static void AddParameters(SQLiteCommand cmd, Dictionary<string, object> parameters)
         {
             if (parameters != null)

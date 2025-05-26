@@ -76,7 +76,7 @@ namespace RoomManegerApp.Bills
             string status = comboBox1.Text;
             string note = textBox1.Text;
             string total = label12.Text;
-            string time = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string staff = "Admin";
             total = total.Replace("đ", "").Replace(".", "").Trim();
 
             if (string.IsNullOrEmpty(status))
@@ -111,22 +111,17 @@ namespace RoomManegerApp.Bills
                     DialogResult result = MessageBox.Show("Chưa đến ngày checkout! Tiếp tục?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
-                        sql = @"insert into bills (checkins_id, total, status, time) values (@checkins_id, @total, @status, @time)";
+                        sql = @"insert into bills (checkins_id, total, status, staff) values (@checkins_id, @total, @status, @staff)";
                         int rowAffected = Convert.ToInt16(Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
                         {
                             { "@checkins_id", checkinId},
                             { "@total", total},
                             { "@status", status},
-                            { "@time", time},
+                            { "@staff", staff},
                         }));
 
                         if (rowAffected > 0)
                         {
-                            sql = @"update rooms set status = 'Trống' where name = @name";
-                            Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@name", name } });
-
-                            sql = @"update checkins set status = 'Đã xử lý' where id = @id";
-                            Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", checkinId } });
 
                             MessageBox.Show("Tạo mới thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             _callback?.Invoke();

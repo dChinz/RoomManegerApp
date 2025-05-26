@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RoomManegerApp.Booking;
 using RoomManegerApp.Report;
+using RoomManegerApp.Users;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static RoomManegerApp.FormDangNhap;
 
 namespace RoomManegerApp.Forms
@@ -27,107 +29,106 @@ namespace RoomManegerApp.Forms
             loadTodayBooking();
             loadTodayRevenue();
         }
-        public Role UserRole { get; set; }
         private Timer bookingTimer;
 
-        private async void FormDashboard_Load(object sender, EventArgs e)
+        private void FormDashboard_Load(object sender, EventArgs e)
         {
             createDTB();
             loadUI();
-            await loadRoomStatus();
+            loadRoomStatus();
             loadTodayRevenue();
             loadTodayBooking();
             updateBooking();
+
+            FormCheck_in form = new FormCheck_in(this);
+            LoadFormToTableLayout(form, 1, 1);
         }
 
         private void loadUI()
         {
-            if (UserRole == Role.Admin)
-            {
-                labelRole.Text = "Admin";
-            }
-            else if (UserRole == Role.Manager)
-            {
-                labelRole.Text = "Manager";
-            }
-            else
-            {
-                labelRole.Text = "Staff";
-            }
+            labelRole.Text = Session.Role;
 
             timerNow.Interval = 1000;
             timerNow.Tick += timerNow_Tick;
             timerNow.Start();
 
             bookingTimer = new Timer();
-            bookingTimer.Interval = 30000;
+            bookingTimer.Interval = 1000;
             bookingTimer.Tick += BookingTimer_Tick;
             bookingTimer.Start();
 
-            labelDangXuat.MouseEnter += (s, e) => labelDangXuat.BackColor = Color.LightGreen;
+            labelDangXuat.MouseEnter += (s, e) => labelDangXuat.BackColor = Color.SkyBlue;
             labelDangXuat.MouseLeave += (s, e) => labelDangXuat.BackColor = SystemColors.ActiveCaption;
         }
-        private async Task loadRoomStatus()
-        {
-            int emptyRoom = await countStatusRoom("Trống");
-            int rentedRoom = await countStatusRoom("Đã thuê");
-            label2.Text = "Phòng trống: " + emptyRoom;
-            label3.Text = "Đang thuê: " + rentedRoom;
-        }
-
-        private void loadTodayBooking() 
-        {
-            try
-            {
-                int todayBooking = Convert.ToInt32(Database_connect.ExecuteScalar(@"select count(*) from checkins
-                    where status = @status and start_date = @time",
-                    new Dictionary<string, object> {
-                        { "@status", "Còn hiệu lực" },
-                        { "@time", DateTime.Now.ToString("yyyyMMdd") }
-                    }));
-                label4.Text = "Thuê hôm nay: " + todayBooking.ToString();
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show("Lỗi " +  ex.Message,"Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            
-        } 
-
-        private void loadTodayRevenue() 
-        {
-            try
-            {
-                double todayRevenue = Convert.ToDouble(Database_connect.ExecuteScalar(
-                @"select ifnull(sum(total), 0) as total from bills
-                    where substr(time, 1, 8) = @time",
-                new Dictionary<string, object> {
-                    { "@time", DateTime.Now.ToString("yyyyMMdd") }
-                }));
-                label5.Text = "Doanh thu: " + string.Format(new CultureInfo("vi-VN"), "{0:N0}", todayRevenue);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private async Task<int> countStatusRoom(string status)
+        private void loadRoomStatus()
         {
             string sql = "select count(*) from rooms where status = @status";
             try
             {
-                int total = await Task.Run(() =>
-                    Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", status } })
-                ));
-                return total;
+                label2.Text = "Phòng trống: " + Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", "Trống" } }));
+                label3.Text = "Đang thuê: " + Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", "Đang thuê" } }));
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return -1;
             }
-            
+        }
+
+        private void loadTodayBooking()
+        {
+            try
+            {
+                string sql = @"select count(*) from checkins where status = @status and start_date = @time";
+                int todayBooking = Convert.ToInt32(Database_connect.ExecuteScalar(sql,
+                    new Dictionary<string, object> {
+                        { "@status", "Đang thuê" },
+                        { "@time", DateTime.Now.ToString("yyyyMMdd")}
+                    }));
+                label4.Text = "Thuê hôm nay: " + todayBooking.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void loadTodayRevenue()
+        {
+            try
+            {
+                double checkinRevenue = 0;
+                string sql = @"select deposit from checkins where start_date = @time";
+                var datacheckin = Database_connect.ExecuteReader(sql, new Dictionary<string, object>
+                {
+                    { "@time", DateTime.Now.ToString("yyyyMMdd")}
+                });
+                foreach(var row in datacheckin)
+                {
+                    checkinRevenue += Convert.ToDouble(row["deposit"]);
+                }
+
+                double checkoutRevenue = 0;
+                sql = @"select total from bills 
+                        inner join checkins on checkins.id = bills.checkins_id
+                        where end_date = @time";
+                var datacheckout = Database_connect.ExecuteReader(sql, new Dictionary<string, object>
+                {
+                    { "@time", DateTime.Now.ToString("yyyyMMdd")}
+                });
+                foreach (var row in datacheckout)
+                {
+                    checkoutRevenue += Convert.ToDouble(row["deposit"]);
+                }
+
+                double todayRevenue = checkinRevenue + checkoutRevenue;
+
+                label5.Text = "Doanh thu: " + string.Format(new CultureInfo("vi-VN"), "{0:N0} VNĐ", todayRevenue);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public void createDTB()
@@ -181,6 +182,7 @@ namespace RoomManegerApp.Forms
                     start_date integer,
                     end_date integer,
                     status text,
+                    desposit real,
                     foreign key (room_id) references rooms(id) on delete cascade,
                     foreign key (tenant_id) references tenants(id) on delete cascade);";
                 using (command = new SQLiteCommand(sql, conn))
@@ -190,7 +192,7 @@ namespace RoomManegerApp.Forms
                     id integer primary key autoincrement,
                     checkins_id integer,
                     total real,
-                    time integer,
+                    staff text,
                     status text,
                     foreign key (checkins_id) references checkins(id) on delete cascade)";
                 using (command = new SQLiteCommand(sql, conn))
@@ -235,7 +237,7 @@ namespace RoomManegerApp.Forms
 
         private void QLPhong_Click(object sender, EventArgs e)
         {
-            if(UserRole == Role.Staff)
+            if(Session.Role == "Staff")
             {
                 MessageBox.Show("Bạn không được phân quyền tại đây");
                 return;
@@ -255,7 +257,7 @@ namespace RoomManegerApp.Forms
 
         private void QLKhachHang_Click(object sender, EventArgs e)
         {
-            if (UserRole == Role.Staff)
+            if (Session.Role == "Staff")
             {
                 MessageBox.Show("Bạn không được phân quyền tại đây");
                 return;
@@ -278,6 +280,17 @@ namespace RoomManegerApp.Forms
             FormReport form = new FormReport();
             LoadFormToTableLayout(form, 1, 1);
         }
+        private void QLUser_Click(object sender, EventArgs e)
+        {
+            if(Session.Role == "Staff")
+            {
+                MessageBox.Show("Bạn không được phân quyền tại đây");
+                return;
+            }
+            FormUser form = new FormUser();
+            LoadFormToTableLayout(form, 1, 1);
+        }
+
 
         private void label4_Click(object sender, EventArgs e)
         {
@@ -309,5 +322,6 @@ namespace RoomManegerApp.Forms
             loadUI();
             updateBooking();
         }
+
     }
 }

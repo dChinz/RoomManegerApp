@@ -35,6 +35,11 @@ namespace RoomManegerApp.Forms
             SetPlaceholderText(textBoxId_card, "Nhập số CCCD...");
         }
 
+        private int currentPage = 1;
+        private int pageSize = 26;
+        private int totalRecords = 0;
+        private int totalPages = 0;
+
         private async void FormTenant_Load(object sender, EventArgs e)
         {
             await load_tentant();
@@ -42,11 +47,17 @@ namespace RoomManegerApp.Forms
 
         private async Task load_tentant()
         {
+            UpdatePaginationInfo();
             positionIndex();
             try
             {
-                string sql = @"select * from tenants";
-                var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
+                int offset = (currentPage - 1) * pageSize;
+                string sql = @"select * from tenants limit @pageSize offset @offset";
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql, new Dictionary<string, object>
+                {
+                    { "@pageSize", pageSize },
+                    { "@offset", offset}
+                }));
 
                 dataGridView1.Invoke(new Action(() =>
                 {
@@ -61,12 +72,20 @@ namespace RoomManegerApp.Forms
                         dataGridView1.FirstDisplayedScrollingRowIndex = scrollPosition;
                     }
                 }));
-                
+                labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("lỗi khi tải dữ liệu: " +  ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void UpdatePaginationInfo()
+        {
+            string sql = "SELECT COUNT(*) FROM tenants";
+            totalRecords = Convert.ToInt32(Database_connect.ExecuteScalar(sql));
+            totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
         }
 
         private int scrollPosition = 0;
@@ -171,20 +190,26 @@ namespace RoomManegerApp.Forms
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
+            currentPage = 1;
+            load_search();
+        }
+
+        private async void load_search()
+        {
             string name = textBoxName.Text;
             string id_card = textBoxId_card.Text;
 
             var conditions = new List<string>();
             var parameters = new Dictionary<string, object>();
 
-            if(!string.IsNullOrEmpty(name) && name != "Nhập tên...")
+            if (!string.IsNullOrEmpty(name) && name != "Nhập tên...")
             {
                 conditions.Add("name like '%' || @name || '%'");
                 parameters.Add("@name", name);
             }
-            if(!string.IsNullOrEmpty(id_card) && id_card != "Nhập số CCCD...")
+            if (!string.IsNullOrEmpty(id_card) && id_card != "Nhập số CCCD...")
             {
-                if(Int64.TryParse(id_card, out long tmp))
+                if (Int64.TryParse(id_card, out long tmp))
                 {
                     conditions.Add("id_card = @id_card");
                     parameters.Add("@id_card", id_card);
@@ -195,11 +220,21 @@ namespace RoomManegerApp.Forms
                     return;
                 }
             }
+
+            if(conditions.Count == 0)
+            {
+                await load_tentant();
+                return;
+            }
+
             string sql = "select * from tenants";
-            if(conditions.Count > 0)
+            if (conditions.Count > 0)
             {
                 sql += " where " + string.Join(" and ", conditions);
             }
+            sql += " limit @pageSize offset @offset";
+            parameters.Add("@pageSize", pageSize);
+            parameters.Add("@offset", (currentPage - 1) * pageSize);
             try
             {
                 var data = Database_connect.ExecuteReader(sql, parameters);
@@ -209,11 +244,50 @@ namespace RoomManegerApp.Forms
                 {
                     dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["email"], row["id_card"], row["gender"], row["address"]);
                 }
+
+                sql = "select count(*) from tenants";
+                if (conditions.Count > 0)
+                {
+                    sql += " where " + string.Join(" and ", conditions);
+                }
+                totalRecords = Convert.ToInt32(Database_connect.ExecuteScalar(sql, parameters));
+                totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+                labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tìm kiếm: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private async void btnFirst_Click(object sender, EventArgs e)
+        {
+            currentPage = 1;
+            await load_tentant();
+        }
+
+        private async void btnPrev_Click(object sender, EventArgs e)
+        {
+            if(currentPage > 1)
+            {
+                currentPage--;
+                await load_tentant();
+            }
+        }
+
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            if(currentPage < totalPages)
+            {
+                currentPage++;
+                await load_tentant();
+            }
+        }
+
+        private async void btnLast_Click(object sender, EventArgs e)
+        {
+            currentPage = totalPages;
+            await load_tentant();
         }
     }
 }

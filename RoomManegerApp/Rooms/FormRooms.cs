@@ -35,34 +35,42 @@ namespace RoomManegerApp
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.ReadOnly = true;
             dataGridView1.EditMode = DataGridViewEditMode.EditOnEnter;
+
+            buttonSave.Visible = false;
+            buttonExit.Visible = false;
         }
 
         private async void FormRooms_Load(object sender, EventArgs e)
         {
             await load_rooms();
-            loadStatusRoom();
+            loadStatusRoom(); 
         }
+
+        private int currentPage = 1;
+        private int pageSize = 24;
+        private int totalRecords = 0;
+        private int totalPages = 0;
 
         public async Task load_rooms()
         {
+            UpdatePaginationInfo();
             positionIndex();
             try
             {
-                string sql = @"select * from rooms";
-
-                var data = await Task.Run(() => Database_connect.ExecuteReader(sql));
+                int offset = (currentPage - 1) * pageSize;
+                string sql = @"select * from rooms limit @pageSize offset @offset";
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql, new Dictionary<string, object>
+                {
+                    { "@pageSize", pageSize},
+                    { "@offset", offset},
+                }));
                 BeginInvoke(new Action(() => FillDataGirdView(data)));
             }
             catch (Exception ex) 
             {
                 MessageBox.Show("lỗi khi tải dữ liệu: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
-            buttonSave.Visible = false;
-            buttonExit.Visible = false;
-            buttonSelect_all.Visible = false;
-            buttonUn_selected_all.Visible = false;
+            labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
         }
 
         private void FillDataGirdView(List<Dictionary<string, object>> data)
@@ -81,28 +89,11 @@ namespace RoomManegerApp
             }
         }
 
-        private void loadStatusRoom()
+        private void UpdatePaginationInfo()
         {
-            label8.Text = countStatusRoom("Trống").ToString();
-            label6.Text = countStatusRoom("Đã thuê").ToString();
-            label4.Text = countStatusRoom("Đang sửa chữa").ToString();
-        }
-
-        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                var hit = dataGridView1.HitTest(e.X, e.Y);
-                if (hit.RowIndex >= 0)
-                {
-                    // Chọn dòng chuột phải vào
-                    dataGridView1.ClearSelection();
-                    dataGridView1.Rows[hit.RowIndex].Selected = true;
-
-                    // Hiển thị menu tại vị trí chuột
-                    contextMenuStrip1.Show(dataGridView1, e.Location);
-                }
-            }
+            string sql = "SELECT COUNT(*) FROM rooms";
+            totalRecords = Convert.ToInt32(Database_connect.ExecuteScalar(sql));
+            totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
         }
 
         public int get_id_room()
@@ -163,51 +154,56 @@ namespace RoomManegerApp
 
         private async void buttonSave_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
+            foreach(DataGridViewRow row in dataGridView1.Rows)
             {
-                bool hasSelected = false;
-                foreach(DataGridViewRow row in dataGridView1.Rows)
+                if (row.IsNewRow) continue;
+                if (row.Tag?.ToString() != "modified") continue;
+
+                if (int.TryParse(row.Cells[0].Value.ToString(), out int id))
                 {
-                    if (row.Cells[0] is DataGridViewCheckBoxCell cell && Convert.ToBoolean(cell.Value) == true)
+                    string type = row.Cells[3].Value?.ToString();
+                    string size = row.Cells[5].Value?.ToString();
+                    string note = row.Cells[6].Value?.ToString();
+                    double price = 0;
+
+                    if (type == "Standard")
                     {
-                        hasSelected = true;
-                        break;
+                        price = 1300000;
                     }
-                }
-
-                if (!hasSelected)
-                {
-                    MessageBox.Show("Vui lòng chọn ít nhất 1 dòng để xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                DialogResult result = MessageBox.Show("Bạn chắc chắn muốn xóa không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                int rowAffected = 0;
-                if (result == DialogResult.Yes) 
-                {
-                    string sql = @"delete from rooms where id = @id";
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    else if (type == "Superior")
                     {
-                        var cell = row.Cells[0] as DataGridViewCheckBoxCell;
-                        if (cell != null && Convert.ToBoolean(cell.Value) == true)
-                        {
-                            var parameters = new Dictionary<string, object> { { "@id", row.Cells[0].Value } };
-                            rowAffected += Convert.ToInt32(Database_connect.ExecuteNonQuery(sql, parameters));
-                        }
+                        price = 1500000;
                     }
+                    else if (type == "Delexu")
+                    {
+                        price = 1800000;
+                    }
+                    else if (type == "Executive")
+                    {
+                        price = 2000000;
+                    }
+
+                    if (size == "Đôi")
+                    {
+                        price += 100000;
+                    }
+
+                    string sql = @"update rooms set type = @type, price = @price, size = @size, note = @note where id = @id";
+                    await Task.Run(()=> Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
+                    {
+                        { "@id", id},
+                        { "@type", type},
+                        { "@price", price},
+                        { "@size", size},
+                        { "note", note}
+                    }));
+
+                    row.Tag = null;
                 }
-
-                MessageBox.Show($"Đã xóa thành công {rowAffected}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                ModeNormal();
-                await load_rooms();
             }
-        }
-
-        private void buttonDelete_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Vào trạng thái xóa. Tích ô trước dòng cần xóa và bấm xác nhận để xóa", "Thông báo", MessageBoxButtons.OK);
-            ModeDelete();
+            MessageBox.Show("Đã lưu những thay đổi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ModeNormal();
+            await load_rooms();
         }
 
         private void SetPlaceholderText(TextBox textBox, string placeholder)
@@ -245,8 +241,8 @@ namespace RoomManegerApp
             Color color = status switch
             {
                 "Trống" => Color.LightGreen,
-                "Đã thuê" => Color.OrangeRed,
-                "Đang sữa chữa" => Color.Orange,
+                "Đang thuê" => Color.LightSalmon,
+                "Đang sữa chữa" => Color.LightGray,
                 _ => Color.White
             };
 
@@ -255,6 +251,11 @@ namespace RoomManegerApp
 
 
         private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            load_search();
+        }
+
+        private void load_search()
         {
             dataGridView1.Rows.Clear();
 
@@ -265,12 +266,12 @@ namespace RoomManegerApp
                 conditions.Add("name like '%' || @name || '%'");
                 parameters.Add("@name", textBoxName.Text);
             }
-            if(comboBoxStatus.Text != "")
+            if (comboBoxStatus.Text != "")
             {
                 conditions.Add("status = @status");
                 parameters.Add("@status", comboBoxStatus.Text);
             }
-            if(textBoxPrice.Text != "Nhập giá tiền..." && !string.IsNullOrEmpty(textBoxPrice.Text))
+            if (textBoxPrice.Text != "Nhập giá tiền..." && !string.IsNullOrEmpty(textBoxPrice.Text))
             {
                 if (Int32.TryParse(textBoxPrice.Text, out int tmp))
                 {
@@ -285,15 +286,27 @@ namespace RoomManegerApp
             }
 
             string sql = @"select * from rooms";
-            if (conditions.Count > 0) 
+            if (conditions.Count > 0)
             {
                 sql += " where " + string.Join(" and ", conditions);
             }
-
+            sql += " limit @pageSize offset @offset";
+            parameters.Add("@pageSize", pageSize);
+            parameters.Add("@offset", (currentPage - 1) * pageSize);
             try
             {
                 var data = Database_connect.ExecuteReader(sql, parameters);
                 FillDataGirdView(data);
+
+                sql = @"select count(*) from rooms";
+                if (conditions.Count > 0)
+                {
+                    sql += " where " + string.Join(" and ", conditions);
+                }
+                totalRecords = Convert.ToInt32(Database_connect.ExecuteScalar(sql, parameters));
+                totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+                labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
+
             }
             catch (Exception ex)
             {
@@ -309,13 +322,14 @@ namespace RoomManegerApp
             scrollPosition = dataGridView1.FirstDisplayedScrollingRowIndex;
         }
 
-        private int countStatusRoom(string status)
+        private void loadStatusRoom()
         {
             string sql = @"select count(status) as total 
                     from rooms
                     where status = @status";
-            int total = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", status} }));
-            return total;
+            label8.Text = Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", "Trống"} }).ToString();
+            label6.Text = Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", "Đang thuê" } }).ToString();
+            label4.Text = Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@status", "Đang sửa chữa" } }).ToString();
         }
 
         private async void buttonExit_edit_Click(object sender, EventArgs e)
@@ -354,24 +368,13 @@ namespace RoomManegerApp
         private void ModeNormal()
         {
             buttonUpdate.Enabled = true;
-            buttonAdd.Enabled = true;
-            buttonDelete.Enabled = true;
 
-            buttonDelete.Text = "Xóa";
-            buttonDelete.BackColor = SystemColors.ControlLight;
-            buttonDelete.ForeColor = Color.Black;
-
-            buttonUpdate.Text = "Cập nhật";
+            buttonUpdate.Text = "Cập nhật phòng";
             buttonUpdate.BackColor = SystemColors.ControlLight;
             buttonUpdate.ForeColor = Color.Black;
 
             buttonSave.Visible = false;
             buttonExit.Visible = false;
-            buttonSelect_all.Visible = false;
-            buttonUn_selected_all.Visible = false;
-
-            if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
-                dataGridView1.Columns.RemoveAt(0);
 
             dataGridView1.ReadOnly = true;
         }
@@ -379,10 +382,8 @@ namespace RoomManegerApp
         private void ModeUpdate()
         {
             buttonUpdate.Enabled = false;
-            buttonAdd.Enabled = false;
-            buttonDelete.Enabled = false;
 
-            buttonUpdate.Text = "Đang cập nhật...";
+            buttonUpdate.Text = "Cập nhật...";
             buttonUpdate.BackColor = Color.Orange;
             buttonUpdate.ForeColor = Color.White;
 
@@ -395,30 +396,43 @@ namespace RoomManegerApp
             dataGridView1.Columns[2].ReadOnly = true;
         }
 
-        private void ModeDelete()
+        private async void btnFirst_Click(object sender, EventArgs e)
         {
-            buttonUpdate.Enabled = false;
-            buttonAdd.Enabled = false;
-            buttonDelete.Enabled = false;
+            currentPage = 1;
+            await load_rooms();
+        }
 
-            buttonDelete.Text = "Đang xóa...";
-            buttonDelete.BackColor = Color.Orange;
-            buttonDelete.ForeColor = Color.White;
+        private async void btnPrev_Click(object sender, EventArgs e)
+        {
+            if(currentPage > 1)
+            {
+                currentPage--;
+                await load_rooms();
+            }
+        }
 
-            buttonSelect_all.Visible = true;
-            buttonUn_selected_all.Visible = true;
-            buttonSave.Visible = true;
-            buttonExit.Visible = true;
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                await load_rooms();
+            }
+        }
 
-            DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
-            dataGridView1.Columns.Insert(0, checkBoxColumn);
+        private async void btnLast_Click(object sender, EventArgs e)
+        {
+            currentPage = totalPages;
+            await load_rooms();
+        }
 
-            dataGridView1.ReadOnly = false;
-            dataGridView1.Columns[1].ReadOnly = true;
-            dataGridView1.Columns[2].ReadOnly = true;
-            dataGridView1.Columns[3].ReadOnly = true;
-            dataGridView1.Columns[4].ReadOnly = true;
-            dataGridView1.Columns[5].ReadOnly = true;
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.RowIndex >= 0)
+            {
+                var row = dataGridView1.Rows[e.RowIndex];
+                row.Tag = "modified";
+            }
         }
     }
 }
