@@ -19,15 +19,17 @@ namespace RoomManegerApp.Contracts
         private string nameRoom;
         private string nameGuest;
         private string type;
+        private string size;
         private Action _callback;
         private string checkin;
         private string checkout;
-        public FormAdd_check_in(string roomName, string guestName, string roomType, Action callback, string checkin, string checkout)
+        public FormAdd_check_in(string roomName, string guestName, string roomType, string size, Action callback, string checkin, string checkout)
         {
             InitializeComponent();
             nameRoom = roomName;
             nameGuest = guestName;
             type = roomType;
+            this.size = size;
             _callback = callback;
             this.checkin = checkin;
             this.checkout = checkout;
@@ -36,6 +38,7 @@ namespace RoomManegerApp.Contracts
         private void FormAdd_contract_Load(object sender, EventArgs e)
         {
             load_add_contract();
+            comboBox1.SelectedIndex = 0;
         }
         private void load_add_contract()
         {
@@ -44,7 +47,7 @@ namespace RoomManegerApp.Contracts
             labelGuestname.Text = nameGuest;
             labelChechin.Text = checkin;
             labelCheckout.Text = checkout;
-
+            labelSize.Text = size;
         }
 
         private void buttonCapnhat_Click(object sender, EventArgs e)
@@ -84,16 +87,10 @@ namespace RoomManegerApp.Contracts
                         { "@deposit", deposit},
                     }));
 
-                sql = @"select price from rooms where type = @type";
-                double price = Convert.ToDouble(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@type", typeRoom } }));
-                int soNgay = (checkoutDate - checkinDate).Days;
-                double total = soNgay * price;
-
-                sql = @"insert into bills (checkins_id, total, userId, status, create_date) values (@checkins_id, @total, @userId, @status, @create_date)";
+                sql = @"insert into bills (checkins_id, userId, status, create_date) values (@checkins_id, @userId, @status, @create_date)";
                 Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
                     {
                         { "@checkins_id", checkinId },
-                        { "@total", total},
                         { "@userId", Session.UserId},
                         { "@status", status_pay},
                         { "@create_date", DateTime.Now.ToString("yyyy-MM-dd")}
@@ -138,8 +135,8 @@ namespace RoomManegerApp.Contracts
                 System.Globalization.CultureInfo.InvariantCulture,
                 System.Globalization.DateTimeStyles.None, out DateTime checkoutDate);
 
-                string sql = @"select price from rooms where type = @type";
-                double price = Convert.ToDouble(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@type", typeRoom } }));
+                string sql = @"select price from rooms where type = @type and size = @size";
+                double price = Convert.ToDouble(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@type", typeRoom }, { "@size", size } }));
                 int soNgay = (checkoutDate - checkinDate).Days;
                 double total = soNgay * price;
                 textBoxDeposit.Text = total.ToString("#,##0");

@@ -11,15 +11,24 @@ namespace RoomManegerApp
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// 
+        static HttpServer server;
         [STAThread]
         static void Main()
         {
-            HttpServer server = new HttpServer();
+            server = new HttpServer();
             server.Start();
+
+            Application.ApplicationExit += OnClosing;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDangNhap());
+        }
+
+        static void OnClosing(object  sender, EventArgs e)
+        {
+            server?.Stop();
         }
     }
 }

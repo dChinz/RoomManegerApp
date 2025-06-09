@@ -45,6 +45,7 @@
             this.QLKhachHang = new System.Windows.Forms.Button();
             this.QLPhong = new System.Windows.Forms.Button();
             this.QLUser = new System.Windows.Forms.Button();
+            this.QLiDichVu = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -176,6 +177,7 @@
             this.flowLayoutPanel2.Controls.Add(this.QLKhachHang);
             this.flowLayoutPanel2.Controls.Add(this.QLPhong);
             this.flowLayoutPanel2.Controls.Add(this.QLUser);
+            this.flowLayoutPanel2.Controls.Add(this.QLiDichVu);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -186,8 +188,8 @@
             // 
             // QLDatPhong
             // 
-            this.QLDatPhong.Location = new System.Drawing.Point(13, 20);
-            this.QLDatPhong.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.QLDatPhong.Location = new System.Drawing.Point(13, 10);
+            this.QLDatPhong.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.QLDatPhong.Name = "QLDatPhong";
             this.QLDatPhong.Size = new System.Drawing.Size(125, 43);
             this.QLDatPhong.TabIndex = 1;
@@ -197,8 +199,8 @@
             // 
             // booking
             // 
-            this.booking.Location = new System.Drawing.Point(13, 103);
-            this.booking.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.booking.Location = new System.Drawing.Point(13, 73);
+            this.booking.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.booking.Name = "booking";
             this.booking.Size = new System.Drawing.Size(125, 43);
             this.booking.TabIndex = 5;
@@ -207,8 +209,8 @@
             // 
             // ThanhToan
             // 
-            this.ThanhToan.Location = new System.Drawing.Point(13, 186);
-            this.ThanhToan.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.ThanhToan.Location = new System.Drawing.Point(13, 136);
+            this.ThanhToan.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.ThanhToan.Name = "ThanhToan";
             this.ThanhToan.Size = new System.Drawing.Size(125, 43);
             this.ThanhToan.TabIndex = 3;
@@ -218,8 +220,8 @@
             // 
             // BaoCao
             // 
-            this.BaoCao.Location = new System.Drawing.Point(13, 269);
-            this.BaoCao.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.BaoCao.Location = new System.Drawing.Point(13, 199);
+            this.BaoCao.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.BaoCao.Name = "BaoCao";
             this.BaoCao.Size = new System.Drawing.Size(125, 43);
             this.BaoCao.TabIndex = 4;
@@ -229,8 +231,8 @@
             // 
             // QLKhachHang
             // 
-            this.QLKhachHang.Location = new System.Drawing.Point(13, 352);
-            this.QLKhachHang.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.QLKhachHang.Location = new System.Drawing.Point(13, 262);
+            this.QLKhachHang.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.QLKhachHang.Name = "QLKhachHang";
             this.QLKhachHang.Size = new System.Drawing.Size(125, 43);
             this.QLKhachHang.TabIndex = 2;
@@ -241,8 +243,8 @@
             // QLPhong
             // 
             this.QLPhong.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.QLPhong.Location = new System.Drawing.Point(13, 435);
-            this.QLPhong.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.QLPhong.Location = new System.Drawing.Point(13, 325);
+            this.QLPhong.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.QLPhong.Name = "QLPhong";
             this.QLPhong.Size = new System.Drawing.Size(125, 43);
             this.QLPhong.TabIndex = 0;
@@ -252,14 +254,25 @@
             // 
             // QLUser
             // 
-            this.QLUser.Location = new System.Drawing.Point(13, 518);
-            this.QLUser.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.QLUser.Location = new System.Drawing.Point(13, 388);
+            this.QLUser.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.QLUser.Name = "QLUser";
             this.QLUser.Size = new System.Drawing.Size(125, 43);
             this.QLUser.TabIndex = 6;
             this.QLUser.Text = "Quản lí người dùng";
             this.QLUser.UseVisualStyleBackColor = true;
             this.QLUser.Click += new System.EventHandler(this.QLUser_Click);
+            // 
+            // QLiDichVu
+            // 
+            this.QLiDichVu.Location = new System.Drawing.Point(13, 451);
+            this.QLiDichVu.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.QLiDichVu.Name = "QLiDichVu";
+            this.QLiDichVu.Size = new System.Drawing.Size(125, 43);
+            this.QLiDichVu.TabIndex = 7;
+            this.QLiDichVu.Text = "Quản lí dịch vụ";
+            this.QLiDichVu.UseVisualStyleBackColor = true;
+            this.QLiDichVu.Click += new System.EventHandler(this.QLiDichVu_Click);
             // 
             // flowLayoutPanel1
             // 
@@ -334,7 +347,7 @@
             this.IsMdiContainer = true;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormDashboard";
-            this.Text = "FormDashboard";
+            this.Text = "Hệ thống quản lí đặt phòng, trả phòng";
             this.Load += new System.EventHandler(this.FormDashboard_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -372,5 +385,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button booking;
         private System.Windows.Forms.Button QLUser;
+        private System.Windows.Forms.Button QLiDichVu;
     }
 }

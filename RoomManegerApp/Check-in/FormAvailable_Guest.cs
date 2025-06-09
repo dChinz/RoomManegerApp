@@ -17,31 +17,72 @@ namespace RoomManegerApp.Check_in
     {
         private string nameRoom;
         private string type;
+        private string size;
         private Action _callback;
         private string checkin;
         private string checkout;
-        public FormAvailable_Guest(string roomName, string roomType, Action callback, string checkin, string checkout)
+        public FormAvailable_Guest(string roomName, string roomType, string size, Action callback, string checkin, string checkout)
         {
             InitializeComponent();
             nameRoom = roomName;
             type = roomType;
+            this.size = size;
             _callback = callback;
             this.checkin = checkin;
             this.checkout = checkout;
         }
 
-        private void FormAvailable_Guest_Load(object sender, EventArgs e)
+        private int currentPage = 1;
+        private int pageSize = 18;
+        private int totalRecords = 0;
+        private int totalPages = 0;
+
+        private async void FormAvailable_Guest_Load(object sender, EventArgs e)
         {
+            await load_form();
+        }
+
+        private async Task load_form()
+        {
+            UpdatePaginationInfo();
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.Rows.Clear();
 
-            string sql = @"select tenants.id, name, phone, id_card, gender, address from tenants
-                    left join checkins on checkins.tenant_id = tenants.id";
-            var data = Database_connect.ExecuteReader(sql);
-            foreach(var row in data)
+            try
             {
-                dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["id_card"], row["gender"], row["address"]);
+                int offset = (currentPage - 1) * pageSize;
+                string sql = @"select tenants.id as id, name, phone, email, id_card, gender, address
+                    from tenants
+                    left join checkins on checkins.tenant_id = tenants.id 
+                    limit @pageSize offset @offset";
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql, new Dictionary<string, object>
+                {
+                    { "@pageSize", pageSize },
+                    { "@offset", offset}
+                }));
+
+                dataGridView1.Invoke(new Action(() =>
+                {
+                    dataGridView1.Rows.Clear();
+                    foreach (var row in data)
+                    {
+                        dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["email"], row["id_card"], row["gender"], row["address"]);
+                    }
+                }));
+                labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
+
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("lỗi khi tải dữ liệu: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UpdatePaginationInfo()
+        {
+            string sql = "SELECT COUNT(*) FROM tenants";
+            totalRecords = Convert.ToInt32(Database_connect.ExecuteScalar(sql));
+            totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -60,7 +101,7 @@ namespace RoomManegerApp.Check_in
         private void chọnToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string nameGuest = get_name();
-            FormAdd_check_in f = new FormAdd_check_in(nameRoom, nameGuest, type, _callback, checkin, checkout);
+            FormAdd_check_in f = new FormAdd_check_in(nameRoom, nameGuest, type, size, _callback, checkin, checkout);
             f.ShowDialog();
         }
 
@@ -97,6 +138,36 @@ namespace RoomManegerApp.Check_in
             string Tenant = textBox1.Text;
             FormAdd_one_tenant f = new FormAdd_one_tenant(Tenant);
             f.Show();
+        }
+
+        private async void btnFirst_Click(object sender, EventArgs e)
+        {
+            currentPage = 1;
+            await load_form();
+        }
+
+        private async void btnPrev_Click(object sender, EventArgs e)
+        {
+            if(currentPage > 0)
+            {
+                currentPage--;
+                await load_form();
+            }
+        }
+
+        private async void btnNext_Click(object sender, EventArgs e)
+        {
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                await load_form();
+            }
+        }
+
+        private async void btnLast_Click(object sender, EventArgs e)
+        {
+            currentPage = totalPages;
+            await load_form();
         }
     }
 }

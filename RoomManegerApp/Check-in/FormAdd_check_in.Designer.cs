@@ -46,6 +46,8 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.labelSize = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +55,7 @@
             // buttonCapnhat
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.buttonCapnhat, 2);
-            this.buttonCapnhat.Location = new System.Drawing.Point(114, 266);
+            this.buttonCapnhat.Location = new System.Drawing.Point(114, 299);
             this.buttonCapnhat.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCapnhat.Name = "buttonCapnhat";
             this.buttonCapnhat.Size = new System.Drawing.Size(61, 24);
@@ -171,7 +173,7 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(35, 241);
+            this.label1.Location = new System.Drawing.Point(35, 274);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 47;
@@ -181,7 +183,7 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(47, 208);
+            this.label2.Location = new System.Drawing.Point(47, 241);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 13);
             this.label2.TabIndex = 49;
@@ -195,7 +197,7 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Thanh toán cọc",
             "Thanh toán toàn bộ"});
-            this.comboBox1.Location = new System.Drawing.Point(129, 204);
+            this.comboBox1.Location = new System.Drawing.Point(129, 237);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 50;
@@ -222,15 +224,17 @@
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.label6, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.label7, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.labelGuestname, 2, 2);
             this.tableLayoutPanel1.Controls.Add(this.labelChechin, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.labelCheckout, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.labelTypeRoom, 2, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 2, 6);
-            this.tableLayoutPanel1.Controls.Add(this.buttonCapnhat, 1, 8);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 2, 7);
+            this.tableLayoutPanel1.Controls.Add(this.buttonCapnhat, 1, 9);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 2, 8);
+            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 2, 7);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.label9, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.labelSize, 2, 6);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -252,7 +256,7 @@
             // 
             this.flowLayoutPanel1.Controls.Add(this.textBoxDeposit);
             this.flowLayoutPanel1.Controls.Add(this.label8);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(129, 234);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(129, 267);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(149, 27);
             this.flowLayoutPanel1.TabIndex = 52;
@@ -267,6 +271,27 @@
             this.label8.TabIndex = 52;
             this.label8.Text = "VNĐ";
             // 
+            // label9
+            // 
+            this.label9.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(50, 208);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(60, 13);
+            this.label9.TabIndex = 53;
+            this.label9.Text = "Kích thước";
+            // 
+            // labelSize
+            // 
+            this.labelSize.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelSize.AutoSize = true;
+            this.labelSize.Location = new System.Drawing.Point(129, 208);
+            this.labelSize.Name = "labelSize";
+            this.labelSize.Size = new System.Drawing.Size(35, 13);
+            this.labelSize.TabIndex = 54;
+            this.labelSize.Text = "label1";
+            // 
             // FormAdd_check_in
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -274,7 +299,7 @@
             this.ClientSize = new System.Drawing.Size(281, 331);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FormAdd_check_in";
-            this.Text = "FormAdd_check_in";
+            this.Text = "Hệ thống quản lí đặt phòng, trả phòng";
             this.Load += new System.EventHandler(this.FormAdd_contract_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -303,5 +328,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label labelSize;
     }
 }

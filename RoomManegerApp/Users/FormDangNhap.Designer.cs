@@ -72,7 +72,6 @@
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.Size = new System.Drawing.Size(163, 26);
             this.textBoxPassword.TabIndex = 9;
-            this.textBoxPassword.Text = "123456";
             // 
             // label1
             // 
@@ -95,7 +94,6 @@
             this.textBoxUsername.Name = "textBoxUsername";
             this.textBoxUsername.Size = new System.Drawing.Size(163, 26);
             this.textBoxUsername.TabIndex = 7;
-            this.textBoxUsername.Text = "admin";
             // 
             // label2
             // 
@@ -150,7 +148,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "FormDangNhap";
-            this.Text = "Form1";
+            this.Text = "Đăng nhập";
             this.Load += new System.EventHandler(this.FormDangNhap_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

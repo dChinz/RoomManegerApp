@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RoomManegerApp.Booking;
 using RoomManegerApp.Report;
+using RoomManegerApp.Services;
 using RoomManegerApp.Users;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static RoomManegerApp.FormDangNhap;
@@ -52,10 +53,13 @@ namespace RoomManegerApp.Forms
             timerNow.Tick += timerNow_Tick;
             timerNow.Start();
 
-            bookingTimer = new Timer();
-            bookingTimer.Interval = 1000;
-            bookingTimer.Tick += BookingTimer_Tick;
-            bookingTimer.Start();
+            if (bookingTimer == null)
+            {
+                bookingTimer = new Timer();
+                bookingTimer.Interval = 1000;
+                bookingTimer.Tick += BookingTimer_Tick;
+                bookingTimer.Start();
+            }
 
             labelDangXuat.MouseEnter += (s, e) => labelDangXuat.BackColor = Color.SkyBlue;
             labelDangXuat.MouseLeave += (s, e) => labelDangXuat.BackColor = SystemColors.ActiveCaption;
@@ -109,8 +113,8 @@ namespace RoomManegerApp.Forms
                 }
 
                 double checkoutRevenue = 0;
-                sql = @"select total from bills 
-                        inner join checkins on checkins.id = bills.checkins_id
+                sql = @"select start_date, end_date, rooms.price as price from checkins
+                        inner join rooms on checkins.room_id = rooms.id
                         where end_date = @time";
                 var datacheckout = Database_connect.ExecuteReader(sql, new Dictionary<string, object>
                 {
@@ -118,7 +122,12 @@ namespace RoomManegerApp.Forms
                 });
                 foreach (var row in datacheckout)
                 {
-                    checkoutRevenue += Convert.ToDouble(row["deposit"]);
+                    DateTime.TryParseExact(row["start_date"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime checkin);
+                    DateTime.TryParseExact(row["end_date"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime checkout);
+
+                    double price = Convert.ToDouble(row["price"].ToString());
+
+                    checkoutRevenue += (checkout - checkin).Days * price;
                 }
 
                 double todayRevenue = checkinRevenue + checkoutRevenue;
@@ -209,7 +218,14 @@ namespace RoomManegerApp.Forms
 
         private void timerNow_Tick(object sender, EventArgs e)
         {
-            labelTime.Text = DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy");
+            try
+            {
+                labelTime.Text = DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy");
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine("Lỗi ở timerNow_Tick: " + ex.Message);
+            }
         }
 
         private void LoadFormToTableLayout(Form formToLoad, int row, int column)
@@ -319,9 +335,20 @@ namespace RoomManegerApp.Forms
 
         private void BookingTimer_Tick(object sender, EventArgs e)
         {
-            loadUI();
-            updateBooking();
+            try
+            {
+                updateBooking();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Lỗi ở BookingTimer_Tick: " + ex.Message);
+            }
         }
 
+        private void QLiDichVu_Click(object sender, EventArgs e)
+        {
+            FormService form = new FormService();
+            LoadFormToTableLayout(form, 1, 1);
+        }
     }
 }

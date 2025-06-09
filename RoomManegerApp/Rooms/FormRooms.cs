@@ -46,6 +46,12 @@ namespace RoomManegerApp
             loadStatusRoom(); 
         }
 
+        private async void ReloadData()
+        {
+            await load_rooms();
+            loadStatusRoom();
+        }
+
         private int currentPage = 1;
         private int pageSize = 24;
         private int totalRecords = 0;
@@ -71,6 +77,12 @@ namespace RoomManegerApp
                 MessageBox.Show("lỗi khi tải dữ liệu: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (!row.IsNewRow)
+                    row.Cells[0].Value = false; // Cột 0 là checkbox
+            }
         }
 
         private void FillDataGirdView(List<Dictionary<string, object>> data)
@@ -132,19 +144,6 @@ namespace RoomManegerApp
             }
         }
 
-        private void buttonAdd_one_room_Click(object sender, EventArgs e)
-        {
-            FormAdd_one_room formAdd_Room = new FormAdd_one_room();
-            formAdd_Room.Show();
-
-            // Đăng ký sự kiện reload lại danh sách khi form edit cập nhật
-            formAdd_Room.room_added += async (s, args) =>
-            {
-                await load_rooms();
-                loadStatusRoom();
-            };
-        }
-
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Bạn đang bật trạng thái cập nhật. Hiện tại bạn có thể sửa tại bảng.", "Thông báo");
@@ -154,42 +153,48 @@ namespace RoomManegerApp
 
         private async void buttonSave_Click(object sender, EventArgs e)
         {
-            foreach(DataGridViewRow row in dataGridView1.Rows)
+            if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
             {
-                if (row.IsNewRow) continue;
-                if (row.Tag?.ToString() != "modified") continue;
-
-                if (int.TryParse(row.Cells[0].Value.ToString(), out int id))
+                deleteRoom();
+            }
+            else
+            {
+                foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    string type = row.Cells[3].Value?.ToString();
-                    string size = row.Cells[5].Value?.ToString();
-                    string note = row.Cells[6].Value?.ToString();
-                    double price = 0;
+                    if (row.IsNewRow) continue;
+                    if (row.Tag?.ToString() != "modified") continue;
 
-                    if (type == "Standard")
+                    if (int.TryParse(row.Cells[0].Value.ToString(), out int id))
                     {
-                        price = 1300000;
-                    }
-                    else if (type == "Superior")
-                    {
-                        price = 1500000;
-                    }
-                    else if (type == "Delexu")
-                    {
-                        price = 1800000;
-                    }
-                    else if (type == "Executive")
-                    {
-                        price = 2000000;
-                    }
+                        string type = row.Cells[3].Value?.ToString();
+                        string size = row.Cells[5].Value?.ToString();
+                        string note = row.Cells[6].Value?.ToString();
+                        double price = 0;
 
-                    if (size == "Đôi")
-                    {
-                        price += 100000;
-                    }
+                        if (type == "Standard")
+                        {
+                            price = 1300000;
+                        }
+                        else if (type == "Superior")
+                        {
+                            price = 1500000;
+                        }
+                        else if (type == "Delexu")
+                        {
+                            price = 1800000;
+                        }
+                        else if (type == "Executive")
+                        {
+                            price = 2000000;
+                        }
 
-                    string sql = @"update rooms set type = @type, price = @price, size = @size, note = @note where id = @id";
-                    await Task.Run(()=> Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
+                        if (size == "Đôi")
+                        {
+                            price += 100000;
+                        }
+
+                        string sql = @"update rooms set type = @type, price = @price, size = @size, note = @note where id = @id";
+                        await Task.Run(() => Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
                     {
                         { "@id", id},
                         { "@type", type},
@@ -198,12 +203,42 @@ namespace RoomManegerApp
                         { "note", note}
                     }));
 
-                    row.Tag = null;
+                        row.Tag = null;
+                    }
                 }
+                MessageBox.Show("Đã lưu những thay đổi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            MessageBox.Show("Đã lưu những thay đổi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ModeNormal();
             await load_rooms();
+        }
+
+        private void deleteRoom()
+        {
+            try
+            {
+                if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
+                {
+                    for (int i = dataGridView1.Rows.Count - 1; i >= 0; i--)
+                    {
+                        DataGridViewRow row = dataGridView1.Rows[i];
+                        if (row.IsNewRow) continue;
+
+                        bool isChecked = Convert.ToBoolean(row.Cells[0].Value);
+                        if (isChecked)
+                        {
+                            int id = Convert.ToInt32(row.Cells[1].Value);
+                            string sql = @"delete from rooms where id = @id";
+                            Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã có lỗi xảy ra " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            MessageBox.Show("Xóa phòng thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ReloadData();
         }
 
         private void SetPlaceholderText(TextBox textBox, string placeholder)
@@ -242,7 +277,7 @@ namespace RoomManegerApp
             {
                 "Trống" => Color.LightGreen,
                 "Đang thuê" => Color.LightSalmon,
-                "Đang sữa chữa" => Color.LightGray,
+                "Đang sửa chữa" => Color.LightGray,
                 _ => Color.White
             };
 
@@ -367,21 +402,34 @@ namespace RoomManegerApp
 
         private void ModeNormal()
         {
+            buttonCreate.Enabled = true;
             buttonUpdate.Enabled = true;
+            buttonDelete.Enabled = true;
 
             buttonUpdate.Text = "Cập nhật phòng";
             buttonUpdate.BackColor = SystemColors.ControlLight;
             buttonUpdate.ForeColor = Color.Black;
 
+            buttonDelete.Text = "Xóa phòng";
+            buttonDelete.BackColor = SystemColors.ControlLight;
+            buttonDelete.ForeColor = Color.Black;
+
             buttonSave.Visible = false;
             buttonExit.Visible = false;
 
             dataGridView1.ReadOnly = true;
+
+            if (dataGridView1.Columns[0] is DataGridViewCheckBoxColumn)
+            {
+                dataGridView1.Columns.RemoveAt(0);
+            }
         }
 
         private void ModeUpdate()
         {
+            buttonCreate.Enabled = false;
             buttonUpdate.Enabled = false;
+            buttonDelete.Enabled = false;
 
             buttonUpdate.Text = "Cập nhật...";
             buttonUpdate.BackColor = Color.Orange;
@@ -394,6 +442,33 @@ namespace RoomManegerApp
             dataGridView1.Columns[0].ReadOnly = true;
             dataGridView1.Columns[1].ReadOnly = true;
             dataGridView1.Columns[2].ReadOnly = true;
+        }
+
+        private void ModeDelete()
+        {
+            DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
+            checkBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
+
+            dataGridView1.Columns.Insert(0, checkBoxColumn);
+
+            buttonCreate.Enabled = false;
+            buttonUpdate.Enabled = false;
+            buttonDelete.Enabled = false;
+
+            buttonDelete.Text = "Đang xóa...";
+            buttonDelete.BackColor = Color.Orange;
+            buttonDelete.ForeColor = Color.White;
+
+            buttonSave.Visible = true;
+            buttonExit.Visible = true;
+
+            dataGridView1.ReadOnly = false;
+            dataGridView1.Columns[1].ReadOnly = true;
+            dataGridView1.Columns[2].ReadOnly = true;
+            dataGridView1.Columns[3].ReadOnly = true;
+            dataGridView1.Columns[4].ReadOnly = true;
+            dataGridView1.Columns[5].ReadOnly = true;
+            dataGridView1.Columns[6].ReadOnly = true;
         }
 
         private async void btnFirst_Click(object sender, EventArgs e)
@@ -432,6 +507,48 @@ namespace RoomManegerApp
             {
                 var row = dataGridView1.Rows[e.RowIndex];
                 row.Tag = "modified";
+            }
+        }
+
+        private void buttonCreate_Click(object sender, EventArgs e)
+        {
+            FormAdd_one_room formAdd_Room = new FormAdd_one_room(ReloadData);
+            formAdd_Room.ShowDialog();
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            ModeDelete();
+            positionIndex();
+        }
+
+        private void sửaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int id = get_id_room();
+            int rowIndex = dataGridView1.CurrentCell.RowIndex;
+            if (dataGridView1.Rows[rowIndex].Cells[2].Value.ToString() == "Đang thuê")
+            {
+                MessageBox.Show("Phòng này đang được thuê. Không thể sửa lúc này.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            FormAdd_one_room form = new FormAdd_one_room(id, ReloadData);
+            form.ShowDialog();
+        }
+
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var hit = dataGridView1.HitTest(e.X, e.Y);
+                if (hit.RowIndex >= 0)
+                {
+                    // Chọn dòng chuột phải vào
+                    dataGridView1.ClearSelection();
+                    dataGridView1.Rows[hit.RowIndex].Selected = true;
+
+                    // Hiển thị menu tại vị trí chuột
+                    contextMenuStrip1.Show(dataGridView1, e.Location);
+                }
             }
         }
     }

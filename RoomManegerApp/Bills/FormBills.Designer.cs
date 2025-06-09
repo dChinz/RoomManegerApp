@@ -30,17 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.check_in_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.roomName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tenant = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.total_days = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.roomType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.staff = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonAdd_new = new System.Windows.Forms.Button();
@@ -55,12 +44,27 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.đãThanhToánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inHóaĐơnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.check_in_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.roomName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tenant = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total_days = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.roomType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.staff = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.flowLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -89,84 +93,6 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDown);
             // 
-            // id
-            // 
-            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.id.HeaderText = "STT";
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
-            this.id.Width = 53;
-            // 
-            // check_in_id
-            // 
-            this.check_in_id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.check_in_id.HeaderText = "Mã Check In";
-            this.check_in_id.Name = "check_in_id";
-            this.check_in_id.ReadOnly = true;
-            // 
-            // roomName
-            // 
-            this.roomName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.roomName.HeaderText = "Tên phòng";
-            this.roomName.Name = "roomName";
-            this.roomName.ReadOnly = true;
-            // 
-            // tenant
-            // 
-            this.tenant.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tenant.HeaderText = "Khách hàng";
-            this.tenant.Name = "tenant";
-            this.tenant.ReadOnly = true;
-            // 
-            // total_days
-            // 
-            this.total_days.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.total_days.HeaderText = "Số ngày";
-            this.total_days.Name = "total_days";
-            this.total_days.ReadOnly = true;
-            // 
-            // roomType
-            // 
-            this.roomType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.roomType.HeaderText = "Loại phòng";
-            this.roomType.Name = "roomType";
-            this.roomType.ReadOnly = true;
-            // 
-            // rent
-            // 
-            this.rent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.rent.HeaderText = "Giá thuê (VNĐ)";
-            this.rent.Name = "rent";
-            this.rent.ReadOnly = true;
-            // 
-            // deposit
-            // 
-            this.deposit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.deposit.HeaderText = "Tiền cọc (VNĐ)";
-            this.deposit.Name = "deposit";
-            this.deposit.ReadOnly = true;
-            // 
-            // total
-            // 
-            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.total.HeaderText = "Tiền cần thanh toán (VNĐ)";
-            this.total.Name = "total";
-            this.total.ReadOnly = true;
-            // 
-            // status
-            // 
-            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.status.HeaderText = "Tình trạng";
-            this.status.Name = "status";
-            this.status.ReadOnly = true;
-            // 
-            // staff
-            // 
-            this.staff.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.staff.HeaderText = "Nhân viên thanh toán";
-            this.staff.Name = "staff";
-            this.staff.ReadOnly = true;
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
@@ -177,6 +103,7 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel3, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel4, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -214,11 +141,11 @@
             this.label1.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(280, 0);
+            this.label1.Location = new System.Drawing.Point(274, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(240, 22);
+            this.label1.Size = new System.Drawing.Size(252, 22);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Quản lí check out";
+            this.label1.Text = "Quản lí thanh toán";
             // 
             // flowLayoutPanel2
             // 
@@ -304,13 +231,13 @@
             this.đãThanhToánToolStripMenuItem,
             this.inHóaĐơnToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(229, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(248, 70);
             // 
             // đãThanhToánToolStripMenuItem
             // 
             this.đãThanhToánToolStripMenuItem.Name = "đãThanhToánToolStripMenuItem";
-            this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
-            this.đãThanhToánToolStripMenuItem.Text = "Xác nhận thanh toán toàn bộ";
+            this.đãThanhToánToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+            this.đãThanhToánToolStripMenuItem.Text = "Xác nhận đã  thanh toán toàn bộ";
             this.đãThanhToánToolStripMenuItem.Click += new System.EventHandler(this.đãThanhToánToolStripMenuItem_Click);
             // 
             // inHóaĐơnToolStripMenuItem
@@ -319,6 +246,113 @@
             this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
             this.inHóaĐơnToolStripMenuItem.Text = "In hóa đơn";
             this.inHóaĐơnToolStripMenuItem.Click += new System.EventHandler(this.inHóaĐơnToolStripMenuItem_Click);
+            // 
+            // flowLayoutPanel4
+            // 
+            this.flowLayoutPanel4.Controls.Add(this.textBox1);
+            this.flowLayoutPanel4.Controls.Add(this.label2);
+            this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel4.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(403, 25);
+            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(394, 16);
+            this.flowLayoutPanel4.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(191, 6);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(94, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Nhập mã check in";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(291, 3);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 1;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // id
+            // 
+            this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.id.HeaderText = "STT";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Width = 53;
+            // 
+            // check_in_id
+            // 
+            this.check_in_id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.check_in_id.HeaderText = "Mã Check In";
+            this.check_in_id.Name = "check_in_id";
+            this.check_in_id.ReadOnly = true;
+            // 
+            // roomName
+            // 
+            this.roomName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.roomName.HeaderText = "Tên phòng";
+            this.roomName.Name = "roomName";
+            this.roomName.ReadOnly = true;
+            // 
+            // tenant
+            // 
+            this.tenant.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tenant.HeaderText = "Khách hàng";
+            this.tenant.Name = "tenant";
+            this.tenant.ReadOnly = true;
+            // 
+            // total_days
+            // 
+            this.total_days.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.total_days.HeaderText = "Số ngày";
+            this.total_days.Name = "total_days";
+            this.total_days.ReadOnly = true;
+            // 
+            // roomType
+            // 
+            this.roomType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.roomType.HeaderText = "Loại phòng";
+            this.roomType.Name = "roomType";
+            this.roomType.ReadOnly = true;
+            // 
+            // rent
+            // 
+            this.rent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.rent.HeaderText = "Giá thuê (VNĐ)";
+            this.rent.Name = "rent";
+            this.rent.ReadOnly = true;
+            // 
+            // deposit
+            // 
+            this.deposit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.deposit.HeaderText = "Tiền trả trước (VNĐ)";
+            this.deposit.Name = "deposit";
+            this.deposit.ReadOnly = true;
+            // 
+            // total
+            // 
+            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.total.HeaderText = "Tiền cần thanh toán (VNĐ)";
+            this.total.Name = "total";
+            this.total.ReadOnly = true;
+            // 
+            // status
+            // 
+            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.status.HeaderText = "Tình trạng";
+            this.status.Name = "status";
+            this.status.ReadOnly = true;
+            // 
+            // staff
+            // 
+            this.staff.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.staff.HeaderText = "Nhân viên thanh toán";
+            this.staff.Name = "staff";
+            this.staff.ReadOnly = true;
             // 
             // FormBills
             // 
@@ -337,6 +371,8 @@
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
+            this.flowLayoutPanel4.ResumeLayout(false);
+            this.flowLayoutPanel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -358,6 +394,9 @@
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Button btnLast;
         private System.Windows.Forms.Label labelPageInfo;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn check_in_id;
         private System.Windows.Forms.DataGridViewTextBoxColumn roomName;

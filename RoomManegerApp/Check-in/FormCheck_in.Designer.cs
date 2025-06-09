@@ -59,13 +59,14 @@
             this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.xácNhậnThanhToánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xácNhậnTrảPhòngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inHóaĐơnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hủyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chỉnhSửaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
-            this.xácNhậnTrảPhòngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -206,7 +207,7 @@
             // desposit
             // 
             this.desposit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.desposit.HeaderText = "Tiền cọc (VNĐ)";
+            this.desposit.HeaderText = "Tiền đã trả (VNĐ)";
             this.desposit.Name = "desposit";
             this.desposit.ReadOnly = true;
             // 
@@ -280,11 +281,11 @@
             this.label2.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(278, 0);
+            this.label2.Location = new System.Drawing.Point(208, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(243, 22);
+            this.label2.Size = new System.Drawing.Size(383, 22);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Quản lí đặt phòng";
+            this.label2.Text = "Quản lí đặt phòng, trả phòng";
             // 
             // flowLayoutPanel3
             // 
@@ -369,6 +370,7 @@
             this.flowLayoutPanel5.Controls.Add(this.label3);
             this.flowLayoutPanel5.Controls.Add(this.dateTimePicker1);
             this.flowLayoutPanel5.Controls.Add(this.button1);
+            this.flowLayoutPanel5.Controls.Add(this.button2);
             this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 44);
             this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
@@ -395,44 +397,6 @@
             this.dateTimePicker1.TabIndex = 1;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.xácNhậnThanhToánToolStripMenuItem,
-            this.xácNhậnTrảPhòngToolStripMenuItem,
-            this.inHóaĐơnToolStripMenuItem,
-            this.hủyToolStripMenuItem,
-            this.chỉnhSửaToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 136);
-            // 
-            // xácNhậnThanhToánToolStripMenuItem
-            // 
-            this.xácNhậnThanhToánToolStripMenuItem.Name = "xácNhậnThanhToánToolStripMenuItem";
-            this.xácNhậnThanhToánToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.xácNhậnThanhToánToolStripMenuItem.Text = "Xác nhận thanh toán";
-            this.xácNhậnThanhToánToolStripMenuItem.Click += new System.EventHandler(this.xácNhậnThanhToánToolStripMenuItem_Click);
-            // 
-            // inHóaĐơnToolStripMenuItem
-            // 
-            this.inHóaĐơnToolStripMenuItem.Name = "inHóaĐơnToolStripMenuItem";
-            this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.inHóaĐơnToolStripMenuItem.Text = "In hóa đơn";
-            this.inHóaĐơnToolStripMenuItem.Click += new System.EventHandler(this.inHóaĐơnToolStripMenuItem_Click);
-            // 
-            // hủyToolStripMenuItem
-            // 
-            this.hủyToolStripMenuItem.Name = "hủyToolStripMenuItem";
-            this.hủyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.hủyToolStripMenuItem.Text = "Hủy đặt trước";
-            this.hủyToolStripMenuItem.Click += new System.EventHandler(this.hủyToolStripMenuItem_Click);
-            // 
-            // chỉnhSửaToolStripMenuItem
-            // 
-            this.chỉnhSửaToolStripMenuItem.Name = "chỉnhSửaToolStripMenuItem";
-            this.chỉnhSửaToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.chỉnhSửaToolStripMenuItem.Text = "Chỉnh sửa";
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(276, 3);
@@ -443,12 +407,61 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(3, 32);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(121, 23);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "Hiện thị theo tháng";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xácNhậnThanhToánToolStripMenuItem,
+            this.xácNhậnTrảPhòngToolStripMenuItem,
+            this.inHóaĐơnToolStripMenuItem,
+            this.hủyToolStripMenuItem,
+            this.chỉnhSửaToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(229, 114);
+            // 
+            // xácNhậnThanhToánToolStripMenuItem
+            // 
+            this.xácNhậnThanhToánToolStripMenuItem.Name = "xácNhậnThanhToánToolStripMenuItem";
+            this.xácNhậnThanhToánToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.xácNhậnThanhToánToolStripMenuItem.Text = "Xác nhận thanh toán toàn bộ";
+            this.xácNhậnThanhToánToolStripMenuItem.Click += new System.EventHandler(this.xácNhậnThanhToánToolStripMenuItem_Click);
+            // 
             // xácNhậnTrảPhòngToolStripMenuItem
             // 
             this.xácNhậnTrảPhòngToolStripMenuItem.Name = "xácNhậnTrảPhòngToolStripMenuItem";
-            this.xácNhậnTrảPhòngToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.xácNhậnTrảPhòngToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
             this.xácNhậnTrảPhòngToolStripMenuItem.Text = "Xác nhận trả phòng";
             this.xácNhậnTrảPhòngToolStripMenuItem.Click += new System.EventHandler(this.xácNhậnTrảPhòngToolStripMenuItem_Click);
+            // 
+            // inHóaĐơnToolStripMenuItem
+            // 
+            this.inHóaĐơnToolStripMenuItem.Name = "inHóaĐơnToolStripMenuItem";
+            this.inHóaĐơnToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.inHóaĐơnToolStripMenuItem.Text = "Tạo hóa đơn";
+            this.inHóaĐơnToolStripMenuItem.Click += new System.EventHandler(this.inHóaĐơnToolStripMenuItem_Click);
+            // 
+            // hủyToolStripMenuItem
+            // 
+            this.hủyToolStripMenuItem.Name = "hủyToolStripMenuItem";
+            this.hủyToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.hủyToolStripMenuItem.Text = "Hủy đặt trước";
+            this.hủyToolStripMenuItem.Click += new System.EventHandler(this.hủyToolStripMenuItem_Click);
+            // 
+            // chỉnhSửaToolStripMenuItem
+            // 
+            this.chỉnhSửaToolStripMenuItem.Name = "chỉnhSửaToolStripMenuItem";
+            this.chỉnhSửaToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+            this.chỉnhSửaToolStripMenuItem.Text = "Chỉnh sửa ngày";
+            this.chỉnhSửaToolStripMenuItem.Click += new System.EventHandler(this.chỉnhSửaToolStripMenuItem_Click);
             // 
             // FormCheck_in
             // 
@@ -457,7 +470,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FormCheck_in";
-            this.Text = "FormContract";
+            this.Text = "Hệ thống quản lí đặt phòng, trả phòng";
             this.Load += new System.EventHandler(this.FormCheck_in_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -498,6 +511,12 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.ToolStripMenuItem xácNhậnThanhToánToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem inHóaĐơnToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chỉnhSửaToolStripMenuItem;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem xácNhậnTrảPhòngToolStripMenuItem;
+        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn name_room;
         private System.Windows.Forms.DataGridViewTextBoxColumn name_tentant;
@@ -509,10 +528,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
         private System.Windows.Forms.DataGridViewTextBoxColumn status_pay;
-        private System.Windows.Forms.ToolStripMenuItem xácNhậnThanhToánToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem inHóaĐơnToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem chỉnhSửaToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ToolStripMenuItem xácNhậnTrảPhòngToolStripMenuItem;
     }
 }

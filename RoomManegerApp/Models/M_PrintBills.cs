@@ -14,5 +14,8 @@ namespace RoomManegerApp.Models
         public DateTime start_date {  get; set; }
         public DateTime end_date { get; set; }
         public string total {  get; set; }
+        public string user {  get; set; }
+        public string deposit {  get; set; }
+        public string service {  get; set; }
     }
 }

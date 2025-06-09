@@ -162,7 +162,11 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Tổng tiền: " + Fields!total.Value</Value>
+                <Value>="Tổng tiển: " &amp; Format(
+    CDbl(Replace(Replace(Replace(Fields!total.Value, ".", ""), " đ", ""), ",", "")) + 
+    CDbl(Replace(Replace(Replace(Fields!service.Value, ".", ""), " đ", ""), ",", "")), 
+    "#,##0"
+) &amp; " đ"</Value>
                 <Style>
                   <Format>0,.00;(0,.00)</Format>
                 </Style>
@@ -172,7 +176,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.21652in</Top>
+        <Top>1.58458in</Top>
         <Left>3.5625in</Left>
         <Height>0.25in</Height>
         <Width>2.27083in</Width>
@@ -434,8 +438,137 @@
           </Border>
         </Style>
       </Line>
+      <Textbox Name="Textbox17">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>="Tiền cọc: " + Fields!deposit.Value</Value>
+                <Style>
+                  <Format>0,.00;(0,.00)</Format>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>1.92363in</Top>
+        <Left>3.5625in</Left>
+        <Height>0.25in</Height>
+        <Width>2.27083in</Width>
+        <ZIndex>16</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox18">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>="Tiền cần thanh toán: " &amp; Format(
+	CDbl(Replace(Replace(Replace(Fields!service.Value, ".", ""), " đ", ""), ",", "")) + 
+    CDbl(Replace(Replace(Replace(Fields!total.Value, ".", ""), " đ", ""), ",", "")) - 
+    CDbl(Replace(Replace(Replace(Fields!deposit.Value, ".", ""), " đ", ""), ",", "")), 
+    "#,##0"
+) &amp; " đ"</Value>
+                <Style>
+                  <Format>0,.00;(0,.00)</Format>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>2.24307in</Top>
+        <Left>3.5625in</Left>
+        <Height>0.25in</Height>
+        <Width>2.27083in</Width>
+        <ZIndex>17</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox19">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>="Tiền phòng: " + Fields!total.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>1.26513in</Top>
+        <Left>0.18625in</Left>
+        <Height>0.25in</Height>
+        <Width>2.27083in</Width>
+        <ZIndex>18</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox20">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>="Tiền dịch vụ: " &amp; Fields!service.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>1.26513in</Top>
+        <Left>3.5625in</Left>
+        <Height>0.25in</Height>
+        <Width>2.27083in</Width>
+        <ZIndex>19</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>1.55209in</Height>
+    <Height>2.56251in</Height>
     <Style />
   </Body>
   <Width>5.875in</Width>
@@ -583,6 +716,68 @@
             <PaddingBottom>2pt</PaddingBottom>
           </Style>
         </Textbox>
+        <Textbox Name="Textbox15">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Nhân viên</Value>
+                  <Style>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>Textbox10</rd:DefaultName>
+          <Top>0.11333in</Top>
+          <Left>0.53645in</Left>
+          <Height>0.25in</Height>
+          <Width>1in</Width>
+          <ZIndex>2</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="Textbox16">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Fields!user.Value</Value>
+                  <Style />
+                </TextRun>
+              </TextRuns>
+              <Style />
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>Textbox11</rd:DefaultName>
+          <Top>0.44666in</Top>
+          <Left>0.49479in</Left>
+          <Height>0.25in</Height>
+          <Width>1.32292in</Width>
+          <ZIndex>3</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
       </ReportItems>
       <Style>
         <Border>
@@ -605,20 +800,42 @@
       </ConnectionProperties>
       <rd:DataSourceID>33e0b796-05f6-4bf2-a623-aa0248a0e9e6</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="RoomManegerAppModels1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>8ae2c7b8-8bef-45dd-b4b1-622050246f02</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="RoomManegerAppModels2">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>9e555a66-3cf5-484d-a79b-e5c658647486</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="DataSet1">
       <Query>
-        <DataSourceName>RoomManegerAppModels</DataSourceName>
+        <DataSourceName>RoomManegerAppModels1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
+        <Field Name="deposit">
+          <DataField>deposit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="end_date">
           <DataField>end_date</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="r_name">
           <DataField>r_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="service">
+          <DataField>service</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="start_date">
@@ -631,10 +848,14 @@
         </Field>
         <Field Name="total">
           <DataField>total</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="type">
           <DataField>type</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="user">
+          <DataField>user</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

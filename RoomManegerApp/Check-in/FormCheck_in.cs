@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RoomManegerApp.Check_in;
 using RoomManegerApp.Contracts;
 using RoomManegerApp.Report;
 
@@ -133,6 +134,7 @@ namespace RoomManegerApp.Forms
             {
                 "Trống" => Color.LightGreen,
                 "Sắp nhận phòng" => Color.Khaki,
+                "Tới ngày trả phòng" => Color.LightGoldenrodYellow,
                 "Đang thuê" => Color.LightSalmon,
                 "Đã hủy" => Color.LightGray,
                 _ => Color.White,
@@ -144,9 +146,10 @@ namespace RoomManegerApp.Forms
             {
                 "Trống" => Color.DarkGreen,
                 "Sắp nhận phòng" => Color.DarkOrange,
+                "Tới ngày trả phòng" => Color.DarkGoldenrod,
                 "Đang thuê" => Color.Firebrick,
                 "Đã hủy" => Color.DimGray,
-                _ => Color.White,
+                _ => Color.Black,
             };
 
             row.Cells["status"].Style.ForeColor = forecolor;
@@ -224,9 +227,17 @@ namespace RoomManegerApp.Forms
                     string endDateStr = row["end_date"].ToString();
                     string dbstatus = row["status"].ToString();
 
-                    if(dbstatus == "Đã hủy")
+                    if (dbstatus == "Đã hủy")
+                        continue;
+                    if(dbstatus == "Đã trả phòng")
                     {
-                        return;
+                        string updateRoomSql = @"UPDATE rooms SET status = @status WHERE id = @id";
+                        var roomParams = new Dictionary<string, object>
+                            {
+                                { "@status", "Trống" },
+                                { "@id", room_id }
+                            };
+                        Database_connect.ExecuteNonQuery(updateRoomSql, roomParams);
                     }
                     if (DateTime.TryParseExact(startDateStr, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime start) &&
                         DateTime.TryParseExact(endDateStr, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime end))
@@ -235,24 +246,34 @@ namespace RoomManegerApp.Forms
 
                         if (today < start)
                             status = "Sắp nhận phòng";
-                        else if (today >= start && today <= end)
-                        {
+                        else if (today >= start && today < end)
                             status = "Đang thuê";
-
-                            sql = "update rooms set status = @status where id = @id";
-                            Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@status", status }, { "@id", room_id } });
-                        }
+                        else if (today == end)
+                            status = "Tới ngày trả phòng";
                         else if (today > end)
-                            status = "Đã trả";
+                            status = "Đã trả phòng";
 
-                        string updateSql = @"UPDATE checkins SET status = @status WHERE id = @id";
-                        var parameters = new Dictionary<string, object>
+                        if(status != dbstatus)
+                        {
+                            string updateSql = @"UPDATE checkins SET status = @status WHERE id = @id";
+                            var parameters = new Dictionary<string, object>
                         {
                             { "@status", status },
                             { "@id", id }
                         };
+                            Database_connect.ExecuteNonQuery(updateSql, parameters);
 
-                        Database_connect.ExecuteNonQuery(updateSql, parameters);
+                            if (status == "Đang thuê")
+                            {
+                                string updateRoomSql = @"UPDATE rooms SET status = @status WHERE id = @id";
+                                var roomParams = new Dictionary<string, object>
+                            {
+                                { "@status", status },
+                                { "@id", room_id }
+                            };
+                                Database_connect.ExecuteNonQuery(updateRoomSql, roomParams);
+                            }
+                        }
                     }
                 }
             }
@@ -260,7 +281,6 @@ namespace RoomManegerApp.Forms
             {
                 MessageBox.Show($"Lỗi định dạng ngày " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            
         }
 
         private async void btnFirst_Click(object sender, EventArgs e)
@@ -331,12 +351,34 @@ namespace RoomManegerApp.Forms
         private void xácNhậnThanhToánToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int id = get_id();
+            if (checkStatus(id))
+            {
+                MessageBox.Show("Phòng này đã được trả rồi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             try
             {
                 string sql = @"update bills set status = 'Thanh toán toàn bộ' where checkins_id = @id";
                 int hasRows = Convert.ToInt32(Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { @"id", id } }));
                 if (hasRows > 0)
                 {
+                    double deposit = 0;
+                    sql = @"select start_date, end_date, rooms.price
+                            from checkins
+                            inner join rooms on checkins.room_id = rooms.id
+                            where checkins.id = @id";
+                    var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@id", id } });
+                    foreach(var row in data)
+                    {
+                        DateTime.TryParseExact(row["start_date"].ToString(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime checkin);
+                        DateTime.TryParseExact(row["end_date"].ToString(), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime checkout);
+                        double price = Convert.ToDouble(row["price"].ToString());
+                        deposit = (checkout - checkin).Days * price;
+                    }
+
+                    sql = @"update checkins set deposit = @deposit where id = @id";
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@deposit", deposit }, { "@id", id } });
+
                     MessageBox.Show("Cập nhật thanh toán thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     reloadData();
                 }
@@ -393,7 +435,7 @@ namespace RoomManegerApp.Forms
             labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
         }
 
-        private void xácNhậnTrảPhòngToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void xácNhậnTrảPhòngToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -410,6 +452,12 @@ namespace RoomManegerApp.Forms
 
                     if (dbstatus == "Đã hủy")
                     {
+                        MessageBox.Show("Lịch đặt phòng này đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    if (checkStatus(id))
+                    {
+                        MessageBox.Show("Phòng này đã được trả rồi.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
                     if (DateTime.TryParseExact(startDateStr, "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime start) &&
@@ -422,7 +470,7 @@ namespace RoomManegerApp.Forms
                             DialogResult result =  MessageBox.Show("Xác nhận trả phòng?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Information );
                             if (result == DialogResult.Yes)
                             {
-                                status = "Đã trả";
+                                status = "Đã trả phòng";
 
                                 string updateSql = @"UPDATE checkins SET status = @status WHERE id = @id";
                                 var parameters = new Dictionary<string, object>
@@ -432,6 +480,7 @@ namespace RoomManegerApp.Forms
                                 };
 
                                 Database_connect.ExecuteNonQuery(updateSql, parameters);
+                                await load_check_in();
                             }
                          }
                         else
@@ -445,6 +494,70 @@ namespace RoomManegerApp.Forms
             {
                 MessageBox.Show($"Lỗi định dạng ngày " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void chỉnhSửaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int id = get_id();
+            if (checkStatus(id))
+            {
+                MessageBox.Show("Phòng này đã được trả", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else
+            {
+                FormEditCheckin form = new FormEditCheckin(id, reloadData);
+                form.ShowDialog();
+            }
+        }
+
+        private bool checkStatus(int id)
+        {
+            string status = "";
+            string sql = @"select status from checkins where id = @id";
+            var data = Database_connect.ExecuteReader(sql, new Dictionary<string, object> { { "@id", id } });
+            foreach (var row in data)
+            {
+                status = row["status"].ToString();
+            }
+            if (status == "Đã trả phòng")
+                return true;
+            return false;
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            UpdatePaginationInfo();
+            int offset = (currentPage - 1) * pageSize;
+            string time = dateTimePicker1.Value.ToString("yyyyMMdd").Substring(4, 2);
+            dataGridView1.Rows.Clear();
+            try
+            {
+                string sql = @"select checkins.id as checkins_id, rooms.name as room_name, tenants.name as tenants_name, 
+                    tenants.phone as tenants_phone, start_date, end_date, rooms.type as r_type, deposit, checkins.status as c_status, 
+                    rooms.price as price, bills.status as billStatus
+                    from checkins
+                    inner join rooms on checkins.room_id = rooms.id
+                    inner join tenants on checkins.tenant_id = tenants.id
+                    left join bills on checkins.id = bills.checkins_id
+                    where substr(start_date, 5, 2) = @time or substr(end_date, 5, 2) = @time
+                    limit @pageSize offset @offset";
+                var data = await Task.Run(() => Database_connect.ExecuteReader(sql, new Dictionary<string, object>
+                {
+                    { "@pageSize", pageSize },
+                    { "@offset", offset},
+                    {"@time", time }
+                }));
+                foreach (var row in data)
+                {
+                    load_datagridview(row);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi đã xảy ra: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            labelPageInfo.Text = $"Trang {currentPage}/{totalPages}";
         }
     }
 }

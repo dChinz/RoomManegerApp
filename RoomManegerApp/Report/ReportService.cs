@@ -19,13 +19,15 @@ namespace RoomManegerApp.Report
 
             string time = timeValue.ToString("D2");
             string sql = @"SELECT
-                        substr(start_date, 1, 4) || '-' ||
-                        substr(start_date, 5, 2) || '-' ||
-                        substr(start_date, 7, 2) as date,
-                        count(*) as rent_count,
-                        sum(bills.total) as total_revenue
-                        from bills
-                        inner join checkins on checkins.id = bills.checkins_id";
+                            substr(start_date, 1, 4) || '-' ||
+                            substr(start_date, 5, 2) || '-' ||
+                            substr(start_date, 7, 2) AS date,
+                            count(*) AS rent_count,
+                            SUM((julianday(substr(end_date, 1, 4) || '-' || substr(end_date, 5, 2) || '-' || substr(end_date, 7, 2)) -
+                                 julianday(substr(start_date, 1, 4) || '-' || substr(start_date, 5, 2) || '-' || substr(start_date, 7, 2))) * price) AS total_revenue
+                            FROM bills
+                            INNER JOIN checkins ON checkins.id = bills.checkins_id
+                            INNER JOIN rooms ON checkins.room_id = rooms.id";
             TimeConditions(timeType, timeValue, condition, parameter);
 
             if (condition.Count > 0)
@@ -106,12 +108,14 @@ namespace RoomManegerApp.Report
         public List<GuestReport> GetGuestReports()
         {
             var list = new List<GuestReport>();
-            string sql = @"select name, phone, id_card, gender, count(checkins.id) as checkinCount, sum(bills.total) as total
+            string sql = @"select tenants.name, phone, id_card, gender, count(checkins.id) as checkinCount, SUM((julianday(substr(end_date, 1, 4) || '-' || substr(end_date, 5, 2) || '-' || substr(end_date, 7, 2)) -
+                                 julianday(substr(start_date, 1, 4) || '-' || substr(start_date, 5, 2) || '-' || substr(start_date, 7, 2))) * price) AS total
                     from tenants
                     inner join checkins on tenants.id = checkins.tenant_id
                     inner join bills on checkins.id = bills.checkins_id
-                    group by name
-                    order by name";
+                    inner join rooms on checkins.room_id = rooms.id
+                    group by tenants.name
+                    order by tenants.name";
             var data = Database_connect.ExecuteReader(sql);
             foreach (var row in data)
             {

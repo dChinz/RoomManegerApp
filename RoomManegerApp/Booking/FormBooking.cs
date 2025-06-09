@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -44,7 +45,7 @@ namespace RoomManegerApp.Booking
             DateTime.TryParseExact(row["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckin);
             string checkin = dbcheckin.ToString("dd/MM/yyyy");
 
-            DateTime.TryParseExact(row["checkin"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckout);
+            DateTime.TryParseExact(row["checkout"].ToString(), "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime dbcheckout);
             string checkout = dbcheckout.ToString("dd/MM/yyyy");
 
             dataGridView1.Rows.Add(row["id"], row["name"], row["phone"], row["email"], row["roomSize"], checkin, checkout, row["type"]);
@@ -75,9 +76,10 @@ namespace RoomManegerApp.Booking
             string phone = row.Cells["phone"].Value.ToString();
             string email = row.Cells["email"].Value.ToString();
             string roomSize = row.Cells["roomSize"].Value.ToString();
-            string checkin = row.Cells[4].Value.ToString();
-            string checkout = row.Cells[5].Value.ToString();
+            string checkin = row.Cells["checkin"].Value.ToString();
+            string checkout = row.Cells["checkout"].Value.ToString();
             string type = row.Cells["type"].Value.ToString();
+
             if (e.ColumnIndex == 8)
             {
                 try
@@ -118,6 +120,10 @@ namespace RoomManegerApp.Booking
                         return;
                     }
 
+                    //Lấy giá phòng
+                    sql = @"select price from rooms where id = @id";
+                    double price = Convert.ToDouble(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@id", idRoom } }));
+
                     //Lấy id khách hàng
                     sql = @"select id from tenants where name = @name";
                     int idTenant = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object> { { "@name", name } }));
@@ -127,20 +133,34 @@ namespace RoomManegerApp.Booking
                         return;
                     }
 
+                    DateTime.TryParseExact(checkin, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime checkinDate);
+                    DateTime.TryParseExact(checkout, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime checkoutDate);
+
+                    double total = (checkoutDate - checkinDate).Days * price;
+
                     //Tạo checkins 
-                    sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, status) values (@room_id, @tenant_id, @start_date, @end_date, @status)";
-                    int rowAffected = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object>
+                    sql = @"insert into checkins (room_id, tenant_id, start_date, end_date, deposit) values (@room_id, @tenant_id, @start_date, @end_date, @deposit)";
+                    int rowAffected = Convert.ToInt32(Database_connect.ExecutiveInsertAndGetId(sql, new Dictionary<string, object>
                     {
                         { "@room_id", idRoom},
                         { "@tenant_id", idTenant},
-                        { "@start_date", checkin},
-                        { "@end_date", checkout},
-                        { "@status", "Hiệu lực"},
+                        { "@start_date", checkinDate.ToString("yyyyMMdd")},
+                        { "@end_date", checkoutDate.ToString("yyyyMMdd")},
+                        { "@deposit", total},
                     }));
-                    if (rowAffected != 0)
+
+
+
+                    sql = @"insert into bills (checkins_id, userId, status, create_date) values (@checkins_id, @userId, @status, @create_date)";
+                    Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object>
                     {
-                        sql = @"update rooms set status = 'Đã thuê' where id = @id";
-                        Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", idRoom } });
+                        { "@checkins_id", rowAffected},
+                        { "@userId", Session.Role},
+                        { "@status", "Thanh toán toàn bộ"},
+                        { "@create_date", DateTime.Now.ToString("yyyy-MM-dd")}
+                    });
+                    if (rowAffected > 0)
+                    {
 
                         sql = @"delete from booking where id = @id";
                         Database_connect.ExecuteNonQuery(sql, new Dictionary<string, object> { { "@id", id } });
@@ -171,6 +191,8 @@ namespace RoomManegerApp.Booking
                 }
                 
             }
+            if (e.RowIndex < 0 || e.RowIndex >= dataGridView1.Rows.Count)
+                return;
         }
     }
 }

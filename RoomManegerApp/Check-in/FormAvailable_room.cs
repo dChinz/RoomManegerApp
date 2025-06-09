@@ -92,7 +92,7 @@ namespace RoomManegerApp.Contracts
                     if (result == DialogResult.Yes)
                     {
                         //FormAdd_check_in f = new FormAdd_check_in(roomName, type, _callback);
-                        FormAvailable_Guest f = new FormAvailable_Guest(roomName, type, _callback, checkin, checkout);
+                        FormAvailable_Guest f = new FormAvailable_Guest(roomName, type, size, _callback, checkin, checkout);
                         f.ShowDialog();
                     }
                     return;

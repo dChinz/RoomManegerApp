@@ -124,6 +124,12 @@
       <DependentUpon>FormBooking.cs</DependentUpon>
     </Compile>
     <Compile Include="Booking\HttpServer.cs" />
+    <Compile Include="Check-in\FormAddService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Check-in\FormAddService.Designer.cs">
+      <DependentUpon>FormAddService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Check-in\FormAdd_check_in.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +148,12 @@
     <Compile Include="Check-in\FormAvailable_room.Designer.cs">
       <DependentUpon>FormAvailable_room.cs</DependentUpon>
     </Compile>
+    <Compile Include="Check-in\FormEditCheckin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Check-in\FormEditCheckin.Designer.cs">
+      <DependentUpon>FormEditCheckin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\GuestReport.cs" />
     <Compile Include="Models\M_PrintBills.cs" />
     <Compile Include="Models\RateReport.cs" />
@@ -152,6 +164,12 @@
     <Compile Include="Report\FormReport.Designer.cs">
       <DependentUpon>FormReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Report\FormServiceDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\FormServiceDetails.Designer.cs">
+      <DependentUpon>FormServiceDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Report\PrintBills.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +177,18 @@
       <DependentUpon>PrintBills.cs</DependentUpon>
     </Compile>
     <Compile Include="Report\ReportService.cs" />
+    <Compile Include="Services\FormAddService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Services\FormAddService.Designer.cs">
+      <DependentUpon>FormAddService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\FormService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Services\FormService.Designer.cs">
+      <DependentUpon>FormService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Session.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="System\Text\Json.cs" />
@@ -242,6 +272,9 @@
     <EmbeddedResource Include="Booking\FormBooking.resx">
       <DependentUpon>FormBooking.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Check-in\FormAddService.resx">
+      <DependentUpon>FormAddService.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Check-in\FormAdd_check_in.resx">
       <DependentUpon>FormAdd_check_in.cs</DependentUpon>
     </EmbeddedResource>
@@ -254,8 +287,14 @@
     <EmbeddedResource Include="Check-in\FormAvailable_room.resx">
       <DependentUpon>FormAvailable_room.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Check-in\FormEditCheckin.resx">
+      <DependentUpon>FormEditCheckin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report\FormReport.resx">
       <DependentUpon>FormReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\FormServiceDetails.resx">
+      <DependentUpon>FormServiceDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\PrintBills.rdlc" />
     <EmbeddedResource Include="Report\PrintBills.resx">
@@ -264,6 +303,12 @@
     <EmbeddedResource Include="Report\Report1.rdlc" />
     <EmbeddedResource Include="Report\Report2.rdlc" />
     <EmbeddedResource Include="Report\Report3.rdlc" />
+    <EmbeddedResource Include="Services\FormAddService.resx">
+      <DependentUpon>FormAddService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Services\FormService.resx">
+      <DependentUpon>FormService.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Users\FormAddUser.resx">
       <DependentUpon>FormAddUser.cs</DependentUpon>
     </EmbeddedResource>
