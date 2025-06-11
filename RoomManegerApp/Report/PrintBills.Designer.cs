@@ -275,7 +275,7 @@
             this.ClientSize = new System.Drawing.Size(805, 593);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Name = "PrintBills";
-            this.Text = "PrintBills";
+            this.Text = "Hóa đơn";
             this.Load += new System.EventHandler(this.PrintBills_Load);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();

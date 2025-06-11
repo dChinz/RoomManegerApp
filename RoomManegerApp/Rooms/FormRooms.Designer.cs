@@ -526,13 +526,13 @@
             this.sửaToolStripMenuItem,
             this.xóaToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(95, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
             // 
             // sửaToolStripMenuItem
             // 
             this.sửaToolStripMenuItem.Name = "sửaToolStripMenuItem";
             this.sửaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sửaToolStripMenuItem.Text = "Sửa";
+            this.sửaToolStripMenuItem.Text = "Cập nhật";
             this.sửaToolStripMenuItem.Click += new System.EventHandler(this.sửaToolStripMenuItem_Click);
             // 
             // xóaToolStripMenuItem

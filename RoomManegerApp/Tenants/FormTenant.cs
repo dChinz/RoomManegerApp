@@ -100,7 +100,7 @@ namespace RoomManegerApp.Forms
         private void buttonAdd_one_tentant_Click(object sender, EventArgs e)
         {
             FormAdd_one_tenant f = new FormAdd_one_tenant();
-            f.Show();
+            f.ShowDialog();
 
             f.tentant_added += async (s, args) => await load_tentant();
         }
@@ -138,8 +138,9 @@ namespace RoomManegerApp.Forms
             if (id < 0) return;
 
             var f = new FormAdd_one_tenant(id);
+            f.Text = "Cập nhật thông tin khách hàng";
             positionIndex();
-            f.Show();
+            f.ShowDialog();
         }
 
         private async void xóaToolStripMenuItem_Click(object sender, EventArgs e)

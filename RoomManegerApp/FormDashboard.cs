@@ -273,16 +273,8 @@ namespace RoomManegerApp.Forms
 
         private void QLKhachHang_Click(object sender, EventArgs e)
         {
-            if (Session.Role == "Staff")
-            {
-                MessageBox.Show("Bạn không được phân quyền tại đây");
-                return;
-            }
-            else
-            {
-                FormTenant form = new FormTenant();
-                LoadFormToTableLayout(form, 1, 1);
-            }
+            FormTenant form = new FormTenant();
+            LoadFormToTableLayout(form, 1, 1);
         }
 
         private void ThanhToan_Click(object sender, EventArgs e)

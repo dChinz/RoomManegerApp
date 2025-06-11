@@ -106,6 +106,13 @@ namespace RoomManegerApp.Booking
                     sql = @"select id
                                 from rooms
                                 where status = @status and size = @size and type = @type
+                                and id NOT IN (
+                                SELECT room_id
+                                FROM checkins
+                                WHERE NOT (
+                                    end_date <= @checkin OR start_date >= @checkout
+                                        )
+                                    )
                                 order by id asc
                                 limit 1";
                     int idRoom = Convert.ToInt32(Database_connect.ExecuteScalar(sql, new Dictionary<string, object>

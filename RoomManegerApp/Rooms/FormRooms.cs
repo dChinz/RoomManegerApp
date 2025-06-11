@@ -402,6 +402,7 @@ namespace RoomManegerApp
 
         private void ModeNormal()
         {
+            contextMenuStrip1.Enabled = true;
             buttonCreate.Enabled = true;
             buttonUpdate.Enabled = true;
             buttonDelete.Enabled = true;
@@ -427,6 +428,7 @@ namespace RoomManegerApp
 
         private void ModeUpdate()
         {
+            contextMenuStrip1.Enabled = false;
             buttonCreate.Enabled = false;
             buttonUpdate.Enabled = false;
             buttonDelete.Enabled = false;
@@ -451,6 +453,7 @@ namespace RoomManegerApp
 
             dataGridView1.Columns.Insert(0, checkBoxColumn);
 
+            contextMenuStrip1.Enabled = false;
             buttonCreate.Enabled = false;
             buttonUpdate.Enabled = false;
             buttonDelete.Enabled = false;
@@ -524,6 +527,7 @@ namespace RoomManegerApp
 
         private void sửaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             int id = get_id_room();
             int rowIndex = dataGridView1.CurrentCell.RowIndex;
             if (dataGridView1.Rows[rowIndex].Cells[2].Value.ToString() == "Đang thuê")
@@ -532,6 +536,7 @@ namespace RoomManegerApp
                 return;
             }
             FormAdd_one_room form = new FormAdd_one_room(id, ReloadData);
+            form.Text = "Sửa phòng";
             form.ShowDialog();
         }
 

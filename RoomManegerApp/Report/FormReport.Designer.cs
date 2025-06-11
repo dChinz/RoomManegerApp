@@ -180,7 +180,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FormReport";
-            this.Text = "FormReport";
+            this.Text = "Báo cáo";
             this.Load += new System.EventHandler(this.FormReport_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

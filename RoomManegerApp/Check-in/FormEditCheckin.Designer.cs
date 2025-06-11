@@ -172,7 +172,7 @@
             this.ClientSize = new System.Drawing.Size(409, 388);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FormEditCheckin";
-            this.Text = "FormEditCheckin";
+            this.Text = "Hệ thống quản lí đặt phòng, trả phòng";
             this.Load += new System.EventHandler(this.FormEditCheckin_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

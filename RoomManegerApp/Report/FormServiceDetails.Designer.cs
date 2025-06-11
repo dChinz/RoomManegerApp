@@ -78,7 +78,7 @@
             this.Controls.Add(this.labelTenantName);
             this.Controls.Add(this.panel1);
             this.Name = "FormServiceDetails";
-            this.Text = "FormServiceDetails";
+            this.Text = "Dịch vụ";
             this.Load += new System.EventHandler(this.FormServiceDetails_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -198,7 +198,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
             this.Name = "FormAdd_one_tenant";
-            this.Text = "FormAdd_one_tentant";
+            this.Text = "Thêm mới khách hàng";
             this.Load += new System.EventHandler(this.FormAdd_one_tentant_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
